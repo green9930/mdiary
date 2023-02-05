@@ -1,12 +1,12 @@
-import Home from "../components/Home";
+import Login from "../components/Login";
 import AppLayout from "../components/layout/AppLayout";
 
-const HomePage = () => {
+const LoginPage = () => {
   return (
     <AppLayout>
-      <Home />
+      <Login />
     </AppLayout>
   );
 };
 
-export default HomePage;
+export default LoginPage;

@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import common from "./modules/commonSlice";
+import user from "./modules/userSlice";
 
 const store = configureStore({
   reducer: {
     common,
+    user,
   },
 });
 

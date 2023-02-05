@@ -1,10 +1,30 @@
 import { Route, Routes } from "react-router-dom";
-import HomePage from "../pages/HomePage";
+import { useAppSelector } from "../context/redux";
+import CategoryPage from "../pages/CategoryPage";
+import DailyPage from "../pages/DailyPage";
+import LoginPage from "../pages/LoginPage";
+import MonthlyPage from "../pages/MonthlyPage";
+import NewPage from "../pages/NewPage";
+import WeeklyPage from "../pages/WeeklyPage";
 
-const Router = () => {
+interface IRouter extends React.HTMLAttributes<HTMLDivElement> {}
+interface IRouter {
+  isLogin: boolean;
+}
+
+const Router: React.FC<IRouter> = () => {
+  const isLogin = useAppSelector((state) => state.user.isLogin);
+
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
+      <Route path="/" element={isLogin ? <MonthlyPage /> : <LoginPage />} />
+      <Route path="/new" element={<NewPage />} />
+      <Route
+        path="/weekly"
+        element={isLogin ? <WeeklyPage /> : <LoginPage />}
+      />
+      <Route path="/daily" element={<DailyPage />} />
+      <Route path="/categories" element={<CategoryPage />} />
     </Routes>
   );
 };
