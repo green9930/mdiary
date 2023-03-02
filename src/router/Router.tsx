@@ -18,13 +18,16 @@ const Router: React.FC<IRouter> = () => {
   return (
     <Routes>
       <Route path="/" element={isLogin ? <MonthlyPage /> : <LoginPage />} />
-      <Route path="/new" element={<NewPage />} />
+      <Route path="/new" element={isLogin ? <NewPage /> : <LoginPage />} />
       <Route
         path="/weekly"
         element={isLogin ? <WeeklyPage /> : <LoginPage />}
       />
-      <Route path="/daily" element={<DailyPage />} />
-      <Route path="/categories" element={<CategoryPage />} />
+      <Route path="/daily" element={isLogin ? <DailyPage /> : <LoginPage />} />
+      <Route
+        path="/categories"
+        element={isLogin ? <CategoryPage /> : <LoginPage />}
+      />
     </Routes>
   );
 };
