@@ -5,7 +5,7 @@ import { calcRem } from "../../styles/theme";
 interface IModal extends React.HTMLAttributes<HTMLDivElement> {}
 
 interface IModal {
-  height: number;
+  height: string;
   handleModal: () => void;
 }
 
@@ -49,11 +49,11 @@ const StModalLayout = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.2);
   z-index: 99;
 `;
 
-const StModalBody = styled.div<{ height: number }>`
+const StModalBody = styled.div<{ height: string }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -64,11 +64,11 @@ const StModalBody = styled.div<{ height: number }>`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 60%;
-  height: ${({ height }) => calcRem(height)};
+  width: 70%;
+  height: ${({ height }) => height};
   background-color: #ffffff;
   border-radius: 5px;
   overflow: hidden;
   z-index: 100;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
 `;
