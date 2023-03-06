@@ -12,14 +12,18 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Provider store={store}>
-        <GlobalStyle />
-        <App />
-      </Provider>
-    </BrowserRouter>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <BrowserRouter
+    basename={
+      process.env.NODE_ENV === "production" ? process.env.PUBLIC_URL : ""
+    }
+  >
+    <Provider store={store}>
+      <GlobalStyle />
+      <App />
+    </Provider>
+  </BrowserRouter>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
