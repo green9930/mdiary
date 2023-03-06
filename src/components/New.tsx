@@ -4,42 +4,36 @@ import { useAppSelector } from "../context/redux";
 import ModalLayout from "./layout/ModalLayout";
 import SelectCategoryModal from "./modal/SelectCategoryModal";
 import { dbService } from "../firebase";
-import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  setDoc,
-} from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
+import { addExpend, ExpendType } from "../context/modules/expendSlice";
+import { useDispatch } from "react-redux";
 
-type DataType = {
-  category: string;
-  title: string;
-  content: string;
-  date: string;
-  price: number;
-};
+const MAX_PRICE_LENGTH = 9;
+const MAX_TITLE_LENGTH = 30;
+const MAX_CONTENT_LENGTH = 200;
 
 const New = () => {
-  const username = useAppSelector((state) => state.user.username);
+  const user = useAppSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   const [showCategory, setShowCategory] = useState(false);
-  const [data, setData] = useState<DataType>({
+  const [data, setData] = useState<ExpendType>({
     category: "",
     title: "",
     content: "",
     date: "",
-    price: 0,
+    price: "",
+    username: "",
   });
+  const [displayPrice, setDisplayPrice] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     const today = new Date();
     const defaultDate = `${today.getFullYear()}-${(today.getMonth() + 1)
       .toString()
-      .padStart(2, "0")}-${today.getDate()}`;
-    setData({ ...data, date: defaultDate });
+      .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}}`;
+    setData({ ...data, date: defaultDate, username: user.username });
   }, []);
 
   const handleSelect = (target: string) => {
@@ -53,21 +47,55 @@ const New = () => {
       | React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setData({ ...data, [name]: value });
+    if (name === "price") {
+      const price = value.replaceAll(",", "").substr(0, MAX_PRICE_LENGTH);
+      const realPrice = price.replace(/(^0+)/, "").length
+        ? price.replace(/(^0+)/, "")
+        : "0";
+      const preview = price.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      setDisplayPrice(preview);
+      setData({ ...data, [name]: realPrice });
+    } else {
+      setData({ ...data, [name]: value });
+    }
   };
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(data);
-    await addDoc(collection(dbService, "expend"), { username, ...data });
-    const q = query(collection(dbService, "expend"));
-    const res = await getDocs(q);
-    console.log(res);
+    if (
+      data.category === "" ||
+      data.date === "" ||
+      data.price === "" ||
+      data.title === ""
+    ) {
+      setShowAlert(true);
+    }
+    if (
+      data.category.length &&
+      data.title.trim().length &&
+      data.date.length &&
+      data.price.length
+    ) {
+      await addDoc(collection(dbService, "expend"), data);
+      dispatch(addExpend(data));
+      setData({
+        category: "",
+        title: "",
+        content: "",
+        date: "",
+        price: "",
+        username: user.username,
+      });
+      setDisplayPrice("");
+    }
   };
 
   const handleCancel = () => {
     console.log("CANCEL");
   };
+
+  console.log(showAlert);
 
   return (
     <StNew>
@@ -80,18 +108,21 @@ const New = () => {
             name="date"
             onChange={onChange}
             value={data.date}
+            // required
           />
         </div>
         <div>
           <label htmlFor="title-input">Title</label>
           <input
             id="title-input"
-            type="text"
             name="title"
             onChange={onChange}
             value={data.title}
+            // required
           />
-          <div onClick={() => setShowCategory(!showCategory)}>CATEGORY</div>
+          <div onClick={() => setShowCategory(!showCategory)}>
+            {data.category ? data.category : "CATEGORY"}
+          </div>
         </div>
         <div>
           <label htmlFor="content-input">Content</label>
@@ -107,9 +138,9 @@ const New = () => {
           <input
             id="price-input"
             name="price"
-            type="number"
             onChange={onChange}
-            value={data.price}
+            value={displayPrice}
+            // required
           />
         </div>
         <div>
@@ -120,12 +151,23 @@ const New = () => {
       {showCategory ? (
         <ModalLayout
           handleModal={() => setShowCategory(!showCategory)}
-          height={500}
+          height={"500px"}
         >
           <SelectCategoryModal
             handleClose={() => setShowCategory(!showCategory)}
             handleSelect={handleSelect}
           />
+        </ModalLayout>
+      ) : null}
+      {showAlert ? (
+        <ModalLayout
+          handleModal={() => setShowAlert(!showAlert)}
+          height={"300px"}
+        >
+          <div>
+            필수 항목을 입력해주세요
+            <button onClick={() => setShowAlert(!showAlert)}>닫기</button>
+          </div>
         </ModalLayout>
       ) : null}
     </StNew>

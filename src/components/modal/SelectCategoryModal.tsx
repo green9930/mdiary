@@ -29,9 +29,13 @@ const SelectCategoryModal = ({
       <ul>
         {CATEGORY_LIST.map((val) => {
           return (
-            <li onClick={() => setTarget(val)} key={val}>
+            <StLi
+              isSelected={target === val}
+              onClick={() => setTarget(val)}
+              key={val}
+            >
               {val}
-            </li>
+            </StLi>
           );
         })}
       </ul>
@@ -46,3 +50,7 @@ const SelectCategoryModal = ({
 export default SelectCategoryModal;
 
 const StCategoryModal = styled.div``;
+
+const StLi = styled.li<{ isSelected: boolean }>`
+  color: ${({ isSelected }) => (isSelected ? "red" : "#000000")};
+`;
