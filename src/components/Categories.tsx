@@ -6,7 +6,7 @@ import {
   ExpendType,
 } from "../config";
 import { useAppSelector } from "../context/redux";
-import sortingData from "../utils/sortingData";
+import { sortingData } from "../utils/sortingData";
 import DetailPreview from "./DetailPreview";
 
 const Categories = () => {

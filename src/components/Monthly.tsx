@@ -15,7 +15,6 @@ const Monthly = () => {
 
   useEffect(() => {
     if (dataArr) {
-      console.log("CHANGE DATE");
       const dateStr = `${value.getFullYear()}-${(value.getMonth() + 1)
         .toString()
         .padStart(2, "0")}-${value.getDate().toString().padStart(2, "0")}`;
@@ -25,7 +24,7 @@ const Monthly = () => {
         })
       );
     }
-  }, [value, dataArr.length]);
+  }, [value, dataArr]);
 
   const handleTargetData = (target: ExpendType) => setTargetData(target);
 

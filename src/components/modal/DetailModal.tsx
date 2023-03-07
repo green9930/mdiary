@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { ExpendType } from "../../config";
-import ModalLayout from "../layout/ModalLayout";
+import Edit from "../Edit";
 
 interface IDetailModal {
   data: ExpendType;
@@ -14,23 +14,41 @@ const DetailModal = ({
   handleShowDetail,
   handleShowDelete,
 }: IDetailModal) => {
-  const { id, category, title, content, date, price } = data;
+  const [isEdit, setIsEdit] = useState(false);
+  const [defaultData, setDefaultData] = useState<ExpendType>(data);
+  const { id, category, title, content, date, price } = defaultData;
+
+  const handleEdit = (target: ExpendType) => {
+    setDefaultData(target);
+    setIsEdit(!isEdit);
+  };
+
   return (
     <StDetail>
-      <StDetailHead>
-        <h3>{title}</h3>
-        <span>{category}</span>
-        <span>{date}</span>
-      </StDetailHead>
-      <StDeatilBody>
-        <span>{price}</span>
-        <p>{content}</p>
-      </StDeatilBody>
-      <StDetailFooter>
-        <button>EDIT</button>
-        <button onClick={handleShowDelete}>DELETE</button>
-      </StDetailFooter>
-      <button onClick={handleShowDetail}>X</button>
+      {isEdit ? (
+        <Edit
+          defaultData={data}
+          handleEdit={handleEdit}
+          handleClose={() => setIsEdit(!isEdit)}
+        />
+      ) : (
+        <>
+          <StDetailHead>
+            <h3>{title}</h3>
+            <span>{category}</span>
+            <span>{date}</span>
+          </StDetailHead>
+          <StDeatilBody>
+            <span>{price}</span>
+            <p>{content}</p>
+          </StDeatilBody>
+          <StDetailFooter>
+            <button onClick={() => setIsEdit(!isEdit)}>EDIT</button>
+            <button onClick={handleShowDelete}>DELETE</button>
+          </StDetailFooter>
+          <button onClick={handleShowDetail}>X</button>
+        </>
+      )}
     </StDetail>
   );
 };

@@ -41,11 +41,21 @@ const expendSlice = createSlice({
       fetchNewData();
       state.push({ id: targetId, ...action.payload });
     },
+    updateExpend: (state, action: PayloadAction<ExpendType>) => {
+      return state.map((val) => {
+        if (val.id === action.payload.id) {
+          return action.payload;
+        } else {
+          return val;
+        }
+      });
+    },
     deleteExpend: (state, action: PayloadAction<ExpendType>) => {
       return state.filter((val) => val.id !== action.payload.id);
     },
   },
 });
 
-export const { setExpend, addExpend, deleteExpend } = expendSlice.actions;
+export const { setExpend, addExpend, updateExpend, deleteExpend } =
+  expendSlice.actions;
 export default expendSlice.reducer;

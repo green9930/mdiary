@@ -4,7 +4,7 @@ import { ExpendType } from "../config";
 import { useAppSelector } from "../context/redux";
 import { dateConverter } from "../utils/dateConverter";
 import { dayConverter } from "../utils/dayConverter";
-import sortingData from "../utils/sortingData";
+import { sortingData } from "../utils/sortingData";
 import DetailPreview from "./DetailPreview";
 
 type TWeekly = {
@@ -15,9 +15,9 @@ type TWeekly = {
 };
 
 const Weekly = () => {
-  const [weekArr, setWeekArr] = useState<TWeekly[]>([]);
   const [d, setD] = useState(new Date());
   const [targetDay, setTargetDay] = useState(new Date().getDay());
+  const [weekArr, setWeekArr] = useState<TWeekly[]>([]);
   const [dataArr, setDataArr] = useState<ExpendType[]>([]);
   const [targetData, setTargetData] = useState<ExpendType>();
 
@@ -52,39 +52,6 @@ const Weekly = () => {
         });
       }
     }
-
-    // targetDay
-    // // MON ~ targetDay
-    // for (let i = 1; i < targetDay; i++) {
-    //   const copiedD = new Date(d);
-    //   const val = new Date(
-    //     copiedD.setDate(copiedD.getDate() - (targetDay - i))
-    //   );
-    //   wArr.push({
-    //     day: dayConverter(i),
-    //     fullDate: dateConverter(val),
-    //     date: dateConverter(val).slice(-2),
-    //   });
-    // }
-    // // targetDay
-    // wArr.push({
-    //   day: dayConverter(targetDay),
-    //   fullDate: dateConverter(d),
-    //   date: dateConverter(d).slice(-2),
-    // });
-    // // targetDay ~ SUN
-    // for (let i = targetDay + 1; i < 8; i++) {
-    //   const copiedD = new Date(d);
-    //   const val = new Date(
-    //     copiedD.setDate(copiedD.getDate() + (i - targetDay))
-    //   );
-    //   wArr.push({
-    //     day: dayConverter(i),
-    //     fullDate: dateConverter(val),
-    //     date: dateConverter(val).slice(-2),
-    //   });
-    // }
-    console.log(wArr);
     setWeekArr(wArr);
   }, [data, dateConverter(d)]);
 
@@ -126,6 +93,7 @@ const Weekly = () => {
               <WeekLi
                 key={fullDate}
                 isToday={val.fullDate === dateConverter(new Date())}
+                isSelected={val.fullDate === dateConverter(d)}
                 onClick={() => handleSelectDay(day, fullDate)}
               >
                 <h3>{date}</h3>
@@ -160,6 +128,7 @@ const StWeekly = styled.div``;
 const StHeader = styled.div``;
 const StBody = styled.div``;
 
-const WeekLi = styled.li<{ isToday: boolean }>`
-  color: ${({ isToday }) => (isToday ? "#FF0000" : "#000000")};
+const WeekLi = styled.li<{ isToday: boolean; isSelected: boolean }>`
+  color: ${({ isToday, isSelected }) =>
+    isToday ? "#FF0000" : isSelected ? "#00b418" : "#000000"};
 `;

@@ -1,6 +1,6 @@
 import { ExpendType } from "./../config";
 
-const sortingData = (
+export const sortingData = (
   data: ExpendType[],
   target: "category" | "date" | "price" | "title",
   isAscend: boolean
@@ -40,5 +40,3 @@ const sortingData = (
   });
   return arr;
 };
-
-export default sortingData;

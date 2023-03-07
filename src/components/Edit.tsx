@@ -4,31 +4,41 @@ import { useAppSelector } from "../context/redux";
 import ModalLayout from "./layout/ModalLayout";
 import SelectCategoryModal from "./modal/SelectCategoryModal";
 import { dbService } from "../firebase";
-import { addDoc, collection } from "firebase/firestore";
-import { addExpend } from "../context/modules/expendSlice";
+import { doc, updateDoc } from "firebase/firestore";
+import { addExpend, updateExpend } from "../context/modules/expendSlice";
 import { useDispatch } from "react-redux";
 import { ExpendType } from "../config";
 import { dateConverter } from "../utils/dateConverter";
 import { priceConverter } from "../utils/priceConverter";
 
+const MAX_PRICE_LENGTH = 9;
 const MAX_TITLE_LENGTH = 30;
 const MAX_CONTENT_LENGTH = 200;
 
-const New = () => {
-  const user = useAppSelector((state) => state.user);
-  const dispatch = useDispatch();
+interface IEdit {
+  defaultData: ExpendType;
+  handleEdit: (target: ExpendType) => void;
+  handleClose: () => void;
+}
 
+const Edit = ({ defaultData, handleEdit, handleClose }: IEdit) => {
   const [showCategory, setShowCategory] = useState(false);
   const [data, setData] = useState<ExpendType>({
-    category: "",
-    title: "",
-    content: "",
-    date: "",
-    price: "",
-    username: "",
+    category: defaultData.category,
+    title: defaultData.title,
+    content: defaultData.content,
+    date: defaultData.date,
+    price: defaultData.price,
+    username: defaultData.username,
+    id: defaultData.id,
   });
-  const [displayPrice, setDisplayPrice] = useState("");
+  const [displayPrice, setDisplayPrice] = useState(
+    priceConverter(defaultData.price).previewPrice
+  );
   const [showAlert, setShowAlert] = useState(false);
+
+  const user = useAppSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const today = new Date();
@@ -46,7 +56,7 @@ const New = () => {
       | React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    if (name === "price" && priceConverter(value).isValid) {
+    if (name === "price") {
       setDisplayPrice(priceConverter(value).previewPrice);
       setData({ ...data, [name]: priceConverter(value).realPrice });
     } else {
@@ -71,23 +81,10 @@ const New = () => {
       data.date.length &&
       data.price.length
     ) {
-      await addDoc(collection(dbService, "expend"), data);
-      dispatch(addExpend(data));
-      setData({
-        category: "",
-        title: "",
-        content: "",
-        date: "",
-        price: "",
-        username: user.username,
-      });
-      setDisplayPrice("");
-      // window.location.reload();
+      await updateDoc(doc(dbService, "expend", data.id as string), data);
+      dispatch(updateExpend(data));
+      handleEdit(data);
     }
-  };
-
-  const handleCancel = () => {
-    console.log("CANCEL");
   };
 
   return (
@@ -135,7 +132,7 @@ const New = () => {
         </div>
         <div>
           <button type="submit">추가</button>
-          <button onClick={handleCancel}>취소</button>
+          <button onClick={handleClose}>취소</button>
         </div>
       </form>
       {showCategory ? (
@@ -164,6 +161,6 @@ const New = () => {
   );
 };
 
-export default New;
+export default Edit;
 
 const StNew = styled.div``;
