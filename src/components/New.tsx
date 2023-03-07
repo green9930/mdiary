@@ -4,9 +4,10 @@ import { useAppSelector } from "../context/redux";
 import ModalLayout from "./layout/ModalLayout";
 import SelectCategoryModal from "./modal/SelectCategoryModal";
 import { dbService } from "../firebase";
-import { addDoc, collection } from "firebase/firestore";
-import { addExpend, ExpendType } from "../context/modules/expendSlice";
+import { addDoc, collection, getDocs, query } from "firebase/firestore";
+import { addExpend } from "../context/modules/expendSlice";
 import { useDispatch } from "react-redux";
+import { ExpendType } from "../config";
 
 const MAX_PRICE_LENGTH = 9;
 const MAX_TITLE_LENGTH = 30;
@@ -88,14 +89,14 @@ const New = () => {
         username: user.username,
       });
       setDisplayPrice("");
+      window.location.reload();
+      // window.location.href = "/";
     }
   };
 
   const handleCancel = () => {
     console.log("CANCEL");
   };
-
-  console.log(showAlert);
 
   return (
     <StNew>

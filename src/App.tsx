@@ -1,9 +1,9 @@
 import { collection, getDocs, query } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { ExpendType, setExpend } from "./context/modules/expendSlice";
+import { ExpendType } from "./config";
+import { setExpend } from "./context/modules/expendSlice";
 import { setUser } from "./context/modules/userSlice";
-import { useAppSelector } from "./context/redux";
 import { authService, dbService } from "./firebase";
 import Router from "./router/Router";
 

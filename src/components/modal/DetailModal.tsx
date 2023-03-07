@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { ExpendType } from "../../context/modules/expendSlice";
+import { ExpendType } from "../../config";
 import ModalLayout from "../layout/ModalLayout";
 
 interface IDetailModal {

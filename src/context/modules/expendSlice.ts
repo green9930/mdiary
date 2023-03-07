@@ -2,16 +2,7 @@ import { dbService } from "./../../firebase";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import { collection, getDocs, query } from "firebase/firestore";
-
-export type ExpendType = {
-  id?: string;
-  category: string;
-  title: string;
-  content: string;
-  date: string;
-  price: string;
-  username: string;
-};
+import { ExpendType } from "../../config";
 
 type DataType = {
   auth: string;
