@@ -11,7 +11,7 @@ import { ExpendType } from "../config";
 import { dateConverter } from "../utils/dateConverter";
 import { priceConverter } from "../utils/priceConverter";
 
-const MAX_TITLE_LENGTH = 30;
+const MAX_TITLE_LENGTH = 24;
 const MAX_CONTENT_LENGTH = 200;
 
 const New = () => {
@@ -141,6 +141,7 @@ const New = () => {
       {showCategory ? (
         <ModalLayout
           handleModal={() => setShowCategory(!showCategory)}
+          width="84%"
           height={"500px"}
         >
           <SelectCategoryModal
@@ -152,6 +153,7 @@ const New = () => {
       {showAlert ? (
         <ModalLayout
           handleModal={() => setShowAlert(!showAlert)}
+          width="84%"
           height={"300px"}
         >
           <div>

@@ -138,6 +138,7 @@ const Edit = ({ defaultData, handleEdit, handleClose }: IEdit) => {
       {showCategory ? (
         <ModalLayout
           handleModal={() => setShowCategory(!showCategory)}
+          width="84%"
           height={"500px"}
         >
           <SelectCategoryModal
@@ -149,6 +150,7 @@ const Edit = ({ defaultData, handleEdit, handleClose }: IEdit) => {
       {showAlert ? (
         <ModalLayout
           handleModal={() => setShowAlert(!showAlert)}
+          width="84%"
           height={"300px"}
         >
           <div>

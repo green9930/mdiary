@@ -5,11 +5,17 @@ import { calcRem } from "../../styles/theme";
 interface IModal extends React.HTMLAttributes<HTMLDivElement> {}
 
 interface IModal {
+  width: string;
   height: string;
   handleModal: () => void;
 }
 
-const ModalLayout: React.FC<IModal> = ({ children, height, handleModal }) => {
+const ModalLayout: React.FC<IModal> = ({
+  children,
+  width,
+  height,
+  handleModal,
+}) => {
   useEffect(() => {
     document.body.style.cssText = `
       position: fixed;  
@@ -30,6 +36,7 @@ const ModalLayout: React.FC<IModal> = ({ children, height, handleModal }) => {
     <StModalLayout onClick={handleModal}>
       <StModalBody
         onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
+        width={width}
         height={height}
       >
         {children}
@@ -53,7 +60,7 @@ const StModalLayout = styled.div`
   z-index: 99;
 `;
 
-const StModalBody = styled.div<{ height: string }>`
+const StModalBody = styled.div<{ width: string; height: string }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -64,7 +71,7 @@ const StModalBody = styled.div<{ height: string }>`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 70%;
+  width: 80%;
   height: ${({ height }) => height};
   background-color: #ffffff;
   border-radius: 5px;

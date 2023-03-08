@@ -55,7 +55,7 @@ const Daily = () => {
             <button onClick={moveToNext}>NEXT</button>
             <button onClick={handleClose}>직접입력</button>
             {showDateModal ? (
-              <ModalLayout height="50%" handleModal={handleClose}>
+              <ModalLayout width="84%" height="50%" handleModal={handleClose}>
                 <SelectDateModal
                   handleClose={handleClose}
                   handleSelectDate={handleSelectDate}
