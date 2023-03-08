@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { ExpendType } from "../../config";
+import { CategoryType, ExpendType } from "../../config";
+import { calcRem } from "../../styles/theme";
+import CategoryIcon from "../CategoryIcon";
 import Edit from "../Edit";
 
 interface IDetailModal {
@@ -34,12 +36,17 @@ const DetailModal = ({
       ) : (
         <>
           <StDetailHead>
+            <CategoryIcon target={category as CategoryType} />
             <h3>{title}</h3>
-            <span>{category}</span>
-            <span>{date}</span>
           </StDetailHead>
           <StDeatilBody>
-            <span>{price}</span>
+            <StSubInfo>
+              <span>
+                {date.split("-")[0]} {date.split("-")[1]}
+                {date.split("-")[2]}
+              </span>
+              <span>{price}</span>
+            </StSubInfo>
             <p>{content}</p>
           </StDeatilBody>
           <StDetailFooter>
@@ -56,8 +63,15 @@ export default DetailModal;
 
 const StDetail = styled.div``;
 
-const StDetailHead = styled.div``;
+const StDetailHead = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${calcRem(10)};
+  justify-content: flex-start;
+`;
 
 const StDeatilBody = styled.div``;
+
+const StSubInfo = styled.div``;
 
 const StDetailFooter = styled.div``;
