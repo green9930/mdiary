@@ -6,6 +6,8 @@ import { Provider } from "react-redux";
 import App from "./App";
 import store from "./context/redux";
 import GlobalStyle from "./styles/GlobalStyle";
+import { ThemeProvider } from "styled-components";
+import { theme } from "./styles/theme";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -13,16 +15,18 @@ const root = ReactDOM.createRoot(
 
 root.render(
   // <React.StrictMode>
-  <BrowserRouter
-    basename={
-      process.env.NODE_ENV === "production" ? process.env.PUBLIC_URL : ""
-    }
-  >
-    <Provider store={store}>
-      <GlobalStyle />
-      <App />
-    </Provider>
-  </BrowserRouter>
+  <ThemeProvider theme={theme}>
+    <BrowserRouter
+      basename={
+        process.env.NODE_ENV === "production" ? process.env.PUBLIC_URL : ""
+      }
+    >
+      <Provider store={store}>
+        <GlobalStyle />
+        <App />
+      </Provider>
+    </BrowserRouter>
+  </ThemeProvider>
   // </React.StrictMode>
 );
 
