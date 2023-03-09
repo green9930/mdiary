@@ -81,7 +81,7 @@ const StHeader = styled.div`
   gap: ${calcRem(8)};
 
   h3 {
-    color: ${theme.blue3};
+    color: ${theme.black};
     font-size: ${calcRem(14)};
   }
 `;
