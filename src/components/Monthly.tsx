@@ -12,7 +12,7 @@ const Monthly = () => {
   const [value, onChange] = useState(new Date());
   const [targetDataArr, setTargetDataArr] = useState<ExpendType[]>([]);
   const [targetData, setTargetData] = useState<ExpendType>();
-  const [MExpend, setMExpend] = useState("");
+  const [mExpend, setMExpend] = useState("");
 
   const dataArr = useAppSelector((state) => state.expend);
 
@@ -43,9 +43,9 @@ const Monthly = () => {
   return (
     <StMonthly>
       <StHeader>
-        <h2>
-          Monthly Total <span>{MExpend} ₩</span>
-        </h2>
+        <StTitle>
+          Monthly Total <span>{mExpend} ₩</span>
+        </StTitle>
         <StCalendar>
           <Calendar
             formatDay={(locale, date) =>
@@ -86,21 +86,21 @@ const StMonthly = styled.div`
   padding: ${calcRem(10)} ${calcRem(20)} ${calcRem(20)} ${calcRem(20)};
 `;
 
-const StHeader = styled.div`
-  h2 {
+const StHeader = styled.div``;
+
+const StTitle = styled.h2`
+  margin-bottom: ${calcRem(10)};
+  color: ${theme.blue3};
+  font-family: "Rubik";
+  font-size: ${calcRem(20)};
+  font-weight: 700;
+
+  span {
+    margin-left: ${calcRem(4)};
     color: ${theme.blue3};
     font-family: "Rubik";
     font-size: ${calcRem(20)};
     font-weight: 700;
-    margin-bottom: ${calcRem(10)};
-
-    span {
-      margin-left: ${calcRem(4)};
-      color: ${theme.blue3};
-      font-family: "Rubik";
-      font-size: ${calcRem(20)};
-      font-weight: 700;
-    }
   }
 `;
 
@@ -117,8 +117,14 @@ const StCalendar = styled.div`
 
   .react-calendar__navigation {
     button {
-      font-size: ${calcRem(14)};
+      span {
+        font-size: ${calcRem(14)};
+      }
     }
+  }
+  .react-calendar__navigation__arrow {
+    height: ${calcRem(40)};
+    font-size: ${calcRem(18)};
   }
 
   .react-calendar__navigation button:enabled:hover,
@@ -150,7 +156,7 @@ const StCalendar = styled.div`
 
   .react-calendar__month-view__days__day--neighboringMonth {
     abbr {
-      color: ${theme.grey2};
+      color: ${theme.gray2};
     }
   }
 `;
