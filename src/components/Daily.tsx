@@ -86,7 +86,7 @@ const Daily = () => {
               </SelectBtn>
             </StBtnWrapper>
             {showDateModal ? (
-              <ModalLayout width="84%" height="50%" handleModal={handleClose}>
+              <ModalLayout width="84%" height="40%" handleModal={handleClose}>
                 <SelectDateModal
                   handleClose={handleClose}
                   handleSelectDate={handleSelectDate}

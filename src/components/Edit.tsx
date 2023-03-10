@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { useAppSelector } from "../context/redux";
 import ModalLayout from "./layout/ModalLayout";
 import SelectCategoryModal from "./modal/SelectCategoryModal";
 import { dbService } from "../firebase";
 import { doc, updateDoc } from "firebase/firestore";
-import { addExpend, updateExpend } from "../context/modules/expendSlice";
+import { updateExpend } from "../context/modules/expendSlice";
 import { useDispatch } from "react-redux";
 import { ExpendType } from "../config";
-import { dateConverter } from "../utils/dateConverter";
 import { priceConverter } from "../utils/priceConverter";
+import { calcRem, theme } from "../styles/theme";
+import { MdCalendarMonth } from "react-icons/md";
+import Button from "./elements/Button";
 
 const MAX_PRICE_LENGTH = 9;
 const MAX_TITLE_LENGTH = 30;
@@ -37,13 +38,7 @@ const Edit = ({ defaultData, handleEdit, handleClose }: IEdit) => {
   );
   const [showAlert, setShowAlert] = useState(false);
 
-  const user = useAppSelector((state) => state.user);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const today = new Date();
-    setData({ ...data, date: dateConverter(today), username: user.username });
-  }, []);
 
   const handleSelect = (target: string) => {
     setData({ ...data, category: target });
@@ -88,81 +83,239 @@ const Edit = ({ defaultData, handleEdit, handleClose }: IEdit) => {
   };
 
   return (
-    <StNew>
-      <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="date-input">Date</label>
-          <input
-            id="date-input"
-            type="date"
-            name="date"
-            onChange={onChange}
-            value={data.date}
-          />
-        </div>
-        <div>
-          <label htmlFor="title-input">Title</label>
-          <input
-            id="title-input"
-            name="title"
-            onChange={onChange}
-            value={data.title}
-          />
-          <div onClick={() => setShowCategory(!showCategory)}>
-            {data.category ? data.category : "CATEGORY"}
-          </div>
-        </div>
-        <div>
-          <label htmlFor="content-input">Content</label>
-          <textarea
-            id="content-input"
-            name="content"
-            onChange={onChange}
-            value={data.content}
-          />
-        </div>
-        <div>
-          <label htmlFor="price-input">Price</label>
-          <input
-            id="price-input"
-            name="price"
-            onChange={onChange}
-            value={displayPrice}
-          />
-        </div>
-        <div>
-          <button type="submit">추가</button>
-          <button onClick={handleClose}>취소</button>
-        </div>
-      </form>
+    <>
       {showCategory ? (
-        <ModalLayout
-          handleModal={() => setShowCategory(!showCategory)}
-          width="84%"
-          height={"500px"}
-        >
-          <SelectCategoryModal
-            handleClose={() => setShowCategory(!showCategory)}
-            handleSelect={handleSelect}
-          />
-        </ModalLayout>
-      ) : null}
-      {showAlert ? (
-        <ModalLayout
-          handleModal={() => setShowAlert(!showAlert)}
-          width="84%"
-          height={"300px"}
-        >
-          <div>
-            필수 항목을 입력해주세요
-            <button onClick={() => setShowAlert(!showAlert)}>닫기</button>
-          </div>
-        </ModalLayout>
-      ) : null}
-    </StNew>
+        <SelectCategoryModal
+          handleClose={() => setShowCategory(!showCategory)}
+          handleSelect={handleSelect}
+        />
+      ) : (
+        <StEdit>
+          <form onSubmit={onSubmit}>
+            <StSubInfo>
+              <StDateWrapper>
+                <span>Date</span>
+                <StDateInput
+                  id="date-input"
+                  type="date"
+                  name="date"
+                  onChange={onChange}
+                  value={data.date}
+                />
+                <label htmlFor="date-input">
+                  <MdCalendarMonth size={18} fill={`${theme.blue3}`} />
+                </label>
+              </StDateWrapper>
+              <StCategory
+                isSelected={data.category ? true : false}
+                onClick={() => setShowCategory(!showCategory)}
+              >
+                <span>{data.category ? data.category : "카테고리"}</span>
+              </StCategory>
+            </StSubInfo>
+            <StTitle>
+              <label className="a11y-hidden" htmlFor="title-input">
+                제목
+              </label>
+              <input
+                id="title-input"
+                name="title"
+                onChange={onChange}
+                value={data.title}
+                placeholder="제목을 입력하세요"
+              />
+            </StTitle>
+            <StContent>
+              <label className="a11y-hidden" htmlFor="content-input">
+                내용
+              </label>
+              <textarea
+                rows={8}
+                id="content-input"
+                name="content"
+                onChange={onChange}
+                value={data.content}
+                placeholder="내용을 입력하세요"
+              />
+            </StContent>
+            <StPrice>
+              <span>₩</span>
+              <label className="a11y-hidden" htmlFor="price-input">
+                지출 금액
+              </label>
+              <input
+                id="price-input"
+                name="price"
+                onChange={onChange}
+                value={displayPrice}
+                placeholder="지출 금액"
+              />
+            </StPrice>
+            <StBtnWrapper>
+              <Button type="submit" btnTheme="blue1" btnSize="small2">
+                수정
+              </Button>
+              <Button btnTheme="beige3" btnSize="small2" onClick={handleClose}>
+                취소
+              </Button>
+            </StBtnWrapper>
+          </form>
+          {showAlert ? (
+            <ModalLayout
+              handleModal={() => setShowAlert(!showAlert)}
+              width="84%"
+              height={"300px"}
+            >
+              <div>
+                필수 항목을 입력해주세요
+                <button onClick={() => setShowAlert(!showAlert)}>닫기</button>
+              </div>
+            </ModalLayout>
+          ) : null}
+        </StEdit>
+      )}
+    </>
   );
 };
 
 export default Edit;
 
-const StNew = styled.div``;
+const StEdit = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: ${calcRem(12)};
+    margin-top: ${calcRem(10)};
+  }
+
+  label {
+    color: ${theme.blue3};
+    font-weight: 500;
+  }
+
+  input,
+  textarea {
+    padding: ${calcRem(8)} ${calcRem(10)};
+    border: none;
+    border-radius: ${calcRem(4)};
+    font-size: ${calcRem(14)};
+  }
+  input {
+    background-color: ${theme.beige3};
+  }
+  textarea {
+    background-color: ${theme.gray3};
+  }
+`;
+
+const StSubInfo = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: ${calcRem(-10)};
+`;
+
+const StDateWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  span {
+    margin-right: ${calcRem(4)};
+    color: ${theme.blue3};
+    font-size: ${calcRem(12)};
+    font-weight: 500;
+  }
+
+  input {
+    padding: ${calcRem(2)} ${calcRem(4)};
+    background-color: transparent;
+    font-size: ${calcRem(14)};
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+const StDateInput = styled.input.attrs({
+  type: "date",
+})`
+  ::-webkit-calendar-picker-indicator {
+    display: none;
+  }
+`;
+
+const StCategory = styled.div<{ isSelected: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: ${calcRem(70)};
+
+  span {
+    text-align: center;
+    color: ${({ isSelected }) =>
+      isSelected ? `${theme.green1}` : `${theme.blue3}`};
+    font-size: ${({ isSelected }) =>
+      isSelected ? `${calcRem(12)}` : `${calcRem(10)}`};
+    font-weight: 500;
+  }
+
+  padding: ${calcRem(4)};
+`;
+
+const StTitle = styled.div`
+  width: 100%;
+  input {
+    width: 100%;
+  }
+`;
+
+const StContent = styled.div`
+  width: 100%;
+
+  textarea {
+    width: 100%;
+    height: auto;
+  }
+`;
+
+const StPrice = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: ${calcRem(8)};
+
+  input {
+    flex-grow: 1;
+    width: 100%;
+  }
+  span {
+    padding-left: ${calcRem(4)};
+    color: ${theme.blue3};
+    font-size: ${calcRem(20)};
+    font-weight: 500;
+  }
+`;
+
+const StBtnWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: ${calcRem(26)};
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+`;
