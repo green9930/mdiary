@@ -83,13 +83,13 @@ const StMonthly = styled.div`
   align-items: center;
   justify-content: center;
   gap: ${calcRem(30)};
-  padding: ${calcRem(10)} ${calcRem(20)} ${calcRem(20)} ${calcRem(20)};
+  padding: ${calcRem(20)};
 `;
 
 const StHeader = styled.div``;
 
 const StTitle = styled.h2`
-  margin-bottom: ${calcRem(10)};
+  margin-bottom: ${calcRem(16)};
   color: ${theme.blue3};
   font-family: "Rubik";
   font-size: ${calcRem(20)};

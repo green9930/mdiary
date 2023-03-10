@@ -120,10 +120,10 @@ const Daily = () => {
 export default Daily;
 
 const StDaily = styled.div`
-  padding: ${calcRem(10)} ${calcRem(20)} ${calcRem(20)} ${calcRem(20)};
   display: flex;
   flex-direction: column;
   gap: ${calcRem(70)};
+  padding: ${calcRem(20)};
 `;
 
 const StDailyHeader = styled.div``;
@@ -147,7 +147,7 @@ const StBtnWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
-  margin-top: ${calcRem(8)};
+  margin-top: ${calcRem(16)};
   padding: ${calcRem(8)} 0;
   position: relative;
 

@@ -80,10 +80,10 @@ const Categories = () => {
 export default Categories;
 
 const StCategories = styled.div`
-  padding: ${calcRem(10)} ${calcRem(20)} ${calcRem(20)} ${calcRem(20)};
   display: flex;
   flex-direction: column;
   gap: ${calcRem(50)};
+  padding: ${calcRem(20)};
 `;
 
 const StHeader = styled.div``;
@@ -107,7 +107,7 @@ const StCategoryList = styled.ul`
   display: flex;
   align-items: center;
   gap: ${calcRem(14)};
-  margin-top: ${calcRem(14)};
+  margin-top: ${calcRem(20)};
   padding: ${calcRem(12)} ${calcRem(10)};
   background-color: ${theme.gray1};
   overflow-x: scroll;

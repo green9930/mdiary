@@ -52,6 +52,12 @@ const GlobalStyle = createGlobalStyle`
     cursor: pointer;
   }
 
+  input, textarea {
+    :hover, :focus {
+      outline: none;
+    }
+  }
+
   .a11y-hidden {
     overflow: hidden;
     position: absolute;
