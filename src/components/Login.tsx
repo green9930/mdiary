@@ -1,7 +1,12 @@
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { useDispatch } from "react-redux";
-import { setUser } from "../context/modules/userSlice";
 import { authService } from "../firebase";
+import { useDispatch } from "react-redux";
+import styled from "styled-components";
+import { setUser } from "../context/modules/userSlice";
+import { calcRem, theme } from "../styles/theme";
+import { FcGoogle } from "react-icons/fc";
+import { ImPencil2 } from "react-icons/im";
+import { GoLinkExternal } from "react-icons/go";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -28,13 +33,77 @@ const Login = () => {
       });
 
   return (
-    <div>
-      <h2>LOGIN</h2>
-      <div>
-        <button onClick={handleSignIn}>Continue with Google</button>
-      </div>
-    </div>
+    <StLogin>
+      <p>내가 얼마 썼는지"만" 알고 싶을때, </p>
+      <StLogo>
+        <h2>다씀</h2>
+        <ImPencil2 size={`${calcRem(26)}`} fill={`${theme.blue4}`} />
+      </StLogo>
+      <StGoogleLogin onClick={handleSignIn}>
+        <FcGoogle size={`${calcRem(16)}`} />
+        <span>Continue with Google</span>
+      </StGoogleLogin>
+      <a href="https://github.com/green9930/mdiary" target="_blank">
+        <span>서비스 자세히 알아보기</span>
+        <GoLinkExternal size={`${calcRem(12)}`} fill={`${theme.blue3}`} />
+      </a>
+    </StLogin>
   );
 };
 
 export default Login;
+
+const StLogin = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  margin-top: ${calcRem(100)};
+
+  p {
+    margin-bottom: ${calcRem(24)};
+    padding: ${calcRem(10)};
+    border-radius: ${calcRem(6)};
+    color: ${theme.green2};
+    font-family: "KorailRoundGothicBold";
+  }
+  a {
+    display: flex;
+    align-items: center;
+    gap: ${calcRem(4)};
+    span {
+      color: ${theme.blue3};
+      font-weight: 500;
+    }
+  }
+`;
+
+const StLogo = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: ${calcRem(60)};
+
+  h2 {
+    color: ${theme.blue4};
+    font-family: "Tenada";
+    font-size: ${calcRem(48)};
+  }
+`;
+
+const StGoogleLogin = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: ${calcRem(6)};
+  margin-bottom: ${calcRem(14)};
+  padding: ${calcRem(10)};
+  border: none;
+  border-radius: ${calcRem(4)};
+  background-color: ${theme.beige3};
+
+  span {
+    font-size: ${calcRem(16)};
+    font-weight: 500;
+  }
+`;
