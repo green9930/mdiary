@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { calcRem, theme } from "../../styles/theme";
 import { dateConverter } from "../../utils/dateConverter";
 import { getMonthLength } from "../../utils/getMonthLength";
+import Button from "../elements/Button";
 
 const MONTH_ARR = Array.from({ length: 12 }, (_, idx) => idx + 1);
 interface ISelectDateModal {
@@ -52,73 +54,125 @@ const SelectDateModal = ({
 
   return (
     <StDateModal>
-      <h2>SelectDateModal</h2>
       <StBody>
-        <label htmlFor="year-select">YEAR</label>
-        <select
-          name="year"
-          id="year-select"
-          onChange={onSelect}
-          defaultValue={year}
-        >
-          {yearArr.map((val) => {
-            return (
-              <option key={`year-${val}`} value={val}>
-                {val}
-              </option>
-            );
-          })}
-        </select>
-        <label htmlFor="month-select">MONTH</label>
-        <select
-          name="month"
-          id="month-select"
-          onChange={onSelect}
-          defaultValue={month}
-        >
-          {MONTH_ARR.map((val) => {
-            return (
-              <option key={`month-${val}`} value={val}>
-                {val}
-              </option>
-            );
-          })}
-        </select>
-        <label htmlFor="date-select">DATE</label>
-        <select
-          name="date"
-          id="date-select"
-          onChange={onSelect}
-          defaultValue={date}
-          key={date}
-        >
-          {dateArr.map((val) => {
-            return (
-              <option key={`date-${val}`} value={val}>
-                {val}
-              </option>
-            );
-          })}
-        </select>
+        <div>
+          <label htmlFor="year-select">YEAR</label>
+          <select
+            name="year"
+            id="year-select"
+            onChange={onSelect}
+            defaultValue={year}
+          >
+            {yearArr.map((val) => {
+              return (
+                <option key={`year-${val}`} value={val}>
+                  {val}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="month-select">MONTH</label>
+          <select
+            name="month"
+            id="month-select"
+            onChange={onSelect}
+            defaultValue={month}
+          >
+            {MONTH_ARR.map((val) => {
+              return (
+                <option key={`month-${val}`} value={val}>
+                  {val}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="date-select">DATE</label>
+          <select
+            name="date"
+            id="date-select"
+            onChange={onSelect}
+            defaultValue={date}
+            key={date}
+          >
+            {dateArr.map((val) => {
+              return (
+                <option key={`date-${val}`} value={val}>
+                  {val}
+                </option>
+              );
+            })}
+          </select>
+        </div>
       </StBody>
-      <StFooter>
-        <button
+      <StBtnWrapper>
+        <Button
+          btnTheme="blue1"
+          btnSize="small1"
           onClick={() => handleSelectDate(new Date(year, month - 1, date))}
         >
-          OK
-        </button>
-        <button onClick={handleClose}>Cancel</button>
-      </StFooter>
+          선택
+        </Button>
+        <Button btnTheme="beige3" btnSize="small1" onClick={handleClose}>
+          취소
+        </Button>
+      </StBtnWrapper>
     </StDateModal>
   );
 };
 
 export default SelectDateModal;
 
-const StDateModal = styled.div``;
+const StDateModal = styled.div`
+  width: 100%;
+  height: 100%;
+  padding: ${calcRem(20)};
+  position: relative;
+`;
 
-const StBody = styled.div``;
+const StBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: ${calcRem(16)};
+
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    label {
+      font-weight: 500;
+    }
+    select {
+      width: ${calcRem(70)};
+      height: ${calcRem(30)};
+      background-color: ${theme.beige1};
+      border: none;
+      border-radius: ${calcRem(4)};
+      padding: ${calcRem(6)};
+      font-size: ${calcRem(12)};
+    }
+  }
+`;
 
 const StFooter = styled.div`
   margin-top: 40px;
+`;
+
+const StBtnWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: ${calcRem(26)};
+  width: 100%;
+  position: absolute;
+  bottom: ${calcRem(10)};
+  left: 50%;
+  transform: translateX(-50%);
 `;
