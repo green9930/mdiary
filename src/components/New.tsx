@@ -107,7 +107,6 @@ const New = () => {
           <label htmlFor="date-input">
             <MdCalendarMonth size={18} fill={`${theme.blue3}`} />
           </label>
-          {/* <MdCalendarMonth size={18} fill={`${theme.blue3}`} /> */}
         </StDateWrapper>
         <StTitleWrapper>
           <StTitle>
@@ -167,7 +166,7 @@ const New = () => {
         <ModalLayout
           handleModal={() => setShowCategory(!showCategory)}
           width="84%"
-          height={"500px"}
+          height={"50%"}
         >
           <SelectCategoryModal
             handleClose={() => setShowCategory(!showCategory)}
