@@ -13,15 +13,15 @@ import { priceConverter } from "../utils/priceConverter";
 import { calcRem, theme } from "../styles/theme";
 import { MdCalendarMonth, MdApps } from "react-icons/md";
 import Button from "./elements/Button";
-
-const MAX_TITLE_LENGTH = 24;
-const MAX_CONTENT_LENGTH = 200;
+import ValiModal from "./modal/ValiModal";
 
 const New = () => {
   const user = useAppSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const [showCategory, setShowCategory] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [data, setData] = useState<ExpendType>({
     category: "",
     title: "",
@@ -31,7 +31,6 @@ const New = () => {
     username: "",
   });
   const [displayPrice, setDisplayPrice] = useState("");
-  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     const today = new Date();
@@ -49,6 +48,8 @@ const New = () => {
       | React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
+    if (name === "title") {
+    }
     if (name === "price" && priceConverter(value).isValid) {
       setDisplayPrice(priceConverter(value).previewPrice);
       setData({ ...data, [name]: priceConverter(value).realPrice });
@@ -76,6 +77,7 @@ const New = () => {
     ) {
       await addDoc(collection(dbService, "expend"), data);
       dispatch(addExpend(data));
+      setShowConfirm(!showConfirm);
       setData({
         category: "",
         title: "",
@@ -85,13 +87,24 @@ const New = () => {
         username: user.username,
       });
       setDisplayPrice("");
-      // window.location.reload();
     }
   };
 
   const handleCancel = () => {
-    console.log("CANCEL");
+    setData({
+      category: "",
+      title: "",
+      content: "",
+      date: dateConverter(new Date()),
+      price: "",
+      username: user.username,
+    });
+    setDisplayPrice("");
   };
+
+  const handleShowCategory = () => setShowCategory(!showCategory);
+  const handleShowAlert = () => setShowAlert(!showAlert);
+  const handleShowConfirm = () => setShowConfirm(!showConfirm);
 
   return (
     <StNew>
@@ -106,7 +119,7 @@ const New = () => {
             value={data.date}
           />
           <label htmlFor="date-input">
-            <MdCalendarMonth size={18} fill={`${theme.blue3}`} />
+            <MdCalendarMonth size={`${calcRem(18)}`} fill={`${theme.blue3}`} />
           </label>
         </StDateWrapper>
         <StTitleWrapper>
@@ -124,10 +137,10 @@ const New = () => {
           </StTitle>
           <StCategory
             isSelected={data.category ? true : false}
-            onClick={() => setShowCategory(!showCategory)}
+            onClick={handleShowCategory}
           >
             {data.category ? null : (
-              <MdApps size={20} fill={`${theme.blue3}`} />
+              <MdApps size={`${calcRem(20)}`} fill={`${theme.blue3}`} />
             )}
             <span>{data.category ? data.category : "카테고리"}</span>
           </StCategory>
@@ -168,27 +181,21 @@ const New = () => {
         </StBtnWrapper>
       </form>
       {showCategory ? (
-        <ModalLayout
-          handleModal={() => setShowCategory(!showCategory)}
-          width="84%"
-          height={"50%"}
-        >
+        <ModalLayout handleModal={handleShowCategory} width="84%" height="50%">
           <SelectCategoryModal
-            handleClose={() => setShowCategory(!showCategory)}
+            handleClose={handleShowCategory}
             handleSelect={handleSelect}
           />
         </ModalLayout>
       ) : null}
       {showAlert ? (
-        <ModalLayout
-          handleModal={() => setShowAlert(!showAlert)}
-          width="84%"
-          height={"300px"}
-        >
-          <div>
-            필수 항목을 입력해주세요
-            <button onClick={() => setShowAlert(!showAlert)}>닫기</button>
-          </div>
+        <ModalLayout handleModal={handleShowAlert} width="84%" height="25%">
+          <ValiModal type="alert" onClick={handleShowAlert} />
+        </ModalLayout>
+      ) : null}
+      {showConfirm ? (
+        <ModalLayout handleModal={handleShowConfirm} width="84%" height="25%">
+          <ValiModal type="confirm" onClick={handleShowConfirm} />
         </ModalLayout>
       ) : null}
     </StNew>

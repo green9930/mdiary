@@ -12,17 +12,21 @@ import { calcRem, theme } from "../styles/theme";
 import { MdCalendarMonth } from "react-icons/md";
 import Button from "./elements/Button";
 
-const MAX_PRICE_LENGTH = 9;
-const MAX_TITLE_LENGTH = 30;
-const MAX_CONTENT_LENGTH = 200;
-
 interface IEdit {
   defaultData: ExpendType;
   handleEdit: (target: ExpendType) => void;
   handleClose: () => void;
+  handleShowAlert: () => void;
+  handleShowConfirm: () => void;
 }
 
-const Edit = ({ defaultData, handleEdit, handleClose }: IEdit) => {
+const Edit = ({
+  defaultData,
+  handleEdit,
+  handleClose,
+  handleShowAlert,
+  handleShowConfirm,
+}: IEdit) => {
   const [showCategory, setShowCategory] = useState(false);
   const [data, setData] = useState<ExpendType>({
     category: defaultData.category,
@@ -36,7 +40,6 @@ const Edit = ({ defaultData, handleEdit, handleClose }: IEdit) => {
   const [displayPrice, setDisplayPrice] = useState(
     priceConverter(defaultData.price).previewPrice
   );
-  const [showAlert, setShowAlert] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -68,7 +71,7 @@ const Edit = ({ defaultData, handleEdit, handleClose }: IEdit) => {
       data.price === "" ||
       data.title === ""
     ) {
-      setShowAlert(true);
+      handleShowAlert();
     }
     if (
       data.category.length &&
@@ -78,6 +81,7 @@ const Edit = ({ defaultData, handleEdit, handleClose }: IEdit) => {
     ) {
       await updateDoc(doc(dbService, "expend", data.id as string), data);
       dispatch(updateExpend(data));
+      handleShowConfirm();
       handleEdit(data);
     }
   };
@@ -103,12 +107,15 @@ const Edit = ({ defaultData, handleEdit, handleClose }: IEdit) => {
                   value={data.date}
                 />
                 <label htmlFor="date-input">
-                  <MdCalendarMonth size={18} fill={`${theme.blue3}`} />
+                  <MdCalendarMonth
+                    size={`${calcRem(18)}`}
+                    fill={`${theme.blue3}`}
+                  />
                 </label>
               </StDateWrapper>
               <StCategory
                 isSelected={data.category ? true : false}
-                onClick={() => setShowCategory(!showCategory)}
+                onClick={handleShowAlert}
               >
                 <span>{data.category ? data.category : "카테고리"}</span>
               </StCategory>
@@ -160,18 +167,6 @@ const Edit = ({ defaultData, handleEdit, handleClose }: IEdit) => {
               </Button>
             </StBtnWrapper>
           </form>
-          {showAlert ? (
-            <ModalLayout
-              handleModal={() => setShowAlert(!showAlert)}
-              width="84%"
-              height={"300px"}
-            >
-              <div>
-                필수 항목을 입력해주세요
-                <button onClick={() => setShowAlert(!showAlert)}>닫기</button>
-              </div>
-            </ModalLayout>
-          ) : null}
         </StEdit>
       )}
     </>

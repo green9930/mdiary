@@ -7,6 +7,7 @@ import CategoryIcon from "./CategoryIcon";
 import ModalLayout from "./layout/ModalLayout";
 import DeleteModal from "./modal/DeleteModal";
 import DetailModal from "./modal/DetailModal";
+import ValiModal from "./modal/ValiModal";
 
 interface IDetailPreview {
   handleTargetData: (target: ExpendType) => void;
@@ -20,6 +21,8 @@ const DetailPreview = ({
 }: IDetailPreview) => {
   const [showDetail, setShowDetail] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const { id, category, title, content, date, price } = val;
 
@@ -29,6 +32,8 @@ const DetailPreview = ({
   };
   const handleShowDetail = () => setShowDetail(!showDetail);
   const handleShowDelete = () => setShowDeleteModal(!showDeleteModal);
+  const handleShowAlert = () => setShowAlert(!showAlert);
+  const handleShowConfirm = () => setShowConfirm(!showConfirm);
 
   return (
     <StDetailPreview onClick={() => handleSelectDetail(val)}>
@@ -43,6 +48,8 @@ const DetailPreview = ({
             data={val}
             handleShowDetail={handleShowDetail}
             handleShowDelete={handleShowDelete}
+            handleShowAlert={handleShowAlert}
+            handleShowConfirm={handleShowConfirm}
           />
         </ModalLayout>
       ) : null}
@@ -53,6 +60,16 @@ const DetailPreview = ({
             handleClose={handleShowDelete}
             target={val}
           />
+        </ModalLayout>
+      ) : null}
+      {showAlert ? (
+        <ModalLayout handleModal={handleShowAlert} width="84%" height="25%">
+          <ValiModal type="alert" onClick={handleShowAlert} />
+        </ModalLayout>
+      ) : null}
+      {showConfirm ? (
+        <ModalLayout handleModal={handleShowConfirm} width="84%" height="25%">
+          <ValiModal type="edit" onClick={handleShowConfirm} />
         </ModalLayout>
       ) : null}
     </StDetailPreview>
