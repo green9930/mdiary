@@ -38,7 +38,7 @@ const DetailPreview = ({
       </StHeader>
       <StPrice>{priceConverter(price).previewPrice} ₩</StPrice>
       {showDetail && id === targetData?.id ? (
-        <ModalLayout width="84%" height="50%" handleModal={handleShowDetail}>
+        <ModalLayout width="84%" height="60%" handleModal={handleShowDetail}>
           <DetailModal
             data={val}
             handleShowDetail={handleShowDetail}
@@ -47,7 +47,7 @@ const DetailPreview = ({
         </ModalLayout>
       ) : null}
       {showDeleteModal && id === targetData?.id ? (
-        <ModalLayout width="84%" height="50%" handleModal={handleShowDelete}>
+        <ModalLayout width="84%" height="25%" handleModal={handleShowDelete}>
           <DeleteModal
             handleShowDetail={handleShowDetail}
             handleClose={handleShowDelete}

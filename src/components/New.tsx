@@ -12,6 +12,7 @@ import { dateConverter } from "../utils/dateConverter";
 import { priceConverter } from "../utils/priceConverter";
 import { calcRem, theme } from "../styles/theme";
 import { MdCalendarMonth, MdApps } from "react-icons/md";
+import Button from "./elements/Button";
 
 const MAX_TITLE_LENGTH = 24;
 const MAX_CONTENT_LENGTH = 200;
@@ -158,8 +159,12 @@ const New = () => {
           />
         </StPrice>
         <StBtnWrapper>
-          <StAddBtn type="submit">추가</StAddBtn>
-          <StCancelBtn onClick={handleCancel}>취소</StCancelBtn>
+          <Button type="submit" btnTheme="blue1" btnSize="small2">
+            추가
+          </Button>
+          <Button btnTheme="beige3" btnSize="small2" onClick={handleCancel}>
+            취소
+          </Button>
         </StBtnWrapper>
       </form>
       {showCategory ? (
@@ -320,22 +325,4 @@ const StBtnWrapper = styled.div`
   justify-content: center;
   gap: ${calcRem(26)};
   margin-top: ${calcRem(50)};
-
-  button {
-    border: none;
-    border-radius: ${calcRem(4)};
-    padding: ${calcRem(8)} ${calcRem(40)};
-    font-size: ${calcRem(14)};
-    font-weight: 500;
-  }
-`;
-
-const StAddBtn = styled.button`
-  background-color: ${theme.blue1};
-  color: ${theme.white};
-`;
-
-const StCancelBtn = styled.button`
-  background-color: ${theme.beige3};
-  color: ${theme.gray2};
 `;

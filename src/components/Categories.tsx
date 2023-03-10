@@ -111,9 +111,6 @@ const StCategoryList = styled.ul`
   padding: ${calcRem(12)} ${calcRem(10)};
   background-color: ${theme.gray1};
   overflow-x: scroll;
-  ::-webkit-scrollbar {
-    display: none;
-  }
 
   li {
     display: flex;

@@ -56,7 +56,7 @@ const StModalLayout = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.3);
   z-index: 99;
 `;
 
@@ -65,7 +65,6 @@ const StModalBody = styled.div<{ width: string; height: string }>`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  position: relative;
   padding: ${calcRem(20)};
   position: absolute;
   top: 50%;
@@ -74,7 +73,7 @@ const StModalBody = styled.div<{ width: string; height: string }>`
   width: 80%;
   height: ${({ height }) => height};
   background-color: #ffffff;
-  border-radius: 5px;
+  border-radius: ${calcRem(4)};
   overflow: hidden;
   z-index: 100;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);

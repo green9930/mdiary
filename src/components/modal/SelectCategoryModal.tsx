@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { CategoryType, CATEGORY_LIST } from "../../config";
 import { calcRem, theme } from "../../styles/theme";
 import CategoryIcon from "../CategoryIcon";
+import Button from "../elements/Button";
 
 interface ISelectCategoryModal {
   handleClose: () => void;
@@ -32,8 +33,16 @@ const SelectCategoryModal = ({
         })}
       </ul>
       <StBtnWrapper>
-        <StSelectBtn onClick={() => handleSelect(target)}>선택</StSelectBtn>
-        <StCancelBtn onClick={handleClose}>취소</StCancelBtn>
+        <Button
+          btnTheme="blue1"
+          btnSize="small1"
+          onClick={() => handleSelect(target)}
+        >
+          선택
+        </Button>
+        <Button btnTheme="beige3" btnSize="small1" onClick={handleClose}>
+          취소
+        </Button>
       </StBtnWrapper>
     </StCategoryModal>
   );
@@ -77,22 +86,4 @@ const StBtnWrapper = styled.div`
   bottom: ${calcRem(10)};
   left: 50%;
   transform: translateX(-50%);
-
-  button {
-    border: none;
-    border-radius: ${calcRem(4)};
-    padding: ${calcRem(8)} ${calcRem(30)};
-    font-size: ${calcRem(14)};
-    font-weight: 500;
-  }
-`;
-
-const StSelectBtn = styled.button`
-  background-color: ${theme.blue1};
-  color: ${theme.white};
-`;
-
-const StCancelBtn = styled.button`
-  background-color: ${theme.beige3};
-  color: ${theme.gray2};
 `;

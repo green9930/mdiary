@@ -14,6 +14,9 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Noto Sans KR', sans-serif;
     color: ${theme.black};
     -webkit-tap-highlight-color: transparent;
+    ::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   html {
@@ -27,6 +30,8 @@ const GlobalStyle = createGlobalStyle`
   }
   
   body {
+    max-height: 100vh;
+    overflow: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -52,7 +57,7 @@ const GlobalStyle = createGlobalStyle`
     cursor: pointer;
   }
 
-  input, textarea {
+  input, textarea, select {
     :hover, :focus {
       outline: none;
     }
