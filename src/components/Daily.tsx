@@ -81,7 +81,10 @@ const Daily = () => {
                 <span>&rsaquo;</span>
               </StNavBtn>
               <SelectBtn onClick={handleClose}>
-                <MdCalendarMonth fill={`${theme.green1}`} size={18} />
+                <MdCalendarMonth
+                  fill={`${theme.green1}`}
+                  size={`${calcRem(18)}`}
+                />
                 <span>날짜 선택</span>
               </SelectBtn>
             </StBtnWrapper>

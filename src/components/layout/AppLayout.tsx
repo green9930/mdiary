@@ -8,7 +8,7 @@ import { useAppSelector } from "../../context/redux";
 import { authService } from "../../firebase";
 import { calcRem, theme } from "../../styles/theme";
 import { ImPencil2 } from "react-icons/im";
-import { VscSignOut } from "react-icons/vsc";
+import { VscGithubInverted, VscSignOut } from "react-icons/vsc";
 
 interface IAppLayout extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -32,6 +32,16 @@ const AppLayout: React.FC<IAppLayout> = ({ children }) => {
   return (
     <StAppLayout>
       <StNav>
+        <StCopyright>
+          <span>Made by</span>
+          <a href="https://github.com/green9930" target="_blank">
+            <VscGithubInverted
+              size={`${calcRem(10)}`}
+              fill={`${theme.beige1}`}
+            />
+            <span>green9930</span>
+          </a>
+        </StCopyright>
         <StUser>
           <StLogo onClick={() => handleNavigate("/")}>
             <h1>다씀</h1>
@@ -39,7 +49,7 @@ const AppLayout: React.FC<IAppLayout> = ({ children }) => {
           </StLogo>
           {isLogin ? (
             <StSignOutBtn onClick={onClick} name="signout">
-              <VscSignOut size={20} fill={`${theme.beige1}`} />
+              <VscSignOut size={`${calcRem(20)}`} fill={`${theme.beige1}`} />
             </StSignOutBtn>
           ) : null}
         </StUser>
@@ -80,10 +90,14 @@ const AppLayout: React.FC<IAppLayout> = ({ children }) => {
 
 export default AppLayout;
 
-const StAppLayout = styled.div``;
+const StAppLayout = styled.div`
+  height: 100vh;
+  overflow: scroll;
+  padding-bottom: ${calcRem(60)};
+`;
 
 const StNav = styled.nav`
-  padding: ${calcRem(20)} ${calcRem(20)} ${calcRem(16)} ${calcRem(20)};
+  padding: ${calcRem(30)} ${calcRem(20)} ${calcRem(16)} ${calcRem(20)};
   background-color: ${theme.blue1};
   color: ${theme.white};
   position: relative;
@@ -131,4 +145,26 @@ const StSignOutBtn = styled.button`
   position: absolute;
   top: ${calcRem(12)};
   right: ${calcRem(12)};
+`;
+
+const StCopyright = styled.div`
+  display: flex;
+  gap: ${calcRem(6)};
+  position: absolute;
+  top: ${calcRem(6)};
+  left: ${calcRem(6)};
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: ${calcRem(2)};
+    span {
+      font-weight: 500;
+    }
+  }
+
+  span {
+    color: ${theme.beige1};
+    font-size: ${calcRem(10)};
+  }
 `;

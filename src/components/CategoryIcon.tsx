@@ -45,25 +45,34 @@ const convertIconColor = (target: CategoryType) => {
 const Icon = ({ target }: ICategoryIcon) => {
   switch (target) {
     case "가전":
-      return <MdElectricalServices fill={`${theme.white}`} size={24} />;
+      return (
+        <MdElectricalServices fill={`${theme.white}`} size={`${calcRem(24)}`} />
+      );
     case "교통":
-      return <MdDirectionsSubway fill={`${theme.white}`} size={24} />;
+      return (
+        <MdDirectionsSubway fill={`${theme.white}`} size={`${calcRem(24)}`} />
+      );
     case "문화생활":
-      return <MdAttractions fill={`${theme.white}`} size={24} />;
+      return <MdAttractions fill={`${theme.white}`} size={`${calcRem(24)}`} />;
     case "미용":
-      return <MdFace2 fill={`${theme.white}`} size={24} />;
+      return <MdFace2 fill={`${theme.white}`} size={`${calcRem(24)}`} />;
     case "식비":
-      return <MdFastfood fill={`${theme.white}`} size={24} />;
+      return <MdFastfood fill={`${theme.white}`} size={`${calcRem(24)}`} />;
     case "의료":
-      return <MdOutlineLocalHospital fill={`${theme.white}`} size={24} />;
+      return (
+        <MdOutlineLocalHospital
+          fill={`${theme.white}`}
+          size={`${calcRem(24)}`}
+        />
+      );
     case "의류":
-      return <MdLocalOffer fill={`${theme.white}`} size={24} />;
+      return <MdLocalOffer fill={`${theme.white}`} size={`${calcRem(24)}`} />;
     case "학비":
-      return <MdSchool fill={`${theme.white}`} size={24} />;
+      return <MdSchool fill={`${theme.white}`} size={`${calcRem(24)}`} />;
     case "기타":
-      return <MdAddCard fill={`${theme.white}`} size={24} />;
+      return <MdAddCard fill={`${theme.white}`} size={`${calcRem(24)}`} />;
     default:
-      return <MdAddCard fill={`${theme.white}`} size={24} />;
+      return <MdAddCard fill={`${theme.white}`} size={`${calcRem(24)}`} />;
   }
 };
 
