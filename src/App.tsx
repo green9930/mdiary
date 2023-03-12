@@ -1,11 +1,10 @@
-import { collection, getDocs, query } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { ExpendType } from "./config";
 import { setExpend } from "./context/modules/expendSlice";
 import { setUser } from "./context/modules/userSlice";
-import { authService, dbService } from "./firebase";
+import { authService } from "./firebase";
 import Router from "./router/Router";
+import { fetchData } from "./utils/fetchData";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -14,36 +13,29 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    let username = "";
     const fetchUser = async () => {
       authService.onAuthStateChanged((user) => {
         if (user) {
           console.log(user);
           const { displayName, email, uid } = user;
           const userEmail = email ? email : "";
-          username = displayName ? displayName : "";
+          const username = displayName ? displayName : "";
           const userUid = uid ? uid : "";
           dispatch(
             setUser({ isLogin: true, email: userEmail, username, uid: userUid })
           );
           setIsLogin(true);
-        } else setIsLogin(false);
+          fetchData(username)
+            .then((res) => dispatch(setExpend(res)))
+            .then(() => setIsLoading(false));
+        } else {
+          setIsLogin(false);
+          setIsLoading(false);
+        }
       });
-    };
-    const fetchData = async () => {
-      const q = query(collection(dbService, "expend"));
-      const res = await getDocs(q);
-      let arr: ExpendType[] = [];
-      res.forEach((val) => {
-        const data = val.data() as ExpendType;
-        arr.push({ ...data, id: val.id });
-      });
-      dispatch(setExpend({ auth: username, arr }));
-      setIsLoading(false);
     };
 
     fetchUser();
-    fetchData();
   }, []);
 
   return (

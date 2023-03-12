@@ -1,5 +1,5 @@
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { authService } from "../firebase";
+import { authService, dbService } from "../firebase";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { setUser } from "../context/modules/userSlice";
@@ -7,11 +7,15 @@ import { calcRem, theme } from "../styles/theme";
 import { FcGoogle } from "react-icons/fc";
 import { ImPencil2 } from "react-icons/im";
 import { GoLinkExternal } from "react-icons/go";
+import { setExpend } from "../context/modules/expendSlice";
+import { fetchData } from "../utils/fetchData";
 
 const Login = () => {
   const dispatch = useDispatch();
 
   const provider = new GoogleAuthProvider();
+  let username: string = "";
+
   const handleSignIn = () =>
     signInWithPopup(authService, provider)
       .then((res) => {
@@ -21,11 +25,12 @@ const Login = () => {
         const { user } = res;
         if (user) {
           const email = user.email ? user.email : "";
-          const username = user.displayName ? user.displayName : "";
+          username = user.displayName ? user.displayName : "";
           const uid = user.uid ? user.uid : "";
           dispatch(setUser({ isLogin: true, email, username, uid }));
         }
       })
+      .then(() => fetchData(username).then((res) => dispatch(setExpend(res))))
       .catch((err) => {
         const errCode = err.code;
         const errMessage = err.message;
@@ -58,7 +63,7 @@ const StLogin = styled.div`
   flex-direction: column;
   align-items: center;
   height: 100%;
-  margin-top: ${calcRem(100)};
+  padding-top: ${calcRem(100)};
 
   p {
     margin-bottom: ${calcRem(24)};
