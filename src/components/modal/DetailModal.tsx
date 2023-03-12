@@ -77,7 +77,7 @@ const DetailModal = ({
           </StDetailFooter>
           <StDeleteBtn onClick={handleShowDelete}>
             {/* <span>삭제하기</span> */}
-            <MdDelete size={`${calcRem(20)}`} fill={`${theme.red3}`} />
+            <MdDelete size={`${calcRem(20)}`} fill={`${theme.gray2}`} />
             <span className="a11y-hidden">삭제</span>
           </StDeleteBtn>
         </>
@@ -150,17 +150,13 @@ const StBtnWrapper = styled.div`
 const StDeleteBtn = styled.button`
   display: flex;
   align-items: center;
+  padding: ${calcRem(6)};
   position: absolute;
   top: ${calcRem(-10)};
   right: ${calcRem(-10)};
-
-  /* border: none; */
-  /* border-radius: 50%; */
+  background-color: ${theme.gray4};
+  border: none;
   border-radius: ${calcRem(4)};
-  padding: ${calcRem(6)};
-  border: 1px solid ${theme.red3};
-  background-color: transparent;
-  /* background-color: ${theme.red3}; */
   span {
     color: ${theme.blue3};
     font-size: ${calcRem(12)};

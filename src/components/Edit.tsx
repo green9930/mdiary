@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import ModalLayout from "./layout/ModalLayout";
 import SelectCategoryModal from "./modal/SelectCategoryModal";
 import { dbService } from "../firebase";
 import { doc, updateDoc } from "firebase/firestore";
@@ -43,11 +42,6 @@ const Edit = ({
 
   const dispatch = useDispatch();
 
-  const handleSelect = (target: string) => {
-    setData({ ...data, category: target });
-    setShowCategory(!showCategory);
-  };
-
   const onChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -86,11 +80,17 @@ const Edit = ({
     }
   };
 
+  const handleSelect = (target: string) => {
+    setData({ ...data, category: target });
+    setShowCategory(!showCategory);
+  };
+  const handleShowCategory = () => setShowCategory(!showCategory);
+
   return (
     <>
       {showCategory ? (
         <SelectCategoryModal
-          handleClose={() => setShowCategory(!showCategory)}
+          handleClose={handleShowCategory}
           handleSelect={handleSelect}
         />
       ) : (
@@ -115,7 +115,7 @@ const Edit = ({
               </StDateWrapper>
               <StCategory
                 isSelected={data.category ? true : false}
-                onClick={handleShowAlert}
+                onClick={handleShowCategory}
               >
                 <span>{data.category ? data.category : "카테고리"}</span>
               </StCategory>

@@ -1,5 +1,5 @@
 import { signOut } from "firebase/auth";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -34,16 +34,23 @@ const AppLayout: React.FC<IAppLayout> = ({ children }) => {
       <StNav>
         <StCopyright>
           <span>Made by</span>
-          <a href="https://github.com/green9930" target="_blank">
+          <StGithub href="https://github.com/green9930" target="_blank">
             <VscGithubInverted
               size={`${calcRem(10)}`}
               fill={`${theme.beige1}`}
             />
             <span>green9930</span>
-          </a>
+          </StGithub>
         </StCopyright>
         <StUser>
-          <StLogo onClick={() => handleNavigate("/")}>
+          <StLogo
+            onClick={() =>
+              (window.location.href =
+                process.env.NODE_ENV === "production"
+                  ? process.env.PUBLIC_URL
+                  : "")
+            }
+          >
             <h1>다씀</h1>
             <ImPencil2 fill={`${theme.beige1}`} />
           </StLogo>
@@ -83,7 +90,14 @@ const AppLayout: React.FC<IAppLayout> = ({ children }) => {
           </StLi>
         </ul>
       </StNav>
-      {children}
+      <StBody>{children}</StBody>
+      <StFooter>
+        <p>Copyright © 2023 Bae Geuna. All rights reserved.</p>
+        <StGithub href="https://github.com/green9930" target="_blank">
+          <VscGithubInverted size={`${calcRem(10)}`} fill={`${theme.beige1}`} />
+          <span>green9930</span>
+        </StGithub>
+      </StFooter>
     </StAppLayout>
   );
 };
@@ -92,15 +106,20 @@ export default AppLayout;
 
 const StAppLayout = styled.div`
   height: 100vh;
-  overflow: scroll;
-  padding-bottom: ${calcRem(60)};
+  /* height: calc(100vh + calcRem(90)); */
+  /* overflow: scroll; */
+  padding-bottom: ${calcRem(90)};
 `;
 
 const StNav = styled.nav`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: ${calcRem(100)};
   padding: ${calcRem(30)} ${calcRem(20)} ${calcRem(16)} ${calcRem(20)};
+  position: relative;
   background-color: ${theme.blue1};
   color: ${theme.white};
-  position: relative;
 
   ul {
     display: flex;
@@ -119,7 +138,6 @@ const StLogo = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: ${calcRem(14)};
 
   h1 {
     color: ${theme.beige1};
@@ -154,17 +172,44 @@ const StCopyright = styled.div`
   top: ${calcRem(6)};
   left: ${calcRem(6)};
 
-  a {
-    display: flex;
-    align-items: center;
-    gap: ${calcRem(2)};
-    span {
-      font-weight: 500;
-    }
-  }
-
   span {
     color: ${theme.beige1};
     font-size: ${calcRem(10)};
+  }
+`;
+
+const StGithub = styled.a`
+  display: flex;
+  align-items: center;
+  gap: ${calcRem(2)};
+  span {
+    font-weight: 500;
+  }
+`;
+
+const StBody = styled.div`
+  padding-bottom: ${calcRem(50)};
+  min-height: calc(100vh - ${calcRem(100)});
+`;
+
+const StFooter = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: ${theme.blue1};
+  width: 100%;
+  height: ${calcRem(90)};
+  padding-bottom: ${calcRem(20)};
+  /* position: absolute;
+  bottom: 0;
+  left: 0; */
+  p,
+  span {
+    color: ${theme.beige1};
+    font-size: ${calcRem(12)};
+  }
+  p {
+    text-align: center;
   }
 `;

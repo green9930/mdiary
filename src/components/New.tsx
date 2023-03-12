@@ -241,6 +241,8 @@ const StDateWrapper = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
+  -webkit-user-select: none;
+  user-select: none;
 
   span {
     margin-right: ${calcRem(4)};
@@ -253,6 +255,8 @@ const StDateWrapper = styled.div`
     padding: ${calcRem(6)} ${calcRem(8)};
     background-color: transparent;
     font-size: ${calcRem(16)};
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   label {
