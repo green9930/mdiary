@@ -1,5 +1,5 @@
-import Categories from "../components/Categories";
 import AppLayout from "../components/layout/AppLayout";
+import Categories from "../components/Categories";
 
 const CategoryPage = () => {
   return (

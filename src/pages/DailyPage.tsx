@@ -1,5 +1,5 @@
-import Daily from "../components/Daily";
 import AppLayout from "../components/layout/AppLayout";
+import Daily from "../components/Daily";
 
 const DailyPage = () => {
   return (

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setExpend } from "./context/modules/expendSlice";
-import { setUser } from "./context/modules/userSlice";
 import { authService } from "./firebase";
 import Router from "./router/Router";
+import { setExpend } from "./context/modules/expendSlice";
+import { setUser } from "./context/modules/userSlice";
+import Loader from "./components/elements/Loader";
 import { fetchData } from "./utils/fetchData";
 
 function App() {
@@ -38,9 +39,7 @@ function App() {
     fetchUser();
   }, []);
 
-  return (
-    <>{isLoading ? <div>LOADING...</div> : <Router isLogin={isLogin} />}</>
-  );
+  return <>{isLoading ? <Loader /> : <Router isLogin={isLogin} />}</>;
 }
 
 export default App;
