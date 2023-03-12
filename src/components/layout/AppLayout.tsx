@@ -1,7 +1,7 @@
-import { signOut } from "firebase/auth";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
 import styled from "styled-components";
 import { setUser } from "../../context/modules/userSlice";
 import { useAppSelector } from "../../context/redux";
@@ -105,10 +105,7 @@ const AppLayout: React.FC<IAppLayout> = ({ children }) => {
 export default AppLayout;
 
 const StAppLayout = styled.div`
-  height: 100vh;
-  /* height: calc(100vh + calcRem(90)); */
-  /* overflow: scroll; */
-  padding-bottom: ${calcRem(90)};
+  min-height: 100vh;
 `;
 
 const StNav = styled.nav`
@@ -201,9 +198,7 @@ const StFooter = styled.div`
   width: 100%;
   height: ${calcRem(90)};
   padding-bottom: ${calcRem(20)};
-  /* position: absolute;
-  bottom: 0;
-  left: 0; */
+
   p,
   span {
     color: ${theme.beige1};

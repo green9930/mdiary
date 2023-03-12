@@ -20,9 +20,7 @@ const ModalLayout: React.FC<IModal> = ({
     document.body.style.cssText = `
       position: fixed;  
       top: -${window.scrollY}px;
-      left: 50%;
       width: 100%;
-      transform: translateX(-50%);
     `;
 
     return () => {
