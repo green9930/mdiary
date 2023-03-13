@@ -59,7 +59,7 @@ const StCategoryModal = styled.div`
   ul {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: ${calcRem(10)};
+    gap: ${calcRem(4)};
   }
 `;
 
@@ -67,12 +67,18 @@ const StLi = styled.li<{ isSelected: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: ${calcRem(10)};
+  justify-content: center;
+  gap: ${calcRem(2)};
+  padding: ${calcRem(10)} 0;
+  background-color: ${({ isSelected }) =>
+    isSelected ? `${theme.beige3}` : "transparent"};
+  border-radius: ${calcRem(4)};
 
   span {
     color: ${({ isSelected }) =>
-      isSelected ? `${theme.green1}` : `${theme.black}`};
+      isSelected ? `${theme.red2}` : `${theme.black}`};
     font-size: ${calcRem(10)};
+    font-weight: 500;
   }
 `;
 
