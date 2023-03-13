@@ -31,9 +31,11 @@ const New = () => {
     username: "",
   });
   const [displayPrice, setDisplayPrice] = useState("");
+  const [isChrome, setIsChrome] = useState(false);
 
   useEffect(() => {
     const today = new Date();
+    setIsChrome(window.navigator.userAgent.toLowerCase().includes("chrome"));
     setData({ ...data, date: dateConverter(today), username: user.username });
   }, []);
 
@@ -65,7 +67,7 @@ const New = () => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(data);
+    // console.log(data);
     if (
       data.category === "" ||
       data.date === "" ||
@@ -123,7 +125,13 @@ const New = () => {
             value={data.date}
           />
           <label htmlFor="date-input">
-            <MdCalendarMonth size={`${calcRem(18)}`} fill={`${theme.blue3}`} />
+            {isChrome ? null : (
+              <MdCalendarMonth
+                className="calendar-icon"
+                size={`${calcRem(18)}`}
+                fill={`${theme.blue3}`}
+              />
+            )}
           </label>
         </StDateWrapper>
         <StTitleWrapper>
@@ -245,8 +253,6 @@ const StDateWrapper = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  -webkit-user-select: none;
-  user-select: none;
 
   span {
     margin-right: ${calcRem(4)};
@@ -259,8 +265,6 @@ const StDateWrapper = styled.div`
     padding: ${calcRem(6)} ${calcRem(8)};
     background-color: transparent;
     font-size: ${calcRem(16)};
-    -webkit-user-select: none;
-    user-select: none;
   }
 
   label {
@@ -274,7 +278,7 @@ const StDateInput = styled.input.attrs({
   type: "date",
 })`
   ::-webkit-calendar-picker-indicator {
-    display: none;
+    /* display: none; */
   }
 `;
 

@@ -12,9 +12,12 @@ const Monthly = () => {
   const [value, onChange] = useState(new Date());
   const [targetDataArr, setTargetDataArr] = useState<ExpendType[]>([]);
   const [targetData, setTargetData] = useState<ExpendType>();
-  const [mExpend, setMExpend] = useState("");
+  const [mExpend, setMExpend] = useState("0");
 
   const dataArr = useAppSelector((state) => state.expend);
+  const calendarLabel = window.document.querySelector(
+    ".react-calendar__navigation__label__labelText"
+  ) as HTMLSpanElement;
 
   useEffect(() => {
     if (dataArr) {
@@ -26,8 +29,9 @@ const Monthly = () => {
           return val.date === dateStr;
         })
       );
+      // console.log(dateStr);
       const priceArr = dataArr.map((val) =>
-        val.date.slice(5, 7) === dateStr.slice(5, 7) ? Number(val.price) : 0
+        val.date.slice(0, 7) === dateStr.slice(0, 7) ? Number(val.price) : 0
       );
       const t = priceArr.reduce((acc, cur) => acc + cur, 0);
       setMExpend(priceConverter(t.toString()).previewPrice);
@@ -35,9 +39,16 @@ const Monthly = () => {
   }, [value, dataArr]);
 
   const handleTargetData = (target: ExpendType) => setTargetData(target);
+
   const onActiveStartDateChange = () => {
-    console.log("month change");
-    console.log(value);
+    console.log("MONTH CHANGE");
+    const yy = calendarLabel.innerText.split(" ")[0].replace("년", "");
+    const mm = calendarLabel.innerText
+      .split(" ")[1]
+      .replace("월", "")
+      .padStart(2, "0");
+    const str = `${yy}-${mm}-01`;
+    onChange(new Date(Number(yy), Number(mm) - 1, 1));
   };
 
   return (
@@ -138,6 +149,11 @@ const StCalendar = styled.div`
       color: ${theme.red1};
       font-weight: 700;
     }
+  }
+
+  .react-calendar__tile--now.react-calendar__tile--active {
+    background: ${theme.beige1};
+    border-radius: ${calcRem(4)};
   }
 
   .react-calendar__tile:enabled:hover,
