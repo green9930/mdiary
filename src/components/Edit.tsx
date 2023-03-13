@@ -49,8 +49,13 @@ const Edit = ({
   ) => {
     const { name, value } = e.target;
     if (name === "price") {
-      setDisplayPrice(priceConverter(value).previewPrice);
-      setData({ ...data, [name]: priceConverter(value).realPrice });
+      if (priceConverter(value).isValid) {
+        setDisplayPrice(priceConverter(value).previewPrice);
+        setData({ ...data, [name]: priceConverter(value).realPrice });
+      } else {
+        setDisplayPrice("");
+        setData({ ...data, [name]: "0" });
+      }
     } else {
       setData({ ...data, [name]: value });
     }
@@ -58,16 +63,15 @@ const Edit = ({
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(data);
+    // console.log(data);
     if (
       data.category === "" ||
       data.date === "" ||
-      data.price === "" ||
+      data.price === "0" ||
       data.title === ""
     ) {
       handleShowAlert();
-    }
-    if (
+    } else if (
       data.category.length &&
       data.title.trim().length &&
       data.date.length &&

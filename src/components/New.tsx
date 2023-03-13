@@ -50,9 +50,14 @@ const New = () => {
     const { name, value } = e.target;
     if (name === "title") {
     }
-    if (name === "price" && priceConverter(value).isValid) {
-      setDisplayPrice(priceConverter(value).previewPrice);
-      setData({ ...data, [name]: priceConverter(value).realPrice });
+    if (name === "price") {
+      if (priceConverter(value).isValid) {
+        setDisplayPrice(priceConverter(value).previewPrice);
+        setData({ ...data, [name]: priceConverter(value).realPrice });
+      } else {
+        setDisplayPrice("");
+        setData({ ...data, [name]: "0" });
+      }
     } else {
       setData({ ...data, [name]: value });
     }
@@ -64,12 +69,11 @@ const New = () => {
     if (
       data.category === "" ||
       data.date === "" ||
-      data.price === "" ||
+      data.price === "0" ||
       data.title === ""
     ) {
       setShowAlert(true);
-    }
-    if (
+    } else if (
       data.category.length &&
       data.title.trim().length &&
       data.date.length &&

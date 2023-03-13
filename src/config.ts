@@ -1,3 +1,10 @@
+export const TEST_USERNAME = "DASSEUM TEST USER";
+export const TEST_ID = "admin@dasseum.com";
+
+export const MAX_PRICE_LENGTH = 9;
+export const MAX_TITLE_LENGTH = 24;
+export const MAX_CONTENT_LENGTH = 200;
+
 export type ExpendType = {
   id?: string;
   category: string;

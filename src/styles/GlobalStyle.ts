@@ -55,6 +55,10 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
   }
 
+  li {
+    cursor: pointer;
+  }
+
   p {
     margin: 0;
   }

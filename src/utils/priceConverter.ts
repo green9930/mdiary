@@ -1,4 +1,5 @@
-const MAX_PRICE_LENGTH = 9;
+import { MAX_PRICE_LENGTH } from "./../config";
+
 const priceVali = (price: string) => {
   const regExp = /^[0-9\s+]*$/g;
   return regExp.test(price);
@@ -10,7 +11,7 @@ export const priceConverter = (val: string) => {
   let realPrice = "";
   let previewPrice = "";
 
-  if (priceVali(price)) {
+  if (price !== "0" && priceVali(price)) {
     isValid = price.length ? true : false;
     realPrice = price.replace(/(^0+)/, "").length
       ? price.replace(/(^0+)/, "")

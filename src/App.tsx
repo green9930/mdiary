@@ -6,6 +6,7 @@ import { setExpend } from "./context/modules/expendSlice";
 import { setUser } from "./context/modules/userSlice";
 import Loader from "./components/elements/Loader";
 import { fetchData } from "./utils/fetchData";
+import { TEST_ID, TEST_USERNAME } from "./config";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -17,10 +18,14 @@ function App() {
     const fetchUser = async () => {
       authService.onAuthStateChanged((user) => {
         if (user) {
-          console.log(user);
+          // console.log(user);
           const { displayName, email, uid } = user;
           const userEmail = email ? email : "";
-          const username = displayName ? displayName : "";
+          const username = displayName
+            ? email === TEST_ID
+              ? TEST_USERNAME
+              : displayName
+            : "";
           const userUid = uid ? uid : "";
           dispatch(
             setUser({ isLogin: true, email: userEmail, username, uid: userUid })
