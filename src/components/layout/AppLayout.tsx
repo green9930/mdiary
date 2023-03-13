@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
@@ -9,24 +9,19 @@ import { authService } from "../../firebase";
 import { calcRem, theme } from "../../styles/theme";
 import { ImPencil2 } from "react-icons/im";
 import { VscGithubInverted, VscSignOut } from "react-icons/vsc";
+import { TEST_USERNAME } from "../../config";
 
 interface IAppLayout extends React.HTMLAttributes<HTMLDivElement> {}
 
 const AppLayout: React.FC<IAppLayout> = ({ children }) => {
-  const [target, setTarget] = useState("");
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isLogin } = useAppSelector((state) => state.user);
+  const { isLogin, username } = useAppSelector((state) => state.user);
 
+  const handleNavigate = (name: string) => navigate(name);
   const onClick = async () => {
     await signOut(authService);
     dispatch(setUser({ isLogin: false, email: "", username: "", uid: "" }));
-  };
-
-  const handleNavigate = (name: string) => {
-    setTarget(name);
-    navigate(name);
   };
 
   return (
@@ -61,33 +56,11 @@ const AppLayout: React.FC<IAppLayout> = ({ children }) => {
           ) : null}
         </StUser>
         <ul>
-          <StLi isSelected={target === "/"} onClick={() => handleNavigate("/")}>
-            MONTHLY
-          </StLi>
-          <StLi
-            isSelected={target === "/weekly"}
-            onClick={() => handleNavigate("/weekly")}
-          >
-            WEEKLY
-          </StLi>
-          <StLi
-            isSelected={target === "/new"}
-            onClick={() => handleNavigate("/new")}
-          >
-            NEW
-          </StLi>
-          <StLi
-            isSelected={target === "/daily"}
-            onClick={() => handleNavigate("/daily")}
-          >
-            DAILY
-          </StLi>
-          <StLi
-            isSelected={target === "/categories"}
-            onClick={() => handleNavigate("/categories")}
-          >
-            CATEGORY
-          </StLi>
+          <StLi onClick={() => handleNavigate("/")}>MONTHLY</StLi>
+          <StLi onClick={() => handleNavigate("/weekly")}>WEEKLY</StLi>
+          <StLi onClick={() => handleNavigate("/new")}>NEW</StLi>
+          <StLi onClick={() => handleNavigate("/daily")}>DAILY</StLi>
+          <StLi onClick={() => handleNavigate("/categories")}>CATEGORY</StLi>
         </ul>
       </StNav>
       <StBody>{children}</StBody>
@@ -125,8 +98,8 @@ const StNav = styled.nav`
   }
 `;
 
-const StLi = styled.li<{ isSelected: boolean }>`
-  color: ${({ isSelected }) => (isSelected ? theme.beige2 : theme.white)};
+const StLi = styled.li`
+  color: ${theme.white};
   font-family: "Rubik";
   font-size: ${calcRem(14)};
 `;

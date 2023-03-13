@@ -1,14 +1,20 @@
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { authService, dbService } from "../firebase";
 import { useDispatch } from "react-redux";
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { authService } from "../firebase";
 import styled from "styled-components";
 import { setUser } from "../context/modules/userSlice";
-import { calcRem, theme } from "../styles/theme";
-import { FcGoogle } from "react-icons/fc";
-import { ImPencil2 } from "react-icons/im";
-import { GoLinkExternal } from "react-icons/go";
 import { setExpend } from "../context/modules/expendSlice";
 import { fetchData } from "../utils/fetchData";
+import { calcRem, theme } from "../styles/theme";
+import { FcGoogle, FcUnlock } from "react-icons/fc";
+import { ImPencil2 } from "react-icons/im";
+import { GoLinkExternal } from "react-icons/go";
+import { TEST_ID, TEST_USERNAME } from "../config";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -19,7 +25,7 @@ const Login = () => {
   const handleSignIn = () =>
     signInWithPopup(authService, provider)
       .then((res) => {
-        console.log("RESULT", res);
+        // console.log("RESULT", res);
         const credential = GoogleAuthProvider.credentialFromResult(res);
         const token = credential?.accessToken;
         const { user } = res;
@@ -31,6 +37,29 @@ const Login = () => {
         }
       })
       .then(() => fetchData(username).then((res) => dispatch(setExpend(res))))
+      .catch((err) => {
+        const errCode = err.code;
+        const errMessage = err.message;
+        console.log(err);
+      });
+
+  const handleTestSignIn = async () =>
+    await signInWithEmailAndPassword(
+      authService,
+      TEST_ID as string,
+      process.env.REACT_APP_ADMIN_PASSWORD as string
+    )
+      .then(() => {
+        username = TEST_USERNAME;
+        dispatch(
+          setUser({
+            isLogin: true,
+            email: TEST_ID,
+            username,
+            uid: "testuser",
+          })
+        );
+      })
       .catch((err) => {
         const errCode = err.code;
         const errMessage = err.message;
@@ -52,6 +81,10 @@ const Login = () => {
         <span>서비스 자세히 알아보기</span>
         <GoLinkExternal size={`${calcRem(12)}`} fill={`${theme.blue3}`} />
       </a>
+      <StTestLogin onClick={handleTestSignIn}>
+        <FcUnlock size={`${calcRem(20)}`} />
+        <span>체험해보기</span>
+      </StTestLogin>
     </StLogin>
   );
 };
@@ -87,7 +120,7 @@ const StLogo = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: ${calcRem(60)};
+  margin-bottom: ${calcRem(70)};
 
   h2 {
     color: ${theme.blue4};
@@ -101,7 +134,7 @@ const StGoogleLogin = styled.button`
   align-items: center;
   justify-content: space-between;
   gap: ${calcRem(6)};
-  margin-bottom: ${calcRem(14)};
+  margin-bottom: ${calcRem(24)};
   padding: ${calcRem(10)};
   border: none;
   border-radius: ${calcRem(4)};
@@ -109,6 +142,26 @@ const StGoogleLogin = styled.button`
 
   span {
     font-size: ${calcRem(16)};
+    font-weight: 500;
+  }
+`;
+
+const StTestLogin = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: ${calcRem(6)};
+  width: ${calcRem(130)};
+  margin-top: ${calcRem(10)};
+  padding: ${calcRem(6)} ${calcRem(12)};
+  background-color: ${theme.gray3};
+  border: none;
+  border-radius: ${calcRem(4)};
+
+  span {
+    flex-grow: 1;
+    color: ${theme.gray2};
+    font-size: ${calcRem(12)};
     font-weight: 500;
   }
 `;
