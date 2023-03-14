@@ -16,22 +16,13 @@
 
 #### 📱 iOS 설치 방법
 
-<div style="display: flex">  
-  <img src="https://user-images.githubusercontent.com/69451758/224860521-41c9e9b3-49e4-4e29-b77a-8717f9a14635.jpg" alt="dasseum" width="200px" />  
-  <img src="https://user-images.githubusercontent.com/69451758/224860523-eb0b4334-1ad3-40a6-b116-9dbd27c7a18f.jpg" alt="dasseum" width="200px" />  
-  <img src="https://user-images.githubusercontent.com/69451758/224860526-467673a5-0d3b-4aac-b7b4-20f04558a6c4.jpg" alt="dasseum" width="200px" />  
-</div>
+![ios01](https://user-images.githubusercontent.com/69451758/224860521-41c9e9b3-49e4-4e29-b77a-8717f9a14635.jpg) |![ios02](https://user-images.githubusercontent.com/69451758/224860523-eb0b4334-1ad3-40a6-b116-9dbd27c7a18f.jpg) | ![ios03](https://user-images.githubusercontent.com/69451758/224860526-467673a5-0d3b-4aac-b7b4-20f04558a6c4.jpg) 
+--- | --- | --- |
 
 #### 📱 Android 설치 방법
 
-<div style="display: flex">  
-  <img src="https://user-images.githubusercontent.com/69451758/224860509-a1d2ea71-69b5-44ce-bb3d-9f960fc3124c.jpg" alt="dasseum" width="180px" />  
-  <img src="https://user-images.githubusercontent.com/69451758/224860514-6f42b1f7-67e9-4905-b1c7-6bf1d2c9d643.jpg" alt="dasseum" width="180px" />  
-  <img src="https://user-images.githubusercontent.com/69451758/224860518-9eb797f0-6547-4cf6-b9f8-52af9c428732.JPG" alt="dasseum" width="180px" />  
-  <img src="https://user-images.githubusercontent.com/69451758/224860520-ee1017e5-30e3-4eed-82a1-d570259d3260.JPG" alt="dasseum" width="180px" />  
-</div>
-
-
+![android01](https://user-images.githubusercontent.com/69451758/224860509-a1d2ea71-69b5-44ce-bb3d-9f960fc3124c.jpg) |![android02](https://user-images.githubusercontent.com/69451758/224860514-6f42b1f7-67e9-4905-b1c7-6bf1d2c9d643.jpg) | ![android03](https://user-images.githubusercontent.com/69451758/224860518-9eb797f0-6547-4cf6-b9f8-52af9c428732.JPG) | ![android04](https://user-images.githubusercontent.com/69451758/224860520-ee1017e5-30e3-4eed-82a1-d570259d3260.JPG) 
+--- | --- | --- | --- |
 
 
 ## Tech Stack
@@ -51,8 +42,9 @@
   
   <summary><b>🔐 로그인 페이지</b></summary>
   <br />
+ 
   <div style="display: flex">  
-    <img src="https://user-images.githubusercontent.com/69451758/224855576-b1da1085-4131-4475-a88b-666d3cdb08c3.PNG" alt="dasseum" width="200px" />
+    <img src="https://user-images.githubusercontent.com/69451758/224855576-b1da1085-4131-4475-a88b-666d3cdb08c3.PNG" alt="dasseum" width="300px" />
   </div>
 
   - firebase Google 소셜로그인을 통해 이용할 수 있습니다.  
@@ -63,13 +55,10 @@
   
   <summary><b>📆 월간 / 주간 / 일간 / 카페고리 페이지</b></summary>
   <br />
-  <div style="display: flex">  
-    <img src="https://user-images.githubusercontent.com/69451758/224855580-d92716fb-84a5-46f3-ab9b-7fa68dd957c9.PNG" alt="dasseum" width="180px" />  
-    <img src="https://user-images.githubusercontent.com/69451758/224855583-b192bd65-2364-4e64-8db0-86e584fa42d8.PNG" alt="dasseum" width="180px" />  
-    <img src="https://user-images.githubusercontent.com/69451758/224855585-9832006c-5be3-4fe5-9ed4-f5bf2d65916c.PNG" alt="dasseum" width="180px" />  
-    <img src="https://user-images.githubusercontent.com/69451758/224855586-d4a3b778-0c39-4bf6-bc6f-c664238561f5.PNG" alt="dasseum" width="180px" />  
-  </div>
 
+  ![write01](https://user-images.githubusercontent.com/69451758/224855580-d92716fb-84a5-46f3-ab9b-7fa68dd957c9.PNG) |![write02](https://user-images.githubusercontent.com/69451758/224855583-b192bd65-2364-4e64-8db0-86e584fa42d8.PNG) | ![write03](https://user-images.githubusercontent.com/69451758/224855585-9832006c-5be3-4fe5-9ed4-f5bf2d65916c.PNG) | ![read04](https://user-images.githubusercontent.com/69451758/224855586-d4a3b778-0c39-4bf6-bc6f-c664238561f5.PNG) 
+ --- | --- | --- | --- |
+ 
   - 내가 쓴 내역을 월간, 주간, 일간, 카테고리별로 묶어서 한 눈에 볼 수 있습니다.   
   - 각 페이지별로 총 지출액과 세부내역을 함께 확인할 수 있습니다.  
   
@@ -78,11 +67,9 @@
 
   <summary><b>💸 작성 페이지</b></summary>
   <br />
-  <div style="display: flex">  
-    <img src="https://user-images.githubusercontent.com/69451758/224855588-917c9c51-ec2c-409b-bd15-1e20f5a93fd2.PNG" alt="dasseum" width="200px" />  
-    <img src="https://user-images.githubusercontent.com/69451758/224855591-1d1ed5ec-0b97-4805-8951-b4a337911864.PNG" alt="dasseum" width="200px" />  
-    <img src="https://user-images.githubusercontent.com/69451758/224855593-04e218e3-d565-47bd-a9aa-d58404751cb1.PNG" alt="dasseum" width="200px" />  
-  </div>
+ 
+  ![write01](https://user-images.githubusercontent.com/69451758/224855588-917c9c51-ec2c-409b-bd15-1e20f5a93fd2.PNG) |![write02](https://user-images.githubusercontent.com/69451758/224855591-1d1ed5ec-0b97-4805-8951-b4a337911864.PNG) | ![write03](https://user-images.githubusercontent.com/69451758/224855593-04e218e3-d565-47bd-a9aa-d58404751cb1.PNG) 
+ --- | --- | --- |
 
   - 지출 내역을 작성할 수 있습니다.  
   
@@ -91,11 +78,9 @@
 
   <summary><b>🗑️ 게시글 수정 및 삭제</b></summary>
   <br />
-  <div style="display: flex">  
-    <img src="https://user-images.githubusercontent.com/69451758/224855594-15b1d1e1-ed03-4eac-949f-1d69ab46b2ec.PNG" alt="dasseum" width="200px" />  
-    <img src="https://user-images.githubusercontent.com/69451758/224855596-988580c2-f4db-4881-8f14-0335cd0efb2d.PNG" alt="dasseum" width="200px" />  
-    <img src="https://user-images.githubusercontent.com/69451758/224855599-304844ff-16a7-4e10-8264-0ccb7e68b9ac.PNG" alt="dasseum" width="200px" />  
-  </div>
+ 
+  ![edit01](https://user-images.githubusercontent.com/69451758/224855594-15b1d1e1-ed03-4eac-949f-1d69ab46b2ec.PNG) |![edit02](https://user-images.githubusercontent.com/69451758/224855596-988580c2-f4db-4881-8f14-0335cd0efb2d.PNG) | ![edit03](https://user-images.githubusercontent.com/69451758/224855599-304844ff-16a7-4e10-8264-0ccb7e68b9ac.PNG) 
+--- | --- | --- |
 
   - 게시글 상세보기 모달에서 수정 및 삭제할 수 있습니다.  
 
