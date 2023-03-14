@@ -28,8 +28,9 @@
 ## Tech Stack
 <p>
   <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=black">
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
   <img src="https://img.shields.io/badge/redux toolkit-764ABC?style=for-the-badge&logo=redux&logoColor=white">
-   <img src="https://img.shields.io/badge/firebase-2E77BC?style=for-the-badge&logo=firebase&logoColor=white">
+  <img src="https://img.shields.io/badge/firebase-2E77BC?style=for-the-badge&logo=firebase&logoColor=white">
 <br />
  <img src="https://img.shields.io/badge/React Router-CA4245?style=for-the-badge&logo=React Router&logoColor=white">
  <img src="https://img.shields.io/badge/Styled Components-DB7093?style=for-the-badge&logo=styledComponents&logoColor=white">
