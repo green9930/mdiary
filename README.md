@@ -1,46 +1,103 @@
-# Getting Started with Create React App
+# 내가 얼마 썼는지만 알고 싶을 때, 다씀🖌️
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 소개  
 
-## Available Scripts
+🚨 '다씀'은 모바일에 최적화된 서비스입니다. PC화면에서 사용이 다소 원활하지 않을 수 있습니다.  
+ 
+🔗 [다씀 바로가기 URL](https://green9930.github.io/mdiary)  
+  
+⬇️ QR코드로 다씀 바로가기  
+  
+<img src="https://user-images.githubusercontent.com/69451758/224851439-efd5d8d6-c181-4fde-9bd0-b9b9ff4bc7e4.png" alt="dasseum" width="200px" height="200px" />  
 
-In the project directory, you can run:
+### 설치 방법
 
-### `npm start`
+'다씀'은 PWA로 개발되었습니다. 웹페이지 접속 후 '홈에서 바로가기'를 통해 사용할 수 있습니다.  
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+#### 📱 iOS 설치 방법
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+<div style="display: flex">  
+  <img src="https://user-images.githubusercontent.com/69451758/224860521-41c9e9b3-49e4-4e29-b77a-8717f9a14635.jpg" alt="dasseum" width="300px" />  
+  <img src="https://user-images.githubusercontent.com/69451758/224860523-eb0b4334-1ad3-40a6-b116-9dbd27c7a18f.jpg" alt="dasseum" width="300px" />  
+  <img src="https://user-images.githubusercontent.com/69451758/224860526-467673a5-0d3b-4aac-b7b4-20f04558a6c4.jpg" alt="dasseum" width="300px" />  
+</div>
 
-### `npm test`
+#### 📱 Android 설치 방법
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<div style="display: flex">  
+  <img src="https://user-images.githubusercontent.com/69451758/224860509-a1d2ea71-69b5-44ce-bb3d-9f960fc3124c.jpg" alt="dasseum" width="240px" />  
+  <img src="https://user-images.githubusercontent.com/69451758/224860514-6f42b1f7-67e9-4905-b1c7-6bf1d2c9d643.jpg" alt="dasseum" width="240px" />  
+  <img src="https://user-images.githubusercontent.com/69451758/224860518-9eb797f0-6547-4cf6-b9f8-52af9c428732.JPG" alt="dasseum" width="240px" />  
+  <img src="https://user-images.githubusercontent.com/69451758/224860520-ee1017e5-30e3-4eed-82a1-d570259d3260.JPG" alt="dasseum" width="240px" />  
+</div>
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Tech Stack
+<p>
+  <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=black">
+  <img src="https://img.shields.io/badge/redux toolkit-764ABC?style=for-the-badge&logo=redux&logoColor=white">
+   <img src="https://img.shields.io/badge/firebase-2E77BC?style=for-the-badge&logo=firebase&logoColor=white">
+<br />
+ <img src="https://img.shields.io/badge/React Router-CA4245?style=for-the-badge&logo=React Router&logoColor=white">
+ <img src="https://img.shields.io/badge/Styled Components-DB7093?style=for-the-badge&logo=styledComponents&logoColor=white">
+ <img src="https://img.shields.io/badge/gh pages-%23121011.svg?style=for-the-badge&logo=github&logoColor=white">
+</p>
 
-### `npm run eject`
+## 서비스 안내
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+<details>
+  
+  <summary><b>🔐 로그인 페이지</b></summary>
+  <br />
+  <div style="display: flex">  
+    <img src="https://user-images.githubusercontent.com/69451758/224855576-b1da1085-4131-4475-a88b-666d3cdb08c3.PNG" alt="dasseum" width="300px" />
+  </div>
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+  - firebase Google 소셜로그인을 통해 이용할 수 있습니다.  
+  - 회원가입 전, '체험해보기'를 통해 서비스를 미리 이용해 볼 수 있습니다. 
+  
+</details>
+<details>
+  
+  <summary><b>📆 월간 / 주간 / 일간 / 카페고리 페이지</b></summary>
+  <br />
+  <div style="display: flex">  
+    <img src="https://user-images.githubusercontent.com/69451758/224855580-d92716fb-84a5-46f3-ab9b-7fa68dd957c9.PNG" alt="dasseum" width="240px" />  
+    <img src="https://user-images.githubusercontent.com/69451758/224855583-b192bd65-2364-4e64-8db0-86e584fa42d8.PNG" alt="dasseum" width="240px" />  
+    <img src="https://user-images.githubusercontent.com/69451758/224855585-9832006c-5be3-4fe5-9ed4-f5bf2d65916c.PNG" alt="dasseum" width="240px" />  
+    <img src="https://user-images.githubusercontent.com/69451758/224855586-d4a3b778-0c39-4bf6-bc6f-c664238561f5.PNG" alt="dasseum" width="240px" />  
+  </div>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+  - 내가 쓴 내역을 월간, 주간, 일간, 카테고리별로 묶어서 한 눈에 볼 수 있습니다.   
+  - 각 페이지별로 총 지출액과 세부내역을 함께 확인할 수 있습니다.  
+  
+</details>
+<details>
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+  <summary><b>💸 작성 페이지</b></summary>
+  <br />
+  <div style="display: flex">  
+    <img src="https://user-images.githubusercontent.com/69451758/224855588-917c9c51-ec2c-409b-bd15-1e20f5a93fd2.PNG" alt="dasseum" width="300px" />  
+    <img src="https://user-images.githubusercontent.com/69451758/224855591-1d1ed5ec-0b97-4805-8951-b4a337911864.PNG" alt="dasseum" width="300px" />  
+    <img src="https://user-images.githubusercontent.com/69451758/224855593-04e218e3-d565-47bd-a9aa-d58404751cb1.PNG" alt="dasseum" width="300px" />  
+  </div>
 
-## Learn More
+  - 지출 내역을 작성할 수 있습니다.  
+  
+</details>
+<details>
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+  <summary><b>🗑️ 게시글 수정 및 삭제</b></summary>
+  <br />
+  <div style="display: flex">  
+    <img src="https://user-images.githubusercontent.com/69451758/224855594-15b1d1e1-ed03-4eac-949f-1d69ab46b2ec.PNG" alt="dasseum" width="300px" />  
+    <img src="https://user-images.githubusercontent.com/69451758/224855596-988580c2-f4db-4881-8f14-0335cd0efb2d.PNG" alt="dasseum" width="300px" />  
+    <img src="https://user-images.githubusercontent.com/69451758/224855599-304844ff-16a7-4e10-8264-0ccb7e68b9ac.PNG" alt="dasseum" width="300px" />  
+  </div>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+  - 게시글 상세보기 모달에서 수정 및 삭제할 수 있습니다.  
+
+</details>
+
