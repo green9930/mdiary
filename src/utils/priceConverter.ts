@@ -17,6 +17,10 @@ export const priceConverter = (val: string) => {
       ? price.replace(/(^0+)/, "")
       : "0";
     previewPrice = price.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  } else if (price === "0") {
+    isValid = false;
+    realPrice = "0";
+    previewPrice = "0";
   }
 
   return { isValid, realPrice, previewPrice };
