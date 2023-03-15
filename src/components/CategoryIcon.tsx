@@ -76,7 +76,6 @@ const Icon = ({ target }: ICategoryIcon) => {
   }
 };
 
-console.log();
 const CategoryIcon = ({ target }: ICategoryIcon) => {
   return (
     <StCategoryIcon bg={convertIconColor(target)}>

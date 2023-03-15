@@ -40,7 +40,7 @@ const Login = () => {
       .catch((err) => {
         const errCode = err.code;
         const errMessage = err.message;
-        console.log(err);
+        console.error(err);
       });
 
   const handleTestSignIn = async () =>
@@ -63,12 +63,12 @@ const Login = () => {
       .catch((err) => {
         const errCode = err.code;
         const errMessage = err.message;
-        console.log(err);
+        console.error(err);
       });
 
   return (
     <StLogin>
-      <p>내가 얼마 썼는지"만" 알고 싶을때, </p>
+      <p>내가 얼마 썼는지"만" 알고 싶을 때, </p>
       <StLogo>
         <h2>다씀</h2>
         <ImPencil2 size={`${calcRem(26)}`} fill={`${theme.blue4}`} />

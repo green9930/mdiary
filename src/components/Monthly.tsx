@@ -41,7 +41,7 @@ const Monthly = () => {
   const handleTargetData = (target: ExpendType) => setTargetData(target);
 
   const onActiveStartDateChange = () => {
-    console.log("MONTH CHANGE");
+    // console.log("MONTH CHANGE");
     const yy = calendarLabel.innerText.split(" ")[0].replace("년", "");
     const mm = calendarLabel.innerText
       .split(" ")[1]

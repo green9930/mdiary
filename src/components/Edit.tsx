@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import SelectCategoryModal from "./modal/SelectCategoryModal";
 import { dbService } from "../firebase";
@@ -26,6 +26,7 @@ const Edit = ({
   handleShowAlert,
   handleShowConfirm,
 }: IEdit) => {
+  const [isChrome, setIsChrome] = useState(false);
   const [showCategory, setShowCategory] = useState(false);
   const [data, setData] = useState<ExpendType>({
     category: defaultData.category,
@@ -41,6 +42,10 @@ const Edit = ({
   );
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setIsChrome(window.navigator.userAgent.toLowerCase().includes("chrome"));
+  }, []);
 
   const onChange = (
     e:
@@ -111,10 +116,13 @@ const Edit = ({
                   value={data.date}
                 />
                 <label htmlFor="date-input">
-                  <MdCalendarMonth
-                    size={`${calcRem(18)}`}
-                    fill={`${theme.blue3}`}
-                  />
+                  {isChrome ? null : (
+                    <MdCalendarMonth
+                      className="calendar-icon"
+                      size={`${calcRem(18)}`}
+                      fill={`${theme.blue3}`}
+                    />
+                  )}
                 </label>
               </StDateWrapper>
               <StCategory
@@ -250,7 +258,7 @@ const StDateInput = styled.input.attrs({
   type: "date",
 })`
   ::-webkit-calendar-picker-indicator {
-    display: none;
+    /* display: none; */
   }
 `;
 

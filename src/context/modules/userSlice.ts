@@ -20,7 +20,6 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<userType>) => {
-      // console.log("USER INFO", action.payload);
       return (state = action.payload);
     },
   },
