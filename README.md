@@ -1,6 +1,24 @@
 # 내가 얼마 썼는지만 알고 싶을 때, 다씀🖌️
 
-## 소개  
+<div>
+ 
+ ![resize_thumbnail_dasseum](https://user-images.githubusercontent.com/69451758/225200431-0b662619-ad16-4104-8f49-10d971712c38.png)
+ 
+</div>
+
+## 프로젝트 기획 의도 
+
+<p>
+ 
+최근 대다수 가계부 앱들이 계좌/카드 연동, 지출 유형 관리(카드/현금/할부) 등 다양한 기능을 제공하며 오히려 지출 내역만 관리할 수 있는 앱을 찾기 어려웠습니다. <br />
+따라서 다른 부가기능 없이 간단하게 <b> 내가 얼마 썼는지만 </b> 한눈에 볼 수 있는 가계부 앱을 직접 개발해보기로 했고, <br />
+오로지 지출 내역만 기간, 카테고리 별로 관리할 수 있는 '다씀'을 기획하게 되었습니다.
+
+</p>
+
+<br />
+
+## 서비스 이동하기
 
 🚨 '다씀'은 모바일에 최적화된 서비스입니다. PC화면에서 사용이 다소 원활하지 않을 수 있습니다.  
  
@@ -24,6 +42,7 @@
 ![android01](https://user-images.githubusercontent.com/69451758/224860509-a1d2ea71-69b5-44ce-bb3d-9f960fc3124c.jpg) |![android02](https://user-images.githubusercontent.com/69451758/224860514-6f42b1f7-67e9-4905-b1c7-6bf1d2c9d643.jpg) | ![android03](https://user-images.githubusercontent.com/69451758/224860518-9eb797f0-6547-4cf6-b9f8-52af9c428732.JPG) | ![android04](https://user-images.githubusercontent.com/69451758/224860520-ee1017e5-30e3-4eed-82a1-d570259d3260.JPG) 
 --- | --- | --- | --- |
 
+<br />
 
 ## Tech Stack
 <p>
@@ -36,6 +55,8 @@
  <img src="https://img.shields.io/badge/Styled Components-DB7093?style=for-the-badge&logo=styledComponents&logoColor=white">
  <img src="https://img.shields.io/badge/gh pages-%23121011.svg?style=for-the-badge&logo=github&logoColor=white">
 </p>
+
+<br />
 
 ## 서비스 안내
 
