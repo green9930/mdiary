@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import styled from "styled-components";
-import { ExpendType } from "../config";
+import DetailPreview from "./DetailPreview";
 import { useAppSelector } from "../context/redux";
 import { calcRem, theme } from "../styles/theme";
+import { dateConverter } from "../utils/dateConverter";
 import { priceConverter } from "../utils/priceConverter";
-import DetailPreview from "./DetailPreview";
+import { ExpendType } from "../config";
 
 const Monthly = () => {
   const [value, onChange] = useState(new Date());
@@ -20,28 +21,52 @@ const Monthly = () => {
   ) as HTMLSpanElement;
 
   useEffect(() => {
+    // Calendar 날짜별 지출 금액 표시
+    /* -------------------------------------------------------------------------- */
+    const calendarItems = Array.from(
+      window.document.querySelectorAll(".react-calendar__month-view__days__day")
+    );
+
+    calendarItems.map((val) => {
+      if (val.children[0].ariaLabel) {
+        const label = val.children[0].ariaLabel.split(" ");
+        const yy = Number(label[0].replace("년", ""));
+        const mm = Number(label[1].replace("월", "")) - 1;
+        const dd = Number(label[2].replace("일", ""));
+        const priceList = dataArr.filter(
+          (val) => val.date === dateConverter(new Date(yy, mm, dd))
+        );
+        const price = priceConverter(
+          priceList
+            .map((val) => Number(val.price))
+            .reduce((acc, cur) => acc + cur, 0)
+            .toString()
+        ).previewPrice;
+        const item = val.children[1]
+          ? (val.children[1] as HTMLSpanElement)
+          : document.createElement("span");
+        item.innerText = price === "0" ? "" : price.toString();
+        val.appendChild(item);
+      }
+    });
+
+    // Monthly Total Expends
+    /* -------------------------------------------------------------------------- */
     if (dataArr) {
-      const dateStr = `${value.getFullYear()}-${(value.getMonth() + 1)
-        .toString()
-        .padStart(2, "0")}-${value.getDate().toString().padStart(2, "0")}`;
-      setTargetDataArr(
-        dataArr.filter((val) => {
-          return val.date === dateStr;
-        })
-      );
-      // console.log(dateStr);
-      const priceArr = dataArr.map((val) =>
-        val.date.slice(0, 7) === dateStr.slice(0, 7) ? Number(val.price) : 0
-      );
-      const t = priceArr.reduce((acc, cur) => acc + cur, 0);
-      setMExpend(priceConverter(t.toString()).previewPrice);
+      const dateStr = dateConverter(value);
+      setTargetDataArr(dataArr.filter((val) => val.date === dateStr));
+      const totalPrice = dataArr
+        .map((val) =>
+          val.date.slice(0, 7) === dateStr.slice(0, 7) ? Number(val.price) : 0
+        )
+        .reduce((acc, cur) => acc + cur, 0);
+      setMExpend(priceConverter(totalPrice.toString()).previewPrice);
     }
-  }, [value, dataArr]);
+  }, [value, dataArr, dataArr]);
 
   const handleTargetData = (target: ExpendType) => setTargetData(target);
 
   const onActiveStartDateChange = () => {
-    // console.log("MONTH CHANGE");
     const yy = calendarLabel.innerText.split(" ")[0].replace("년", "");
     const mm = calendarLabel.innerText
       .split(" ")[1]
@@ -70,7 +95,7 @@ const Monthly = () => {
         </StCalendar>
       </StHeader>
       <StExpendList>
-        {targetDataArr.map((val, idx) => {
+        {targetDataArr.map((val) => {
           return (
             <React.Fragment key={val.id}>
               <DetailPreview
@@ -143,6 +168,21 @@ const StCalendar = styled.div`
     background-color: ${theme.white};
   }
 
+  .react-calendar__month-view__days__day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: ${calcRem(54)};
+
+    span {
+      display: inline-block;
+      width: 100%;
+      font-size: ${calcRem(9)};
+      color: ${theme.green1};
+    }
+  }
+
   .react-calendar__tile--now {
     background: transparent;
     abbr {
@@ -171,7 +211,8 @@ const StCalendar = styled.div`
   }
 
   .react-calendar__month-view__days__day--neighboringMonth {
-    abbr {
+    abbr,
+    span {
       color: ${theme.gray2};
     }
   }
