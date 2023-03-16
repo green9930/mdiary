@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/mdiary/static/css/main.f64ec082.css",
-    "main.js": "/mdiary/static/js/main.94f80697.js",
+    "main.js": "/mdiary/static/js/main.f2bd1044.js",
     "static/js/787.64cba5d3.chunk.js": "/mdiary/static/js/787.64cba5d3.chunk.js",
     "service-worker.js": "/mdiary/service-worker.js",
     "index.html": "/mdiary/index.html",
     "main.f64ec082.css.map": "/mdiary/static/css/main.f64ec082.css.map",
-    "main.94f80697.js.map": "/mdiary/static/js/main.94f80697.js.map",
+    "main.f2bd1044.js.map": "/mdiary/static/js/main.f2bd1044.js.map",
     "787.64cba5d3.chunk.js.map": "/mdiary/static/js/787.64cba5d3.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f64ec082.css",
-    "static/js/main.94f80697.js"
+    "static/js/main.f2bd1044.js"
   ]
 }
