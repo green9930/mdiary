@@ -60,9 +60,16 @@ const Categories = () => {
       </StHeader>
       <StBody>
         <StExpendList>
-          {sortingData(targetDataArr, "title", true).map((val) => {
+          {sortingData(targetDataArr, "date", false).map((val, idx, arr) => {
+            const i = idx === 0 ? 0 : idx - 1;
+            const valYearMonth = val.date.slice(0, 7);
             return (
               <React.Fragment key={val.id}>
+                {valYearMonth !== arr[i].date.slice(0, 7) || idx === 0 ? (
+                  <span className="month-section">
+                    {valYearMonth.replace("-", ".")}
+                  </span>
+                ) : null}
                 <DetailPreview
                   handleTargetData={handleTargetData}
                   targetData={targetData}
@@ -82,7 +89,7 @@ export default Categories;
 const StCategories = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${calcRem(50)};
+  gap: ${calcRem(32)};
   padding: ${calcRem(20)};
 `;
 
@@ -134,4 +141,9 @@ const StExpendList = styled.ul`
   align-items: center;
   justify-content: center;
   gap: ${calcRem(12)};
+
+  .month-section {
+    margin-top: ${calcRem(8)};
+    font-size: ${calcRem(12)};
+  }
 `;
