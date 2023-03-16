@@ -41,7 +41,10 @@ const DetailPreview = ({
         <CategoryIcon target={category as CategoryType} />
         <h3>{title}</h3>
       </StHeader>
-      <StPrice>{priceConverter(price).previewPrice} ₩</StPrice>
+      <StSubInfo>
+        <StPrice>{priceConverter(price).previewPrice} ₩</StPrice>
+        <StDate>{date.replaceAll("-", ".")}</StDate>
+      </StSubInfo>
       {showDetail && id === targetData?.id ? (
         <ModalLayout width="84%" height="60%" handleModal={handleShowDetail}>
           <DetailModal
@@ -103,7 +106,18 @@ const StHeader = styled.div`
   }
 `;
 
-const StPrice = styled.p`
-  font-size: ${calcRem(12)};
+const StSubInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+`;
+
+const StPrice = styled.span`
   color: ${theme.black};
+  font-size: ${calcRem(12)};
+`;
+
+const StDate = styled.span`
+  color: ${theme.gray2};
+  font-size: ${calcRem(10)};
 `;
