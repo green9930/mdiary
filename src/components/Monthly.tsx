@@ -8,6 +8,8 @@ import { calcRem, theme } from "../styles/theme";
 import { dateConverter } from "../utils/dateConverter";
 import { priceConverter } from "../utils/priceConverter";
 import { ExpendType } from "../config";
+import Button from "./elements/Button";
+import { useNavigate } from "react-router-dom";
 
 const Monthly = () => {
   const [value, onChange] = useState(new Date());
@@ -15,6 +17,7 @@ const Monthly = () => {
   const [targetData, setTargetData] = useState<ExpendType>();
   const [mExpend, setMExpend] = useState("0");
 
+  const navigate = useNavigate();
   const dataArr = useAppSelector((state) => state.expend);
   const calendarLabel = window.document.querySelector(
     ".react-calendar__navigation__label__labelText"
@@ -94,6 +97,13 @@ const Monthly = () => {
           />
         </StCalendar>
       </StHeader>
+      <Button
+        btnTheme="blue1"
+        btnSize="small1"
+        onClick={() => navigate("/new", { state: value })}
+      >
+        {`${value.getMonth() + 1}/${value.getDate()}`} 추가하기
+      </Button>
       <StExpendList>
         {targetDataArr.map((val) => {
           return (
@@ -118,7 +128,7 @@ const StMonthly = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: ${calcRem(30)};
+  gap: ${calcRem(24)};
   padding: ${calcRem(20)};
 `;
 

@@ -14,6 +14,7 @@ import { calcRem, theme } from "../styles/theme";
 import { MdCalendarMonth, MdApps } from "react-icons/md";
 import Button from "./elements/Button";
 import ValiModal from "./modal/ValiModal";
+import { useLocation } from "react-router-dom";
 
 const New = () => {
   const user = useAppSelector((state) => state.user);
@@ -33,8 +34,11 @@ const New = () => {
   const [displayPrice, setDisplayPrice] = useState("");
   const [isChrome, setIsChrome] = useState(false);
 
+  // MonthlyPage => NewPage
+  const { state } = useLocation();
+
   useEffect(() => {
-    const today = new Date();
+    const today = state ? state : new Date();
     setIsChrome(window.navigator.userAgent.toLowerCase().includes("chrome"));
     setData({ ...data, date: dateConverter(today), username: user.username });
   }, []);
@@ -67,7 +71,7 @@ const New = () => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // console.log(data);
+    console.log(data);
     if (
       data.category === "" ||
       data.date === "" ||
