@@ -7,7 +7,7 @@ import { dbService } from "../firebase";
 import { addDoc, collection } from "firebase/firestore";
 import { addExpend } from "../context/modules/expendSlice";
 import { useDispatch } from "react-redux";
-import { ExpendType } from "../config";
+import { ExpendType, MAX_CONTENT_LENGTH, MAX_TITLE_LENGTH } from "../config";
 import { dateConverter } from "../utils/dateConverter";
 import { priceConverter } from "../utils/priceConverter";
 import { calcRem, theme } from "../styles/theme";
@@ -54,8 +54,8 @@ const New = () => {
       | React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    if (name === "title") {
-    }
+    if (name === "title" && value.length > MAX_TITLE_LENGTH) return;
+    if (name === "content" && value.length > MAX_CONTENT_LENGTH) return;
     if (name === "price") {
       if (priceConverter(value).isValid) {
         setDisplayPrice(priceConverter(value).previewPrice);
@@ -71,7 +71,7 @@ const New = () => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(data);
+    // console.log(data);
     if (
       data.category === "" ||
       data.date === "" ||

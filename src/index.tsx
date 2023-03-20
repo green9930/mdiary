@@ -3,11 +3,11 @@ import ReactDOM from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
+import { ThemeProvider } from "styled-components";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import App from "./App";
 import store from "./context/redux";
 import GlobalStyle from "./styles/GlobalStyle";
-import { ThemeProvider } from "styled-components";
 import { theme } from "./styles/theme";
 
 const root = ReactDOM.createRoot(

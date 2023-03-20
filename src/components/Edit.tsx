@@ -5,7 +5,7 @@ import { dbService } from "../firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import { updateExpend } from "../context/modules/expendSlice";
 import { useDispatch } from "react-redux";
-import { ExpendType } from "../config";
+import { ExpendType, MAX_CONTENT_LENGTH, MAX_TITLE_LENGTH } from "../config";
 import { priceConverter } from "../utils/priceConverter";
 import { calcRem, theme } from "../styles/theme";
 import { MdCalendarMonth } from "react-icons/md";
@@ -53,6 +53,8 @@ const Edit = ({
       | React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
+    if (name === "title" && value.length > MAX_TITLE_LENGTH) return;
+    if (name === "content" && value.length > MAX_CONTENT_LENGTH) return;
     if (name === "price") {
       if (priceConverter(value).isValid) {
         setDisplayPrice(priceConverter(value).previewPrice);
