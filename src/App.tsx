@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { authService } from "./firebase";
+import { updateProfile } from "firebase/auth";
 import Router from "./router/Router";
 import { setExpend } from "./context/modules/expendSlice";
 import { setUser } from "./context/modules/userSlice";
@@ -18,14 +19,12 @@ function App() {
     const fetchUser = async () => {
       authService.onAuthStateChanged((user) => {
         if (user) {
-          // console.log(user);
           const { displayName, email, uid } = user;
+          // console.log(user);
+          // if (email === TEST_ID)
+          //   updateProfile(user, { displayName: TEST_USERNAME });
           const userEmail = email ? email : "";
-          const username = displayName
-            ? email === TEST_ID
-              ? TEST_USERNAME
-              : displayName
-            : "";
+          const username = displayName ? displayName : "";
           const userUid = uid ? uid : "";
           dispatch(
             setUser({ isLogin: true, email: userEmail, username, uid: userUid })

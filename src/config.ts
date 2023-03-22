@@ -1,4 +1,4 @@
-export const TEST_USERNAME = "DASSEUM TEST USER";
+export const TEST_USERNAME = "admin_dasseum";
 export const TEST_ID = "admin@dasseum.com";
 
 export const MAX_PRICE_LENGTH = 9;

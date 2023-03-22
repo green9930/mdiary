@@ -71,7 +71,7 @@ const New = () => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // console.log(data);
+    console.log(data);
     if (
       data.category === "" ||
       data.date === "" ||
