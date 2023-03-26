@@ -3,18 +3,16 @@ import styled from "styled-components";
 import { useAppSelector } from "../context/redux";
 import ModalLayout from "./layout/ModalLayout";
 import SelectCategoryModal from "./modal/SelectCategoryModal";
-import { dbService } from "../firebase";
-import { addDoc, collection } from "firebase/firestore";
-import { addExpend } from "../context/modules/expendSlice";
 import { useDispatch } from "react-redux";
-import { ExpendType, MAX_CONTENT_LENGTH, MAX_TITLE_LENGTH } from "../config";
+import { ExpendType } from "../config";
 import { dateConverter } from "../utils/dateConverter";
-import { priceConverter } from "../utils/priceConverter";
 import { calcRem, theme } from "../styles/theme";
 import { MdCalendarMonth, MdApps } from "react-icons/md";
 import Button from "./elements/Button";
 import ValiModal from "./modal/ValiModal";
 import { useLocation } from "react-router-dom";
+import onChangeExpend from "../utils/onChangeExpend";
+import onSubmitExpend from "../utils/onSubmitExpend";
 
 const New = () => {
   const user = useAppSelector((state) => state.user);
@@ -48,58 +46,6 @@ const New = () => {
     setShowCategory(!showCategory);
   };
 
-  const onChange = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    if (name === "title" && value.length > MAX_TITLE_LENGTH) return;
-    if (name === "content" && value.length > MAX_CONTENT_LENGTH) return;
-    if (name === "price") {
-      if (priceConverter(value).isValid) {
-        setDisplayPrice(priceConverter(value).previewPrice);
-        setData({ ...data, [name]: priceConverter(value).realPrice });
-      } else {
-        setDisplayPrice("");
-        setData({ ...data, [name]: "0" });
-      }
-    } else {
-      setData({ ...data, [name]: value });
-    }
-  };
-
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(data);
-    if (
-      data.category === "" ||
-      data.date === "" ||
-      data.price === "0" ||
-      data.title === ""
-    ) {
-      setShowAlert(true);
-    } else if (
-      data.category.length &&
-      data.title.trim().length &&
-      data.date.length &&
-      data.price.length
-    ) {
-      await addDoc(collection(dbService, "expend"), data);
-      dispatch(addExpend(data));
-      setShowConfirm(!showConfirm);
-      setData({
-        category: "",
-        title: "",
-        content: "",
-        date: dateConverter(new Date()),
-        price: "",
-        username: user.username,
-      });
-      setDisplayPrice("");
-    }
-  };
-
   const handleCancel = () => {
     setData({
       category: "",
@@ -112,20 +58,43 @@ const New = () => {
     setDisplayPrice("");
   };
 
+  const handleDisplayPrice = (target: string) => setDisplayPrice(target);
+  const handleData = (target: ExpendType) => setData(target);
   const handleShowCategory = () => setShowCategory(!showCategory);
   const handleShowAlert = () => setShowAlert(!showAlert);
-  const handleShowConfirm = () => setShowConfirm(!showConfirm);
+  const handleShowConfirm = () => {
+    setShowConfirm(!showConfirm);
+    if (showConfirm) window.location.reload();
+  };
 
   return (
     <StNew>
-      <form onSubmit={onSubmit}>
+      <form
+        onSubmit={(e: React.FormEvent<HTMLFormElement>) =>
+          onSubmitExpend({
+            e,
+            isNew: true,
+            data,
+            user,
+            handleShowAlert,
+            handleShowConfirm,
+            handleData,
+            handleDisplayPrice,
+            dispatch,
+          })
+        }
+      >
         <StDateWrapper>
           <span>Date</span>
           <StDateInput
             id="date-input"
             type="date"
             name="date"
-            onChange={onChange}
+            onChange={(
+              e:
+                | React.ChangeEvent<HTMLInputElement>
+                | React.ChangeEvent<HTMLTextAreaElement>
+            ) => onChangeExpend({ e, handleDisplayPrice, handleData, data })}
             value={data.date}
           />
           <label htmlFor="date-input">
@@ -146,7 +115,11 @@ const New = () => {
             <input
               id="title-input"
               name="title"
-              onChange={onChange}
+              onChange={(
+                e:
+                  | React.ChangeEvent<HTMLInputElement>
+                  | React.ChangeEvent<HTMLTextAreaElement>
+              ) => onChangeExpend({ e, handleDisplayPrice, handleData, data })}
               value={data.title}
               placeholder="제목을 입력하세요"
             />
@@ -169,7 +142,11 @@ const New = () => {
             rows={8}
             id="content-input"
             name="content"
-            onChange={onChange}
+            onChange={(
+              e:
+                | React.ChangeEvent<HTMLInputElement>
+                | React.ChangeEvent<HTMLTextAreaElement>
+            ) => onChangeExpend({ e, handleDisplayPrice, handleData, data })}
             value={data.content}
             placeholder="내용을 입력하세요"
           />
@@ -182,7 +159,11 @@ const New = () => {
           <input
             id="price-input"
             name="price"
-            onChange={onChange}
+            onChange={(
+              e:
+                | React.ChangeEvent<HTMLInputElement>
+                | React.ChangeEvent<HTMLTextAreaElement>
+            ) => onChangeExpend({ e, handleDisplayPrice, handleData, data })}
             value={displayPrice}
             placeholder="지출 금액"
           />

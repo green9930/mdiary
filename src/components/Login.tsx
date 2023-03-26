@@ -3,7 +3,6 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   signInWithEmailAndPassword,
-  updateProfile,
 } from "firebase/auth";
 import { authService } from "../firebase";
 import styled from "styled-components";
@@ -25,7 +24,6 @@ const Login = () => {
   const handleSignIn = () =>
     signInWithPopup(authService, provider)
       .then((res) => {
-        // console.log("RESULT", res);
         const credential = GoogleAuthProvider.credentialFromResult(res);
         const token = credential?.accessToken;
         const { user } = res;

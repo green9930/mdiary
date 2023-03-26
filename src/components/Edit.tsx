@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import SelectCategoryModal from "./modal/SelectCategoryModal";
-import { dbService } from "../firebase";
-import { doc, updateDoc } from "firebase/firestore";
-import { updateExpend } from "../context/modules/expendSlice";
 import { useDispatch } from "react-redux";
-import { ExpendType, MAX_CONTENT_LENGTH, MAX_TITLE_LENGTH } from "../config";
+import { ExpendType } from "../config";
 import { priceConverter } from "../utils/priceConverter";
 import { calcRem, theme } from "../styles/theme";
-import { MdCalendarMonth } from "react-icons/md";
 import Button from "./elements/Button";
+import onSubmitExpend from "../utils/onSubmitExpend";
+import onChangeExpend from "../utils/onChangeExpend";
+import { useAppSelector } from "../context/redux";
+import { MdCalendarMonth } from "react-icons/md";
 
 interface IEdit {
   defaultData: ExpendType;
@@ -41,61 +41,20 @@ const Edit = ({
     priceConverter(defaultData.price).previewPrice
   );
 
+  const user = useAppSelector((state) => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
     setIsChrome(window.navigator.userAgent.toLowerCase().includes("chrome"));
   }, []);
 
-  const onChange = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    if (name === "title" && value.length > MAX_TITLE_LENGTH) return;
-    if (name === "content" && value.length > MAX_CONTENT_LENGTH) return;
-    if (name === "price") {
-      if (priceConverter(value).isValid) {
-        setDisplayPrice(priceConverter(value).previewPrice);
-        setData({ ...data, [name]: priceConverter(value).realPrice });
-      } else {
-        setDisplayPrice("");
-        setData({ ...data, [name]: "0" });
-      }
-    } else {
-      setData({ ...data, [name]: value });
-    }
-  };
-
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(data);
-    if (
-      data.category === "" ||
-      data.date === "" ||
-      data.price === "0" ||
-      data.title === ""
-    ) {
-      handleShowAlert();
-    } else if (
-      data.category.length &&
-      data.title.trim().length &&
-      data.date.length &&
-      data.price.length
-    ) {
-      await updateDoc(doc(dbService, "expend", data.id as string), data);
-      dispatch(updateExpend(data));
-      handleShowConfirm();
-      handleEdit(data);
-    }
-  };
-
+  const handleDisplayPrice = (target: string) => setDisplayPrice(target);
+  const handleData = (target: ExpendType) => setData(target);
+  const handleShowCategory = () => setShowCategory(!showCategory);
   const handleSelect = (target: string) => {
     setData({ ...data, category: target });
     setShowCategory(!showCategory);
   };
-  const handleShowCategory = () => setShowCategory(!showCategory);
 
   return (
     <>
@@ -106,7 +65,22 @@ const Edit = ({
         />
       ) : (
         <StEdit>
-          <form onSubmit={onSubmit}>
+          <form
+            onSubmit={(e: React.FormEvent<HTMLFormElement>) =>
+              onSubmitExpend({
+                e,
+                isNew: false,
+                data,
+                user,
+                handleShowAlert,
+                handleShowConfirm,
+                handleData,
+                handleDisplayPrice,
+                handleEdit,
+                dispatch,
+              })
+            }
+          >
             <StSubInfo>
               <StDateWrapper>
                 <span>Date</span>
@@ -114,7 +88,13 @@ const Edit = ({
                   id="date-input"
                   type="date"
                   name="date"
-                  onChange={onChange}
+                  onChange={(
+                    e:
+                      | React.ChangeEvent<HTMLInputElement>
+                      | React.ChangeEvent<HTMLTextAreaElement>
+                  ) =>
+                    onChangeExpend({ e, handleDisplayPrice, handleData, data })
+                  }
                   value={data.date}
                 />
                 <label htmlFor="date-input">
@@ -141,7 +121,13 @@ const Edit = ({
               <input
                 id="title-input"
                 name="title"
-                onChange={onChange}
+                onChange={(
+                  e:
+                    | React.ChangeEvent<HTMLInputElement>
+                    | React.ChangeEvent<HTMLTextAreaElement>
+                ) =>
+                  onChangeExpend({ e, handleDisplayPrice, handleData, data })
+                }
                 value={data.title}
                 placeholder="제목을 입력하세요"
               />
@@ -154,7 +140,13 @@ const Edit = ({
                 rows={8}
                 id="content-input"
                 name="content"
-                onChange={onChange}
+                onChange={(
+                  e:
+                    | React.ChangeEvent<HTMLInputElement>
+                    | React.ChangeEvent<HTMLTextAreaElement>
+                ) =>
+                  onChangeExpend({ e, handleDisplayPrice, handleData, data })
+                }
                 value={data.content}
                 placeholder="내용을 입력하세요"
               />
@@ -167,7 +159,13 @@ const Edit = ({
               <input
                 id="price-input"
                 name="price"
-                onChange={onChange}
+                onChange={(
+                  e:
+                    | React.ChangeEvent<HTMLInputElement>
+                    | React.ChangeEvent<HTMLTextAreaElement>
+                ) =>
+                  onChangeExpend({ e, handleDisplayPrice, handleData, data })
+                }
                 value={displayPrice}
                 placeholder="지출 금액"
               />

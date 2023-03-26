@@ -20,7 +20,7 @@ const expendSlice = createSlice({
       return arr.filter((val) => val.username === auth);
     },
     addExpend: (state, action: PayloadAction<ExpendType>) => {
-      let targetId: string = "";
+      let newExpend: ExpendType = action.payload;
       const fetchNewData = async () => {
         const q = query(collection(dbService, "expend"));
         const res = await getDocs(q);
@@ -34,12 +34,13 @@ const expendSlice = createSlice({
             data.price === target.price &&
             data.title === target.title &&
             data.username === target.username
-          )
-            targetId = val.id;
+          ) {
+            newExpend = { ...newExpend, id: val.id };
+          }
         });
       };
       fetchNewData();
-      state.push({ id: targetId, ...action.payload });
+      return [...state, newExpend];
     },
     updateExpend: (state, action: PayloadAction<ExpendType>) => {
       return state.map((val) => {

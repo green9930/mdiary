@@ -65,7 +65,7 @@ const Monthly = () => {
         .reduce((acc, cur) => acc + cur, 0);
       setMExpend(priceConverter(totalPrice.toString()).previewPrice);
     }
-  }, [value, dataArr, dataArr]);
+  }, [value, dataArr]);
 
   const handleTargetData = (target: ExpendType) => setTargetData(target);
 

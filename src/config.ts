@@ -5,6 +5,13 @@ export const MAX_PRICE_LENGTH = 9;
 export const MAX_TITLE_LENGTH = 25;
 export const MAX_CONTENT_LENGTH = 200;
 
+export type UserType = {
+  isLogin: boolean;
+  email: string;
+  username: string;
+  uid: string;
+};
+
 export type ExpendType = {
   id?: string;
   category: string;
