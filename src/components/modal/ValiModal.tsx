@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { calcRem } from "../../styles/theme";
 import Button from "../elements/Button";
+import { calcRem } from "../../styles/theme";
 
 type ValiType = "alert" | "confirm" | "edit";
 interface IValiModal {

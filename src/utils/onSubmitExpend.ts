@@ -1,8 +1,8 @@
-import { AnyAction, Dispatch } from "redux";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
+import { AnyAction, Dispatch } from "redux";
 import { dbService } from "../firebase";
-import { addExpend, updateExpend } from "../context/modules/expendSlice";
 import { dateConverter } from "./dateConverter";
+import { addExpend, updateExpend } from "../context/modules/expendSlice";
 import { ExpendType, UserType } from "../config";
 
 interface IOnSubmitExpend {
@@ -18,7 +18,7 @@ interface IOnSubmitExpend {
   dispatch: Dispatch<AnyAction>;
 }
 
-const onSubmitExpend = async ({
+export const onSubmitExpend = async ({
   e,
   isNew,
   data,
@@ -63,5 +63,3 @@ const onSubmitExpend = async ({
     }
   }
 };
-
-export default onSubmitExpend;

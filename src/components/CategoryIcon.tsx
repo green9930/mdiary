@@ -1,3 +1,6 @@
+import styled from "styled-components";
+import { CategoryType } from "../config";
+import { calcRem, theme } from "../styles/theme";
 import {
   MdElectricalServices,
   MdDirectionsSubway,
@@ -9,9 +12,6 @@ import {
   MdSchool,
   MdAddCard,
 } from "react-icons/md";
-import styled from "styled-components";
-import { CategoryType } from "../config";
-import { calcRem, theme } from "../styles/theme";
 
 interface ICategoryIcon {
   target: CategoryType;

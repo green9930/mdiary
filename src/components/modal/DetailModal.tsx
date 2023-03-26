@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import { CategoryType, ExpendType } from "../../config";
+import Edit from "../Edit";
+import CategoryIcon from "../CategoryIcon";
+import Button from "../elements/Button";
 import { calcRem, theme } from "../../styles/theme";
 import { priceConverter } from "../../utils/priceConverter";
-import CategoryIcon from "../CategoryIcon";
-import Edit from "../Edit";
-import Button from "../elements/Button";
+import { CategoryType, ExpendType } from "../../config";
 import { MdDelete } from "react-icons/md";
 
 interface IDetailModal {

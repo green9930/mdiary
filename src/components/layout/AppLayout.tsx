@@ -3,20 +3,19 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import styled from "styled-components";
+import { authService } from "../../firebase";
 import { setUser } from "../../context/modules/userSlice";
 import { useAppSelector } from "../../context/redux";
-import { authService } from "../../firebase";
 import { calcRem, theme } from "../../styles/theme";
-import { ImPencil2 } from "react-icons/im";
 import { VscGithubInverted, VscSignOut } from "react-icons/vsc";
-import { TEST_USERNAME } from "../../config";
+import { ImPencil2 } from "react-icons/im";
 
 interface IAppLayout extends React.HTMLAttributes<HTMLDivElement> {}
 
 const AppLayout: React.FC<IAppLayout> = ({ children }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isLogin, username } = useAppSelector((state) => state.user);
+  const { isLogin } = useAppSelector((state) => state.user);
 
   const handleNavigate = (name: string) => navigate(name);
   const onClick = async () => {

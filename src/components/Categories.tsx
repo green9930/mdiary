@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import CategoryIcon from "./CategoryIcon";
+import DetailPreview from "./DetailPreview";
+import { useAppSelector } from "../context/redux";
+import { calcRem, theme } from "../styles/theme";
+import { priceConverter } from "../utils/priceConverter";
+import { sortingData } from "../utils/sortingData";
 import {
   CategorySelectType,
   CategoryType,
   CATEGORY_SELECT_LIST,
   ExpendType,
 } from "../config";
-import { useAppSelector } from "../context/redux";
-import { calcRem, theme } from "../styles/theme";
-import { priceConverter } from "../utils/priceConverter";
-import { sortingData } from "../utils/sortingData";
-import CategoryIcon from "./CategoryIcon";
-import DetailPreview from "./DetailPreview";
 
 const Categories = () => {
   const [target, setTarget] = useState<CategorySelectType>("All");

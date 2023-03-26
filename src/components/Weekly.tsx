@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { ExpendType } from "../config";
+import DetailPreview from "./DetailPreview";
 import { useAppSelector } from "../context/redux";
-import { calcRem, theme } from "../styles/theme";
 import { dateConverter } from "../utils/dateConverter";
 import { dayConverter } from "../utils/dayConverter";
 import { priceConverter } from "../utils/priceConverter";
 import { sortingData } from "../utils/sortingData";
-import DetailPreview from "./DetailPreview";
+import { calcRem, theme } from "../styles/theme";
+import { ExpendType } from "../config";
 
 type TWeekly = {
   day: string;
@@ -20,8 +20,6 @@ type TWeekly = {
 const Weekly = () => {
   const [d, setD] = useState(new Date());
   const [targetDay, setTargetDay] = useState(new Date().getDay());
-  // const [d, setD] = useState(new Date(2023, 2, 12));
-  // const [targetDay, setTargetDay] = useState(new Date(2023, 2, 12).getDay());
   const [weekArr, setWeekArr] = useState<TWeekly[]>([]);
   const [dataArr, setDataArr] = useState<ExpendType[]>([]);
   const [targetData, setTargetData] = useState<ExpendType>();
@@ -97,53 +95,6 @@ const Weekly = () => {
     });
     setWeekArr(wArr);
   }, [data, dateConverter(d)]);
-
-  // useEffect(() => {
-  //   const dArr = data.filter((val) => val.date === dateConverter(d));
-  //   setDataArr(sortingData(dArr, "title", true));
-
-  //   let wArr: TWeekly[] = [];
-  //   let val: Date = new Date();
-  //   let expend: number = 0;
-
-  //   for (let i = 1; i < 7; i++) {
-  //     const copiedD = new Date(d);
-
-  //     if (i !== targetDay) {
-  //       val =
-  //         i < targetDay
-  //           ? new Date(copiedD.setDate(copiedD.getDate() - (targetDay - i)))
-  //           : new Date(copiedD.setDate(copiedD.getDate() + (i - targetDay)));
-  //       expend = data
-  //         .filter((data) => data.date === dateConverter(val))
-  //         .map((val) => Number(val.price))
-  //         .reduce((acc, cur) => acc + cur, 0);
-
-  //       wArr.push({
-  //         day: dayConverter(i),
-  //         fullDate: dateConverter(val),
-  //         date: dateConverter(val).slice(-2),
-  //         dateObj: val,
-  //         expend,
-  //       });
-  //     } else {
-  //       expend = data
-  //         .filter((val) => val.date === dateConverter(d))
-  //         .map((val) => Number(val.price))
-  //         .reduce((acc, cur) => acc + cur, 0);
-
-  //       wArr.push({
-  //         day: dayConverter(targetDay),
-  //         fullDate: dateConverter(d),
-  //         date: dateConverter(d).slice(-2),
-  //         dateObj: d,
-  //         expend,
-  //       });
-  //     }
-
-  //   }
-  //   setWeekArr(wArr);
-  // }, [data, dateConverter(d)]);
 
   const handleSelectDay = (day: string, fullDate: string) => {
     const yy = Number(fullDate.slice(0, 4));
@@ -306,7 +257,6 @@ const StBtnWrapper = styled.div`
 `;
 
 const WeekLi = styled.li<{ isToday: boolean; isSelected: boolean }>`
-  /* background-color: pink; */
   width: 15%;
   display: flex;
   flex-direction: column;

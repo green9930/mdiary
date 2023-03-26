@@ -1,5 +1,5 @@
-import { ExpendType, MAX_CONTENT_LENGTH, MAX_TITLE_LENGTH } from "../config";
 import { priceConverter } from "./priceConverter";
+import { ExpendType, MAX_CONTENT_LENGTH, MAX_TITLE_LENGTH } from "../config";
 
 interface IOnChangeExpend {
   e:
@@ -10,7 +10,7 @@ interface IOnChangeExpend {
   data: ExpendType;
 }
 
-const onChangeExpend = ({
+export const onChangeExpend = ({
   e,
   handleDisplayPrice,
   handleData,
@@ -31,5 +31,3 @@ const onChangeExpend = ({
     handleData({ ...data, [name]: value });
   }
 };
-
-export default onChangeExpend;

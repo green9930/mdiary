@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { calcRem, theme } from "../../styles/theme";
-import { dateConverter } from "../../utils/dateConverter";
-import { getMonthLength } from "../../utils/getMonthLength";
 import Button from "../elements/Button";
+import { getMonthLength } from "../../utils/getMonthLength";
+import { calcRem, theme } from "../../styles/theme";
 
 const MONTH_ARR = Array.from({ length: 12 }, (_, idx) => idx + 1);
 interface ISelectDateModal {
@@ -159,10 +158,6 @@ const StBody = styled.div`
       font-size: ${calcRem(12)};
     }
   }
-`;
-
-const StFooter = styled.div`
-  margin-top: 40px;
 `;
 
 const StBtnWrapper = styled.div`

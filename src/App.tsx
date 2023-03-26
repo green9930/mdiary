@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { authService } from "./firebase";
+import { useDispatch } from "react-redux";
 import Router from "./router/Router";
-import { setExpend } from "./context/modules/expendSlice";
-import { setUser } from "./context/modules/userSlice";
 import Loader from "./components/elements/Loader";
 import { fetchData } from "./utils/fetchData";
+import { setExpend } from "./context/modules/expendSlice";
+import { setUser } from "./context/modules/userSlice";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);

@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import { CategoryType, ExpendType } from "../config";
-import { calcRem, theme } from "../styles/theme";
-import { priceConverter } from "../utils/priceConverter";
-import CategoryIcon from "./CategoryIcon";
 import ModalLayout from "./layout/ModalLayout";
 import DeleteModal from "./modal/DeleteModal";
 import DetailModal from "./modal/DetailModal";
 import ValiModal from "./modal/ValiModal";
+import CategoryIcon from "./CategoryIcon";
+import { priceConverter } from "../utils/priceConverter";
+import { calcRem, theme } from "../styles/theme";
+import { CategoryType, ExpendType } from "../config";
 
 interface IDetailPreview {
   handleTargetData: (target: ExpendType) => void;

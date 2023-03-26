@@ -1,19 +1,19 @@
-import { useDispatch } from "react-redux";
 import {
   signInWithPopup,
   GoogleAuthProvider,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { authService } from "../firebase";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { setUser } from "../context/modules/userSlice";
 import { setExpend } from "../context/modules/expendSlice";
 import { fetchData } from "../utils/fetchData";
 import { calcRem, theme } from "../styles/theme";
+import { TEST_ID, TEST_USERNAME } from "../config";
 import { FcGoogle, FcUnlock } from "react-icons/fc";
 import { ImPencil2 } from "react-icons/im";
 import { GoLinkExternal } from "react-icons/go";
-import { TEST_ID, TEST_USERNAME } from "../config";
 
 const Login = () => {
   const dispatch = useDispatch();

@@ -11,8 +11,8 @@ import { MdCalendarMonth, MdApps } from "react-icons/md";
 import Button from "./elements/Button";
 import ValiModal from "./modal/ValiModal";
 import { useLocation } from "react-router-dom";
-import onChangeExpend from "../utils/onChangeExpend";
-import onSubmitExpend from "../utils/onSubmitExpend";
+import { onChangeExpend } from "../utils/onChangeExpend";
+import { onSubmitExpend } from "../utils/onSubmitExpend";
 
 const New = () => {
   const user = useAppSelector((state) => state.user);

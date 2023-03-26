@@ -1,7 +1,7 @@
-import { dbService } from "./../../firebase";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import { collection, getDocs, query } from "firebase/firestore";
+import { dbService } from "./../../firebase";
 import { ExpendType } from "../../config";
 
 type DataType = {

@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import { CategoryType, CATEGORY_LIST } from "../../config";
-import { calcRem, theme } from "../../styles/theme";
 import CategoryIcon from "../CategoryIcon";
 import Button from "../elements/Button";
+import { calcRem, theme } from "../../styles/theme";
+import { CategoryType, CATEGORY_LIST } from "../../config";
 
 interface ISelectCategoryModal {
   handleClose: () => void;
