@@ -1,13 +1,14 @@
 import { useState } from "react";
 import styled from "styled-components";
+
 import ModalLayout from "./layout/ModalLayout";
 import DeleteModal from "./modal/DeleteModal";
 import DetailModal from "./modal/DetailModal";
 import ValiModal from "./modal/ValiModal";
 import CategoryIcon from "./CategoryIcon";
 import { priceConverter } from "../utils/priceConverter";
-import { calcRem, theme } from "../styles/theme";
 import { CategoryType, ExpendType } from "../config";
+import { MOBILE_MAX_W, WINDOW_W, calcRem, theme } from "../styles/theme";
 
 interface IDetailPreview {
   handleTargetData: (target: ExpendType) => void;
@@ -46,7 +47,10 @@ const DetailPreview = ({
         <StDate>{date.replaceAll("-", ".")}</StDate>
       </StSubInfo>
       {showDetail && id === targetData?.id ? (
-        <ModalLayout width="84%" height="60%" handleModal={handleShowDetail}>
+        <ModalLayout
+          width={WINDOW_W < MOBILE_MAX_W ? "320px" : "360px"}
+          height="auto"
+        >
           <DetailModal
             data={val}
             handleShowDetail={handleShowDetail}
@@ -57,7 +61,10 @@ const DetailPreview = ({
         </ModalLayout>
       ) : null}
       {showDeleteModal && id === targetData?.id ? (
-        <ModalLayout width="84%" height="25%" handleModal={handleShowDelete}>
+        <ModalLayout
+          width={WINDOW_W < MOBILE_MAX_W ? "320px" : "360px"}
+          height="auto"
+        >
           <DeleteModal
             handleShowDetail={handleShowDetail}
             handleClose={handleShowDelete}
@@ -66,12 +73,18 @@ const DetailPreview = ({
         </ModalLayout>
       ) : null}
       {showAlert ? (
-        <ModalLayout handleModal={handleShowAlert} width="84%" height="25%">
+        <ModalLayout
+          width={WINDOW_W < MOBILE_MAX_W ? "320px" : "360px"}
+          height="auto"
+        >
           <ValiModal type="alert" onClick={handleShowAlert} />
         </ModalLayout>
       ) : null}
       {showConfirm ? (
-        <ModalLayout handleModal={handleShowConfirm} width="84%" height="25%">
+        <ModalLayout
+          width={WINDOW_W < MOBILE_MAX_W ? "320px" : "360px"}
+          height="auto"
+        >
           <ValiModal type="edit" onClick={handleShowConfirm} />
         </ModalLayout>
       ) : null}

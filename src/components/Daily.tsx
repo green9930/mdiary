@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import ModalLayout from "./layout/ModalLayout";
-import DetailPreview from "./DetailPreview";
-import SelectDateModal from "./modal/SelectDateModal";
-import { dateConverter } from "../utils/dateConverter";
-import { getMonthLength } from "../utils/getMonthLength";
-import { priceConverter } from "../utils/priceConverter";
-import { useAppSelector } from "../context/redux";
-import { calcRem, theme } from "../styles/theme";
-import { ExpendType } from "../config";
 import { MdCalendarMonth } from "react-icons/md";
 
+import ModalLayout from "./layout/ModalLayout";
+import DateSelectModal from "./modal/DateSelectModal";
+import DetailPreview from "./DetailPreview";
+import { dateConverter } from "../utils/dateConverter";
+import { priceConverter } from "../utils/priceConverter";
+import { useAppSelector } from "../context/redux";
+import { ExpendType } from "../config";
+import { MOBILE_MAX_W, WINDOW_W, calcRem, theme } from "../styles/theme";
+
 const Daily = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [targetDate, setTargetDate] = useState(new Date());
   const [dateStr, setDateStr] = useState(dateConverter(new Date()));
   const [dataArr, setDataArr] = useState<ExpendType[]>([]);
-  const [showDateModal, setShowDateModal] = useState(false);
+  const [openDateModal, setOpenDateModal] = useState(false);
   const [targetData, setTargetData] = useState<ExpendType>();
 
   const data = useAppSelector((state) => state.expend);
@@ -24,8 +24,14 @@ const Daily = () => {
   useEffect(() => {
     const arr = data.filter((val) => val.date === dateStr);
     setDataArr(arr);
-    setIsLoading(false);
+    setLoading(false);
   }, [data, dateStr]);
+
+  useEffect(() => {
+    if (!loading) {
+      setDateStr(dateConverter(targetDate));
+    }
+  }, [targetDate]);
 
   const moveToPrev = () => {
     const prev = new Date(targetDate.setDate(targetDate.getDate() - 1));
@@ -39,18 +45,11 @@ const Daily = () => {
     setDateStr(dateConverter(next));
   };
 
-  const handleClose = () => setShowDateModal(!showDateModal);
-  const handleSelectDate = (date: Date) => {
-    setTargetDate(date);
-    setDateStr(dateConverter(date));
-    setShowDateModal(!showDateModal);
-  };
-
   const handleTargetData = (target: ExpendType) => setTargetData(target);
 
   return (
     <>
-      {isLoading ? null : (
+      {loading ? null : (
         <StDaily>
           <StDailyHeader>
             <StTitle>
@@ -80,7 +79,7 @@ const Daily = () => {
               <StNavBtn name="next" onClick={moveToNext}>
                 <span>&rsaquo;</span>
               </StNavBtn>
-              <SelectBtn onClick={handleClose}>
+              <SelectBtn onClick={() => setOpenDateModal(true)}>
                 <MdCalendarMonth
                   fill={`${theme.green1}`}
                   size={`${calcRem(18)}`}
@@ -88,18 +87,23 @@ const Daily = () => {
                 <span>날짜 선택</span>
               </SelectBtn>
             </StBtnWrapper>
-            {showDateModal ? (
-              <ModalLayout width="84%" height="40%" handleModal={handleClose}>
-                <SelectDateModal
-                  handleClose={handleClose}
-                  handleSelectDate={handleSelectDate}
-                  defaultMonthLength={getMonthLength(
-                    new Date().getFullYear(),
-                    new Date().getMonth() + 1
-                  )}
+            {openDateModal ? (
+              <ModalLayout
+                width={WINDOW_W < MOBILE_MAX_W ? "320px" : "360px"}
+                height="auto"
+              >
+                <DateSelectModal
+                  type="date"
+                  year={targetDate.getFullYear()}
+                  month={targetDate.getMonth()}
+                  date={targetDate.getDate()}
+                  setTargetDate={setTargetDate}
+                  handleModal={setOpenDateModal}
                 />
               </ModalLayout>
-            ) : null}
+            ) : (
+              <></>
+            )}
           </StDailyHeader>
           <StExpendList>
             {dataArr.map((val) => {
@@ -127,6 +131,7 @@ const StDaily = styled.div`
   flex-direction: column;
   gap: ${calcRem(70)};
   padding: ${calcRem(20)};
+  padding-top: ${calcRem(120)};
 `;
 
 const StDailyHeader = styled.div``;

@@ -1,9 +1,10 @@
 import { useState } from "react";
 import styled from "styled-components";
-import CategoryIcon from "../CategoryIcon";
+
 import Button from "../elements/Button";
-import { calcRem, theme } from "../../styles/theme";
+import CategoryIcon from "../CategoryIcon";
 import { CategoryType, CATEGORY_LIST } from "../../config";
+import { calcRem, theme } from "../../styles/theme";
 
 interface ISelectCategoryModal {
   handleClose: () => void;
@@ -17,7 +18,7 @@ const SelectCategoryModal = ({
   const [target, setTarget] = useState("");
 
   return (
-    <StCategoryModal>
+    <StContainer>
       <ul>
         {CATEGORY_LIST.map((val) => {
           return (
@@ -44,17 +45,19 @@ const SelectCategoryModal = ({
           취소
         </Button>
       </StBtnWrapper>
-    </StCategoryModal>
+    </StContainer>
   );
 };
 
 export default SelectCategoryModal;
 
-const StCategoryModal = styled.div`
+const StContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${calcRem(32)};
   width: 100%;
   height: 100%;
-  padding: ${calcRem(20)};
-  position: relative;
+  padding: ${calcRem(32)};
 
   ul {
     display: grid;
@@ -88,8 +91,4 @@ const StBtnWrapper = styled.div`
   justify-content: center;
   gap: ${calcRem(26)};
   width: 100%;
-  position: absolute;
-  bottom: ${calcRem(10)};
-  left: 50%;
-  transform: translateX(-50%);
 `;

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+
 import Button from "../elements/Button";
 import { calcRem } from "../../styles/theme";
 
@@ -22,30 +23,31 @@ const ValiModal = ({ type, onClick }: IValiModal) => {
     }
   };
   return (
-    <StValiModal>
+    <StContainer>
       <p>{convertMessage(type)}</p>
       <StBtnWrapper>
         <Button btnTheme="black" btnSize="small1" onClick={onClick}>
           닫기
         </Button>
       </StBtnWrapper>
-    </StValiModal>
+    </StContainer>
   );
 };
 
 export default ValiModal;
 
-const StValiModal = styled.div`
+const StContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${calcRem(48)};
   width: 100%;
   height: 100%;
-  position: relative;
+  padding: ${calcRem(32)};
 
   p {
     width: 100%;
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    transform: translateX(-50%);
+    height: 100%;
+    padding-top: ${calcRem(32)};
     text-align: center;
     font-size: ${calcRem(16)};
     font-weight: 500;
@@ -58,8 +60,4 @@ const StBtnWrapper = styled.div`
   justify-content: center;
   gap: ${calcRem(26)};
   width: 100%;
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
 `;

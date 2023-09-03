@@ -33,7 +33,7 @@ const DetailModal = ({
   };
 
   return (
-    <StDetail>
+    <StContainer>
       {isEdit ? (
         <Edit
           defaultData={data}
@@ -44,20 +44,28 @@ const DetailModal = ({
         />
       ) : (
         <>
-          <StDetailHead>
-            <CategoryIcon target={category as CategoryType} />
-            <h3>{title}</h3>
-          </StDetailHead>
-          <StDeatilBody>
-            <StSubInfo>
-              <StDate>
-                {date.split("-")[0]}.{date.split("-")[1]}.{date.split("-")[2]}.
-              </StDate>
-              <StPrice>{priceConverter(price).previewPrice} ₩</StPrice>
-            </StSubInfo>
-            <p>{content}</p>
-          </StDeatilBody>
-          <StDetailFooter>
+          <StBody>
+            <StDetailHead>
+              <CategoryIcon target={category as CategoryType} />
+              <h3>{title}</h3>
+            </StDetailHead>
+            <StDeatilBody>
+              <StSubInfo>
+                <StDate>
+                  {date.split("-")[0]}.{date.split("-")[1]}.{date.split("-")[2]}
+                  .
+                </StDate>
+                <StPrice>{priceConverter(price).previewPrice} ₩</StPrice>
+              </StSubInfo>
+              <p>{content}</p>
+            </StDeatilBody>
+            <StDeleteBtn onClick={handleShowDelete}>
+              {/* <span>삭제하기</span> */}
+              <MdDelete size={`${calcRem(20)}`} fill={`${theme.gray2}`} />
+              <span className="a11y-hidden">삭제</span>
+            </StDeleteBtn>
+          </StBody>
+          <StFooter>
             <StBtnWrapper>
               <Button
                 btnTheme="blue1"
@@ -74,20 +82,27 @@ const DetailModal = ({
                 취소
               </Button>
             </StBtnWrapper>
-          </StDetailFooter>
-          <StDeleteBtn onClick={handleShowDelete}>
-            {/* <span>삭제하기</span> */}
-            <MdDelete size={`${calcRem(20)}`} fill={`${theme.gray2}`} />
-            <span className="a11y-hidden">삭제</span>
-          </StDeleteBtn>
+          </StFooter>
         </>
       )}
-    </StDetail>
+    </StContainer>
   );
 };
 export default DetailModal;
 
-const StDetail = styled.div`
+const StContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${calcRem(32)};
+  width: 100%;
+  height: 100%;
+  padding: ${calcRem(32)};
+`;
+
+const StBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${calcRem(16)};
   width: 100%;
   height: 100%;
   position: relative;
@@ -98,7 +113,7 @@ const StDetailHead = styled.div`
   align-items: center;
   justify-content: flex-start;
   gap: ${calcRem(10)};
-  margin: ${calcRem(30)} 0 ${calcRem(16)} 0;
+
   h3 {
     font-size: ${calcRem(16)};
   }
@@ -107,12 +122,12 @@ const StDetailHead = styled.div`
 const StDeatilBody = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
   gap: ${calcRem(14)};
+  width: 100%;
 
   p {
-    height: ${calcRem(200)};
-    overflow: scroll;
+    height: ${calcRem(240)};
+    overflow-y: scroll;
   }
 `;
 
@@ -132,12 +147,8 @@ const StPrice = styled.span`
   font-weight: 500;
 `;
 
-const StDetailFooter = styled.div`
+const StFooter = styled.div`
   width: 100%;
-  position: absolute;
-  bottom: ${calcRem(0)};
-  left: 50%;
-  transform: translateX(-50%);
 `;
 
 const StBtnWrapper = styled.div`
@@ -151,12 +162,13 @@ const StDeleteBtn = styled.button`
   display: flex;
   align-items: center;
   padding: ${calcRem(6)};
-  position: absolute;
-  top: ${calcRem(-10)};
-  right: ${calcRem(-10)};
   background-color: ${theme.gray4};
   border: none;
   border-radius: ${calcRem(4)};
+  position: absolute;
+  top: ${calcRem(-10)};
+  right: ${calcRem(-10)};
+
   span {
     color: ${theme.blue3};
     font-size: ${calcRem(12)};

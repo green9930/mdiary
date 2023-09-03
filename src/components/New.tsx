@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { useAppSelector } from "../context/redux";
+import { MdCalendarMonth, MdApps } from "react-icons/md";
+
 import ModalLayout from "./layout/ModalLayout";
 import SelectCategoryModal from "./modal/SelectCategoryModal";
-import { useDispatch } from "react-redux";
+import ValiModal from "./modal/ValiModal";
+import Button from "./elements/Button";
+import { useAppSelector } from "../context/redux";
 import { ExpendType } from "../config";
 import { dateConverter } from "../utils/dateConverter";
-import { calcRem, theme } from "../styles/theme";
-import { MdCalendarMonth, MdApps } from "react-icons/md";
-import Button from "./elements/Button";
-import ValiModal from "./modal/ValiModal";
-import { useLocation } from "react-router-dom";
 import { onChangeExpend } from "../utils/onChangeExpend";
 import { onSubmitExpend } from "../utils/onSubmitExpend";
+import { MOBILE_MAX_W, WINDOW_W, calcRem, theme } from "../styles/theme";
 
 const New = () => {
   const user = useAppSelector((state) => state.user);
@@ -149,6 +150,7 @@ const New = () => {
             ) => onChangeExpend({ e, handleDisplayPrice, handleData, data })}
             value={data.content}
             placeholder="내용을 입력하세요"
+            autoComplete="off"
           />
         </StContent>
         <StPrice>
@@ -159,6 +161,7 @@ const New = () => {
           <input
             id="price-input"
             name="price"
+            type="tel"
             onChange={(
               e:
                 | React.ChangeEvent<HTMLInputElement>
@@ -166,6 +169,7 @@ const New = () => {
             ) => onChangeExpend({ e, handleDisplayPrice, handleData, data })}
             value={displayPrice}
             placeholder="지출 금액"
+            autoComplete="off"
           />
         </StPrice>
         <StBtnWrapper>
@@ -178,7 +182,10 @@ const New = () => {
         </StBtnWrapper>
       </form>
       {showCategory ? (
-        <ModalLayout handleModal={handleShowCategory} width="84%" height="50%">
+        <ModalLayout
+          width={WINDOW_W < MOBILE_MAX_W ? "320px" : "360px"}
+          height="auto"
+        >
           <SelectCategoryModal
             handleClose={handleShowCategory}
             handleSelect={handleSelect}
@@ -186,12 +193,18 @@ const New = () => {
         </ModalLayout>
       ) : null}
       {showAlert ? (
-        <ModalLayout handleModal={handleShowAlert} width="84%" height="25%">
+        <ModalLayout
+          width={WINDOW_W < MOBILE_MAX_W ? "320px" : "360px"}
+          height="auto"
+        >
           <ValiModal type="alert" onClick={handleShowAlert} />
         </ModalLayout>
       ) : null}
       {showConfirm ? (
-        <ModalLayout handleModal={handleShowConfirm} width="84%" height="25%">
+        <ModalLayout
+          width={WINDOW_W < MOBILE_MAX_W ? "320px" : "360px"}
+          height="auto"
+        >
           <ValiModal type="confirm" onClick={handleShowConfirm} />
         </ModalLayout>
       ) : null}
@@ -202,7 +215,7 @@ const New = () => {
 export default New;
 
 const StNew = styled.div`
-  padding: ${calcRem(10)} ${calcRem(20)} ${calcRem(20)} ${calcRem(20)};
+  padding: ${calcRem(110)} ${calcRem(20)} ${calcRem(20)} ${calcRem(20)};
   display: flex;
   flex-direction: column;
 
@@ -315,6 +328,7 @@ const StPrice = styled.div`
   input {
     width: 60%;
   }
+
   span {
     margin: 0 ${calcRem(8)} 0 ${calcRem(6)};
     color: ${theme.blue3};
