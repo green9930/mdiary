@@ -4,7 +4,7 @@ import { calcRem, theme } from "../../styles/theme";
 const Loader = () => {
   return (
     <StLoader>
-      <StSpinner></StSpinner>
+      <StSpinner />
     </StLoader>
   );
 };
@@ -17,7 +17,7 @@ const StLoader = styled.div`
   align-items: center;
   justify-content: center;
   gap: ${calcRem(6)};
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);

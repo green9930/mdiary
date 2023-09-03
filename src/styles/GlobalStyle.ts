@@ -21,8 +21,12 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Noto Sans KR', sans-serif;
     color: ${theme.black};
     -webkit-tap-highlight-color: transparent;
+
     ::-webkit-scrollbar {
       display: none;
+    }
+    :focus, :hover {
+      outline: none;
     }
   }
 
@@ -36,12 +40,11 @@ const GlobalStyle = createGlobalStyle`
   html, body {
     box-sizing: border-box;
     margin: 0 auto;
-    background-color: ${theme.white};
+    background-color: ${theme.gray1};
     overscroll-behavior: contain;
   }
   
   body {
-    min-height: 100vh;
     position: relative;
   }
 
@@ -73,7 +76,8 @@ const GlobalStyle = createGlobalStyle`
   }
 
   input, textarea, select {
-    :hover, :focus {
+    caret-color: ${theme.black};
+    :hover, :focus, :active {
       outline: none;
     }
   }

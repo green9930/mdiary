@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+
 import DetailPreview from "./DetailPreview";
 import { useAppSelector } from "../context/redux";
 import { dateConverter } from "../utils/dateConverter";
 import { dayConverter } from "../utils/dayConverter";
 import { priceConverter } from "../utils/priceConverter";
 import { sortingData } from "../utils/sortingData";
-import { calcRem, theme } from "../styles/theme";
 import { ExpendType } from "../config";
+import { calcRem, theme } from "../styles/theme";
 
 type TWeekly = {
   day: string;
@@ -196,6 +197,7 @@ const StWeekly = styled.div`
   flex-direction: column;
   gap: ${calcRem(50)};
   padding: ${calcRem(20)};
+  padding-top: ${calcRem(120)};
 `;
 
 const StHeader = styled.div`
@@ -269,7 +271,7 @@ const WeekLi = styled.li<{ isToday: boolean; isSelected: boolean }>`
       isToday
         ? `${theme.red2}`
         : isSelected
-        ? `${theme.green1}`
+        ? `${theme.blue4}`
         : `${theme.black}`};
   }
 

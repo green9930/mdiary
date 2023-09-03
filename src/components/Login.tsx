@@ -6,14 +6,15 @@ import {
 import { authService } from "../firebase";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { setUser } from "../context/modules/userSlice";
-import { setExpend } from "../context/modules/expendSlice";
-import { fetchData } from "../utils/fetchData";
-import { calcRem, theme } from "../styles/theme";
-import { TEST_ID, TEST_USERNAME } from "../config";
 import { FcGoogle, FcUnlock } from "react-icons/fc";
 import { ImPencil2 } from "react-icons/im";
 import { GoLinkExternal } from "react-icons/go";
+
+import { setUser } from "../context/modules/userSlice";
+import { setExpend } from "../context/modules/expendSlice";
+import { fetchData } from "../utils/fetchData";
+import { TEST_ID, TEST_USERNAME } from "../config";
+import { calcRem, theme } from "../styles/theme";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -36,9 +37,7 @@ const Login = () => {
       })
       .then(() => fetchData(username).then((res) => dispatch(setExpend(res))))
       .catch((err) => {
-        const errCode = err.code;
-        const errMessage = err.message;
-        console.error(err);
+        throw err;
       });
 
   const handleTestSignIn = async () =>
@@ -59,9 +58,7 @@ const Login = () => {
         );
       })
       .catch((err) => {
-        const errCode = err.code;
-        const errMessage = err.message;
-        console.error(err);
+        throw err;
       });
 
   return (
@@ -94,7 +91,7 @@ const StLogin = styled.div`
   flex-direction: column;
   align-items: center;
   height: 100%;
-  padding-top: ${calcRem(100)};
+  padding-top: ${calcRem(120)};
 
   p {
     margin-bottom: ${calcRem(24)};

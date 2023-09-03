@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
+import { MdCalendarMonth } from "react-icons/md";
+
 import SelectCategoryModal from "./modal/SelectCategoryModal";
+import Button from "./elements/Button";
 import { onSubmitExpend } from "../utils/onSubmitExpend";
 import { onChangeExpend } from "../utils/onChangeExpend";
 import { priceConverter } from "../utils/priceConverter";
-import Button from "./elements/Button";
-import { calcRem, theme } from "../styles/theme";
 import { useAppSelector } from "../context/redux";
 import { ExpendType } from "../config";
-import { MdCalendarMonth } from "react-icons/md";
+import { calcRem, theme } from "../styles/theme";
 
 interface IEdit {
   defaultData: ExpendType;
@@ -137,7 +138,7 @@ const Edit = ({
                 내용
               </label>
               <textarea
-                rows={8}
+                rows={10}
                 id="content-input"
                 name="content"
                 onChange={(
@@ -191,14 +192,12 @@ const StEdit = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  position: relative;
 
   form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: ${calcRem(12)};
-    margin-top: ${calcRem(10)};
+    gap: ${calcRem(16)};
   }
 
   label {
@@ -226,7 +225,6 @@ const StSubInfo = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  margin-top: ${calcRem(-10)};
 `;
 
 const StDateWrapper = styled.div`
@@ -319,10 +317,6 @@ const StBtnWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: ${calcRem(26)};
+  gap: ${calcRem(24)};
   width: 100%;
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
 `;

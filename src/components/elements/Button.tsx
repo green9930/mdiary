@@ -1,15 +1,15 @@
 import React from "react";
 import styled from "styled-components";
+
 import { calcRem, theme } from "../../styles/theme";
 
-type BtnTheme = "blue1" | "beige3" | "black";
-type BtnSize = "small1" | "small2";
+type btnTheme = "blue1" | "beige3" | "black";
+type btnSize = "small1" | "small2";
 
-interface IButton extends React.HTMLAttributes<HTMLButtonElement> {}
-interface IButton {
+interface IButton extends React.HTMLAttributes<HTMLButtonElement> {
   onClick?: () => void;
-  btnTheme: BtnTheme;
-  btnSize: BtnSize;
+  btnTheme: btnTheme;
+  btnSize: btnSize;
   type?: "button" | "submit" | "reset";
 }
 
@@ -29,7 +29,8 @@ const Button: React.FC<IButton> = ({
 
 export default Button;
 
-const StBtn = styled.button<{ btnTheme: BtnTheme; btnSize: BtnSize }>`
+const StBtn = styled.button<{ btnTheme: btnTheme; btnSize: btnSize }>`
+  width: 100%;
   border: none;
   border-radius: ${calcRem(4)};
   background-color: ${({ btnTheme }) => {
@@ -70,7 +71,6 @@ const StBtn = styled.button<{ btnTheme: BtnTheme; btnSize: BtnSize }>`
     switch (btnSize) {
       case "small1":
         return `${calcRem(14)}`;
-
       case "small2":
         return `${calcRem(14)}`;
       default:
