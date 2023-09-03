@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.js": "/mdiary/static/js/main.bdee8981.js",
+    "main.js": "/mdiary/static/js/main.899ea84c.js",
     "static/js/496.1c138ed5.chunk.js": "/mdiary/static/js/496.1c138ed5.chunk.js",
     "service-worker.js": "/mdiary/service-worker.js",
     "index.html": "/mdiary/index.html",
-    "main.bdee8981.js.map": "/mdiary/static/js/main.bdee8981.js.map",
+    "main.899ea84c.js.map": "/mdiary/static/js/main.899ea84c.js.map",
     "496.1c138ed5.chunk.js.map": "/mdiary/static/js/496.1c138ed5.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.bdee8981.js"
+    "static/js/main.899ea84c.js"
   ]
 }
