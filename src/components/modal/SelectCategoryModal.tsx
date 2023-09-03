@@ -7,18 +7,20 @@ import { CategoryType, CATEGORY_LIST } from "../../config";
 import { calcRem, theme } from "../../styles/theme";
 
 interface ISelectCategoryModal {
+  isNew: boolean;
   handleClose: () => void;
   handleSelect: (target: string) => void;
 }
 
 const SelectCategoryModal = ({
+  isNew,
   handleClose,
   handleSelect,
 }: ISelectCategoryModal) => {
   const [target, setTarget] = useState("");
 
   return (
-    <StContainer>
+    <StContainer isNew={isNew}>
       <ul>
         {CATEGORY_LIST.map((val) => {
           return (
@@ -51,13 +53,13 @@ const SelectCategoryModal = ({
 
 export default SelectCategoryModal;
 
-const StContainer = styled.div`
+const StContainer = styled.div<{ isNew: boolean }>`
   display: flex;
   flex-direction: column;
   gap: ${calcRem(32)};
   width: 100%;
   height: 100%;
-  padding: ${calcRem(32)};
+  padding: ${({ isNew }) => (isNew ? calcRem(32) : 0)};
 
   ul {
     display: grid;

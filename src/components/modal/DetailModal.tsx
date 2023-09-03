@@ -127,6 +127,8 @@ const StDeatilBody = styled.div`
 
   p {
     height: ${calcRem(240)};
+    white-space: pre-wrap;
+    word-break: keep-all;
     overflow-y: scroll;
   }
 `;

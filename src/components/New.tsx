@@ -187,6 +187,7 @@ const New = () => {
           height="auto"
         >
           <SelectCategoryModal
+            isNew={true}
             handleClose={handleShowCategory}
             handleSelect={handleSelect}
           />

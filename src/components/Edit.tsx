@@ -61,6 +61,7 @@ const Edit = ({
     <>
       {showCategory ? (
         <SelectCategoryModal
+          isNew={false}
           handleClose={handleShowCategory}
           handleSelect={handleSelect}
         />
