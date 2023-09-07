@@ -50,7 +50,6 @@ const AppLayout: React.FC<IAppLayout> = ({ children }) => {
 
     const handleBeforeInstallPrompt = (e: any) => {
       e.preventDefault();
-      console.log(e);
       setDeferredPrompt(e);
       setIsShow(true);
     };
@@ -81,8 +80,7 @@ const AppLayout: React.FC<IAppLayout> = ({ children }) => {
   };
 
   const handleInstall = async () => {
-    console.log("install APP");
-
+    // console.log("install APP");
     setIsShow(false);
 
     if (!deferredPrompt) {

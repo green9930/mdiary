@@ -40,7 +40,6 @@ const DateSelectModal = ({
 
   useEffect(() => {
     if (!loading && type === "date") {
-      console.log("SET DATE");
       const newDate = new Date(yy, mm, 0);
       const lastDate = newDate.getDate();
       setDateLength(lastDate);

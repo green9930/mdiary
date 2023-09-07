@@ -3,13 +3,14 @@ import styled from "styled-components";
 
 import { calcRem, theme } from "../../styles/theme";
 
-type btnTheme = "blue1" | "beige3" | "black";
+type btnTheme = "blue1" | "beige3" | "black" | "disabled";
 type btnSize = "small1" | "small2";
 
 interface IButton extends React.HTMLAttributes<HTMLButtonElement> {
   onClick?: () => void;
   btnTheme: btnTheme;
   btnSize: btnSize;
+  disabled?: boolean;
   type?: "button" | "submit" | "reset";
 }
 
@@ -18,10 +19,17 @@ const Button: React.FC<IButton> = ({
   type = "button",
   btnTheme,
   btnSize,
+  disabled = false,
   children,
 }) => {
   return (
-    <StBtn type={type} onClick={onClick} btnTheme={btnTheme} btnSize={btnSize}>
+    <StBtn
+      type={type}
+      onClick={onClick}
+      btnTheme={btnTheme}
+      btnSize={btnSize}
+      disabled={disabled}
+    >
       {children}
     </StBtn>
   );
@@ -41,6 +49,8 @@ const StBtn = styled.button<{ btnTheme: btnTheme; btnSize: btnSize }>`
         return `${theme.beige3}`;
       case "black":
         return `${theme.beige3}`;
+      case "disabled":
+        return `${theme.gray4}`;
       default:
         return `${theme.blue1}`;
     }
@@ -53,6 +63,8 @@ const StBtn = styled.button<{ btnTheme: btnTheme; btnSize: btnSize }>`
         return `${theme.gray2}`;
       case "black":
         return `${theme.black}`;
+      case "disabled":
+        return `${theme.gray2}`;
       default:
         return `${theme.white}`;
     }

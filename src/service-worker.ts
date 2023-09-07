@@ -15,7 +15,7 @@ import { registerRoute } from "workbox-routing";
 import { StaleWhileRevalidate } from "workbox-strategies";
 
 declare const self: ServiceWorkerGlobalScope;
-const CACHE_VERSION = "1.0.3";
+const CACHE_VERSION = "1.0.4";
 
 // clientsClaim();
 

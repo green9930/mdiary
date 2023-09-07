@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { MdCalendarMonth, MdApps } from "react-icons/md";
+import { MdCalendarMonth, MdApps, MdCalculate } from "react-icons/md";
 
 import ModalLayout from "./layout/ModalLayout";
 import SelectCategoryModal from "./modal/SelectCategoryModal";
+import PriceModal from "./modal/PriceModal";
 import ValiModal from "./modal/ValiModal";
 import Button from "./elements/Button";
 import { useAppSelector } from "../context/redux";
@@ -13,13 +14,13 @@ import { ExpendType } from "../config";
 import { dateConverter } from "../utils/dateConverter";
 import { onChangeExpend } from "../utils/onChangeExpend";
 import { onSubmitExpend } from "../utils/onSubmitExpend";
+import { priceConverter } from "../utils/priceConverter";
 import { MOBILE_MAX_W, WINDOW_W, calcRem, theme } from "../styles/theme";
 
 const New = () => {
   const user = useAppSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  const [showCategory, setShowCategory] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [data, setData] = useState<ExpendType>({
@@ -32,6 +33,8 @@ const New = () => {
   });
   const [displayPrice, setDisplayPrice] = useState("");
   const [isChrome, setIsChrome] = useState(false);
+  const [openCategoryModal, setOpenCategoryModal] = useState(false);
+  const [openPriceModal, setOpenPriceModal] = useState(false);
 
   // MonthlyPage => NewPage
   const { state } = useLocation();
@@ -44,7 +47,7 @@ const New = () => {
 
   const handleSelect = (target: string) => {
     setData({ ...data, category: target });
-    setShowCategory(!showCategory);
+    setOpenCategoryModal(!openCategoryModal);
   };
 
   const handleCancel = () => {
@@ -61,11 +64,16 @@ const New = () => {
 
   const handleDisplayPrice = (target: string) => setDisplayPrice(target);
   const handleData = (target: ExpendType) => setData(target);
-  const handleShowCategory = () => setShowCategory(!showCategory);
   const handleShowAlert = () => setShowAlert(!showAlert);
   const handleShowConfirm = () => {
     setShowConfirm(!showConfirm);
     if (showConfirm) window.location.reload();
+  };
+
+  const handleCalculate = (val: string) => {
+    setDisplayPrice(priceConverter(val.toString()).previewPrice);
+    setData({ ...data, price: priceConverter(val.toString()).realPrice });
+    setOpenPriceModal(false);
   };
 
   return (
@@ -127,7 +135,7 @@ const New = () => {
           </StTitle>
           <StCategory
             isSelected={data.category ? true : false}
-            onClick={handleShowCategory}
+            onClick={() => setOpenCategoryModal(true)}
           >
             {data.category ? null : (
               <MdApps size={`${calcRem(20)}`} fill={`${theme.blue3}`} />
@@ -154,23 +162,35 @@ const New = () => {
           />
         </StContent>
         <StPrice>
-          <span>₩</span>
-          <label className="a11y-hidden" htmlFor="price-input">
-            지출 금액
-          </label>
-          <input
-            id="price-input"
-            name="price"
-            type="tel"
-            onChange={(
-              e:
-                | React.ChangeEvent<HTMLInputElement>
-                | React.ChangeEvent<HTMLTextAreaElement>
-            ) => onChangeExpend({ e, handleDisplayPrice, handleData, data })}
-            value={displayPrice}
-            placeholder="지출 금액"
-            autoComplete="off"
-          />
+          <StPriceWrapper>
+            <span>₩</span>
+            <label className="a11y-hidden" htmlFor="price-input">
+              지출 금액
+            </label>
+            <input
+              id="price-input"
+              name="price"
+              type="tel"
+              onChange={(
+                e:
+                  | React.ChangeEvent<HTMLInputElement>
+                  | React.ChangeEvent<HTMLTextAreaElement>
+              ) => onChangeExpend({ e, handleDisplayPrice, handleData, data })}
+              value={displayPrice}
+              placeholder="지출 금액"
+              autoComplete="off"
+            />
+          </StPriceWrapper>
+          <StPriceBtn>
+            <Button
+              onClick={() => setOpenPriceModal(true)}
+              btnTheme="blue1"
+              btnSize="small1"
+            >
+              <span>정산하기</span>
+              <MdCalculate fill={theme.white} />
+            </Button>
+          </StPriceBtn>
         </StPrice>
         <StBtnWrapper>
           <Button type="submit" btnTheme="blue1" btnSize="small2">
@@ -181,15 +201,26 @@ const New = () => {
           </Button>
         </StBtnWrapper>
       </form>
-      {showCategory ? (
+      {openCategoryModal ? (
         <ModalLayout
           width={WINDOW_W < MOBILE_MAX_W ? "320px" : "360px"}
           height="auto"
         >
           <SelectCategoryModal
             isNew={true}
-            handleClose={handleShowCategory}
+            handleClose={() => setOpenCategoryModal(false)}
             handleSelect={handleSelect}
+          />
+        </ModalLayout>
+      ) : null}
+      {openPriceModal ? (
+        <ModalLayout
+          width={WINDOW_W < MOBILE_MAX_W ? "320px" : "360px"}
+          height="auto"
+        >
+          <PriceModal
+            handleClose={() => setOpenPriceModal(false)}
+            handleCalculate={handleCalculate}
           />
         </ModalLayout>
       ) : null}
@@ -216,9 +247,9 @@ const New = () => {
 export default New;
 
 const StNew = styled.div`
-  padding: ${calcRem(110)} ${calcRem(20)} ${calcRem(20)} ${calcRem(20)};
   display: flex;
   flex-direction: column;
+  padding: ${calcRem(110)} ${calcRem(20)} ${calcRem(20)} ${calcRem(20)};
 
   form {
     display: flex;
@@ -320,14 +351,27 @@ const StContent = styled.div`
   textarea {
     width: 100%;
     height: auto;
+    resize: none;
   }
 `;
 
 const StPrice = styled.div`
+  display: flex;
+  align-items: center;
   width: 100%;
+  justify-content: space-between;
+  gap: ${calcRem(8)};
+`;
+
+const StPriceWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-grow: 1;
+  width: 60%;
 
   input {
-    width: 60%;
+    width: 100%;
   }
 
   span {
@@ -335,6 +379,29 @@ const StPrice = styled.div`
     color: ${theme.blue3};
     font-size: ${calcRem(20)};
     font-weight: 500;
+  }
+`;
+
+const StPriceBtn = styled.div`
+  width: 40%;
+  flex-shrink: 1;
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: ${calcRem(4)};
+    padding: ${calcRem(8)} ${calcRem(12)};
+    width: 100%;
+
+    span {
+      color: ${theme.white};
+    }
+
+    svg {
+      width: ${calcRem(20)};
+      height: ${calcRem(20)};
+    }
   }
 `;
 
