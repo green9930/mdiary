@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Category {
+  APPLIANCE
+  TRANSPORT
+  CULTURE
+  BEAUTY
+  FOOD
+  MEDICAL
+  CLOTHING
+  EDUCATION
+  ETC
+}
+
+enum GroupType {
+  RECURRING
+  INSTALLMENT
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  expenses      Expense[]
+  expenseGroups ExpenseGroup[]
+}
+
+model Expense {
+  id                String    @id @default(cuid())
+  title             String
+  content           String?
+  category          Category
+  date              DateTime
+  amount            Int
+  installmentNumber Int?
+
+  userId  String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  groupId String?
+  group   ExpenseGroup? @relation(fields: [groupId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([date])
+  @@index([groupId])
+}
+
+model ExpenseGroup {
+  id           String    @id @default(cuid())
+  type         GroupType
+  title        String
+  content      String?
+  category     Category
+  amount       Int
+  billingDay   Int
+  totalCount   Int?
+  isContinuous Boolean   @default(false)
+  startDate    DateTime
+  endDate      DateTime?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  expenses Expense[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
