@@ -11,6 +11,7 @@
 - **md 파일명은 `YYYY-MM-DD-NN-title.md`.** 작성일, 같은 날짜 안의 두 자리 순번, 영문 kebab-case 제목 순서다 (예: `2026-10-17-01-title.md`). 순번은 폴더마다 따로 매긴다. `README.md`, `CLAUDE.md`처럼 도구가 정한 이름은 예외.
 - 결정 내용은 해당 단계의 명세 문서(기획서, 화면 구성안 등)에 바로 반영한다. 결정 과정이나 AI 제안과의 차이는 별도 문서로 남기지 않는다.
 - `docs/reference/`는 참고 자료일 뿐 정본이 아니다. 채택한 내용은 해당 단계 문서에 다시 쓴다.
+- 화면 명세·와이어프레임(`docs/02-screens/`)을 쓰거나 고칠 때는 `docs/02-screens/README.md`의 규칙을 따르고, 고친 뒤 `python3 scripts/check-wireframes.py`를 돌려 결과를 보고한다.
 
 ## 진행 단계
 
