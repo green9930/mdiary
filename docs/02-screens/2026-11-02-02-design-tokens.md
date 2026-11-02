@@ -1,0 +1,249 @@
+# 디자인 토큰
+
+다씀의 색·글꼴·간격·컴포넌트 상태를 정한 문서다. **정본**이고, 견본(`2026-11-02-03-design-tokens.html`)은 이 문서의 값을 화면으로 펼친 것이다. 값이 어긋나면 이 문서가 이긴다.
+
+- 기반: 화면 기능 명세(`2026-10-19-01-page-spec.md`), 와이어프레임(`2026-10-19-02-wireframes.html`)
+- 방향 시안: `2026-11-02-01-design-direction.html` (A형 채택)
+- 라이트·다크 두 벌. 화면 모드 선택은 SC-10 (시스템 설정 따름 / 라이트 / 다크)
+
+## 1. 결정 요약
+
+| 항목 | 결정 |
+| --- | --- |
+| 색 방향 | A형: 밝은 초록 `#1DB954`(다크 `#1ED760`) 면에 **흰 글자** |
+| 글꼴 | 레거시 그대로: 본문 Noto Sans KR, 숫자 Rubik, 로고 Tenada, 로그인 문구 코레일둥근고딕 |
+| 버튼 종류 | primary filled · secondary filled · primary outline · secondary line · text · danger · disabled · gray. positive 없음 |
+| danger | 모두 채움(filled). 테두리형 없음 |
+| 달력 | 일요일만 빨강, 토요일은 보조 글자색(회색). 오늘 = 테두리, 선택 = 채움 |
+| 금액 색 | 기본 글자색. 초록은 브랜드·선택·주요 동작에만 |
+| 카테고리 아이콘 | `src/assets/` SVG를 쓴다 (2-5) |
+| 아이콘 | `src/assets/` SVG (2-5) |
+| 글자 크기 | 짝수 단위만 쓴다 |
+| 모서리 | 6 · 8 · 14 · 20 · full |
+| 카테고리 색 | 2-4의 10색 |
+
+**대비 예외**: 초록 면 위 흰 글자는 라이트 2.59:1, 다크 1.92:1로 WCAG AA(4.5:1)에 못 미친다. 이 조합은 주 버튼·선택 날짜·＋ 버튼에만 쓰고, 그 밖의 글자는 모두 4.5:1 이상을 지킨다. 초록 **글자**가 필요하면 `accent`(라이트 `#13823E`)를 쓴다.
+
+## 2. 색
+
+이름은 역할로 짓는다. 화면 코드는 색 값이 아니라 이 이름만 쓴다.
+
+### 2-1. 기본
+
+| 토큰 | 라이트 | 다크 | 쓰임 |
+| --- | --- | --- | --- |
+| `brand` | `#1DB954` | `#1ED760` | 로고, 오늘 테두리, 탭 활성 아이콘 |
+| `primary` | `#1DB954` | `#1ED760` | 주 버튼 면, 선택 날짜 면, ＋ 버튼 |
+| `primary-pressed` | `#17A14B` | `#19C257` | 주 버튼 누름 |
+| `on-primary` | `#FFFFFF` | `#FFFFFF` | 주 버튼·선택 날짜 글자 (대비 예외) |
+| `accent` | `#13823E` | `#1ED760` | 초록 글자: outline 버튼, 탭 활성 라벨, 포커스 테두리 |
+| `tint` | `#E3F7EA` | `#173323` | secondary filled 면, 배지 면, 목록 강조 |
+| `on-tint` | `#0E5A2C` | `#1ED760` | secondary filled 글자, 배지 글자 |
+
+### 2-2. 무채색
+
+| 토큰 | 라이트 | 다크 | 쓰임 |
+| --- | --- | --- | --- |
+| `bg` | `#FFFFFF` | `#111513` | 화면 바탕, 시트·다이얼로그 바탕 |
+| `surface` | `#F3F6F4` | `#1E2522` | 아이콘 자리, 입력 비활성, 미리보기 상자 |
+| `line` | `#E3E8E5` | `#2A322E` | 구분선, 입력 테두리 |
+| `line-strong` | `#C9D1CC` | `#3B4540` | secondary line 테두리, 선택 컨트롤 테두리 |
+| `text` | `#17201B` | `#EEF2EF` | 기본 글자, 금액 |
+| `text-sub` | `#5E6A63` | `#A3AEA8` | 보조 글자, 토요일, 요일 표시줄 |
+| `text-weak` | `#A3ACA7` | `#5C6661` | placeholder, 앞뒤 달 날짜, 비활성 글자 (대비 기준 예외) |
+| `gray` | `#EBEFEC` | `#2A322E` | gray 버튼 면 |
+| `on-gray` | `#4A544F` | `#C9D1CC` | gray 버튼 글자 |
+| `disabled` | `#EEF1EF` | `#1E2522` | 비활성 면 |
+| `on-disabled` | `#9AA39E` | `#5C6661` | 비활성 글자 |
+| `scrim` | `rgba(0,0,0,.40)` | `rgba(0,0,0,.60)` | 시트·다이얼로그 뒤 가림막 |
+
+### 2-3. 상태
+
+| 토큰 | 라이트 | 다크 | 쓰임 |
+| --- | --- | --- | --- |
+| `danger` | `#D93A2B` | `#D93A2B` | danger 버튼 면 (흰 글자 4.57:1) |
+| `danger-pressed` | `#BF3022` | `#BF3022` | danger 누름 |
+| `danger-text` | `#D93A2B` | `#FF7A6E` | 필드 오류 문구, 오류 테두리, 일요일 |
+| `notice` | `#FFF4D6` | `#2B2412` | 오프라인 띠 면 |
+| `on-notice` | `#7A5300` | `#FFD98A` | 오프라인 띠 글자 |
+| `highlight` | `#CFF2DB` | `#1F4A30` | 검색 일치 부분 면 |
+
+### 2-4. 카테고리 색
+
+막대 그래프의 막대와 아이콘 자리 배경에 쓴다. 아이콘은 2-5. 초록(브랜드)과 빨강(danger)은 피했다.
+
+| 카테고리 | 라이트 | 다크 |
+| --- | --- | --- |
+| 식비 | `#F59E0B` | `#FBBF24` |
+| 가전 | `#6366F1` | `#818CF8` |
+| 교통 | `#0EA5E9` | `#38BDF8` |
+| 의료 | `#F43F5E` | `#FB7185` |
+| 의류 | `#A855F7` | `#C084FC` |
+| 미용 | `#EC4899` | `#F472B6` |
+| 문화 | `#14B8A6` | `#2DD4BF` |
+| 교육 | `#3B82F6` | `#60A5FA` |
+| 생활 | `#F97316` | `#FB923C` |
+| 기타 | `#94A3B8` | `#94A3B8` |
+
+### 2-5. 아이콘
+
+`src/assets/`의 SVG(24×24)를 쓴다. 색은 `currentColor`로 놓인 글자색을 따른다.
+
+| 쓰임 | 파일 |
+| --- | --- |
+| 식비 | `icon_food.svg` |
+| 가전 | `icon_electrical.svg` |
+| 교통 | `icon_car.svg` |
+| 의료 | `icon_hospital.svg` |
+| 의류 | `icon_apparel.svg` |
+| 미용 | `icon_fragrance.svg` |
+| 문화 | `icon_attractions.svg` |
+| 교육 | `icon_books.svg` |
+| 생활 | `icon_person.svg` |
+| 기타 | `icon_card.svg` |
+| 체크박스 | `icon_checkbox_blank.svg` (기본) / `icon_checkbox_filled.svg` (선택) |
+| ＋ 등록 버튼 | `icon_add.svg` |
+| 지우기 ⓧ, 시트·다이얼로그 닫기 | `icon_close.svg` |
+| ‹ 이전 · › 다음 | `icon_arrow_left.svg` (다음은 좌우 반전) |
+| ▾ 드롭다운 | `icon_arrow_drop_up.svg` (180° 회전) |
+| 기간 선택 버튼, 달력 탭 | `icon_calendar.svg` |
+| 카테고리 탭 | `icon_grid.svg` |
+| 검색 탭 | `icon_search.svg` |
+| 설정 탭 | `icon_settings.svg` |
+| 로고 연필 | `icon_pencil.svg` |
+
+## 3. 글꼴
+
+### 3-1. 글꼴 묶음
+
+| 토큰 | 글꼴 | 쓰임 |
+| --- | --- | --- |
+| `font-body` | Noto Sans KR (400 · 500 · 700) | 모든 글자의 기본 |
+| `font-num` | Rubik → Noto Sans KR | 금액, 달력 날짜·금액, 건수, 카운터, 비율. Rubik은 한글이 없어 "원·건"은 Noto Sans KR로 이어진다 |
+| `font-logo` | Tenada | 로고 "다씀"만 |
+| `font-tagline` | 코레일둥근고딕 Bold | 로그인 화면 소개 문구만 |
+
+- 숫자 열을 세로로 맞출 때는 `font-variant-numeric: tabular-nums`를 켠다. Rubik이 고정폭 숫자를 지원하는지는 견본에서 확인한다.
+
+### 3-2. 크기 단계
+
+| 토큰 | 크기 / 줄 높이 / 굵기 | 쓰임 |
+| --- | --- | --- |
+| `title-l` | 20 / 28 / 700 | 화면 제목, 달력 헤더 `2026년 10월` |
+| `title-m` | 18 / 26 / 700 | 시트 제목, 다이얼로그 제목, 상세 제목 |
+| `body-l` | 16 / 24 / 400 | 입력값·placeholder (iOS 확대 방지를 위해 16 미만 금지) |
+| `body` | 14 / 22 / 400 | 목록 제목, 본문, 입력 라벨, 버튼 M, 칩 |
+| `body-strong` | 14 / 22 / 700 | 하루 목록 요약 날짜, 월 구분 줄 |
+| `caption` | 12 / 18 / 400 | 보조 글자, 오류 문구, 날짜 보조 줄, 카운터, 요일 표시줄, 버튼 S |
+| `micro` | 10 / 14 / 500 | 배지, 탭 라벨 |
+| `num-xl` | 28 / 34 / 700 (Rubik) | 상세 금액 |
+| `num-l` | 22 / 28 / 700 (Rubik) | 월 합계, 카테고리 총지출 |
+| `num-m` | 16 / 24 / 500 (Rubik) | 목록 금액 |
+| `num-cal` | 10 / 12 / 400 (Rubik) | 달력 칸 금액 |
+| `num-date` | 14 / 16 / 500 (Rubik) | 달력 날짜 숫자 |
+| 버튼 L | 16 / 24 / 700 | 하단 고정 버튼 |
+
+## 4. 간격 · 모서리 · 그림자 · 움직임
+
+| 토큰 | 값 |
+| --- | --- |
+| 간격 | 4 단위: `space-1` 4 · `space-2` 8 · `space-3` 12 · `space-4` 16 · `space-5` 20 · `space-6` 24 · `space-8` 32 |
+| 화면 좌우 여백 | 16 |
+| `radius-s` | 6 (배지, 버튼 S) |
+| `radius-m` | 8 (버튼 L·M, 입력, 세그먼트, 카테고리 칸, 띠) |
+| `radius-l` | 14 (다이얼로그, 드롭다운 메뉴) |
+| `radius-sheet` | 20 (바텀시트 위쪽 두 모서리) |
+| `radius-full` | 999 (칩, ＋ 버튼, 날짜 원, 아이콘 자리) |
+| `shadow-1` | `0 2px 8px rgba(0,0,0,.08)` (드롭다운 메뉴) |
+| `shadow-2` | `0 8px 24px rgba(0,0,0,.16)` (다이얼로그, ＋ 버튼) |
+| `shadow-sheet` | `0 -4px 16px rgba(0,0,0,.10)` |
+| 다크 그림자 | 그림자 대신 `line` 테두리 1px로 구분한다 |
+| 시트 열림·닫힘 | 250ms, ease-out |
+| 다이얼로그 | 150ms 투명도 |
+| 드롭다운 | 120ms |
+| 누름 | 면 색을 `*-pressed`로, 시간 없음 |
+
+## 5. 컴포넌트
+
+### 5-1. 버튼
+
+| 종류 | 면 | 글자 | 테두리 | 와이어프레임 쓰임 |
+| --- | --- | --- | --- | --- |
+| primary filled | `primary` | `on-primary` | 없음 | 저장, 적용, 선택, 수정, 계속 작성, 확인, 로그인 |
+| secondary filled | `tint` | `on-tint` | 없음 | 시트 안 보조 동작 (지금은 없음) |
+| primary outline | `bg` | `accent` | `accent` 1.5 | 계산, 오늘, 기록 추가하기, 다시 시도 |
+| secondary line | `bg` | `text` | `line-strong` 1.5 | 취소, 정렬·기간 드롭다운, 기간 선택 |
+| text | 없음 | `text` 밑줄 | 없음 | 개인정보처리방침, 서비스 안내 링크 |
+| danger | `danger` | `#FFFFFF` | 없음 | 삭제, 탈퇴하기 |
+| disabled | `disabled` | `on-disabled` | 없음 | 모든 버튼의 비활성 |
+| gray | `gray` | `on-gray` | 없음 | 나가기 |
+
+- 크기: L 높이 52 (하단 고정, 폭 전체) · M 44 · S 32 (헤더 안 [오늘], ‹ ›). 누를 수 있는 영역은 최소 44×44.
+- 상태: 기본 · 누름(`*-pressed`, outline·line은 면을 `surface`로) · 로딩(글자 대신 스피너, 같은 색) · 비활성(`disabled` 종류로 바뀜).
+
+### 5-2. 입력
+
+| 상태 | 테두리 | 면 | 글자 |
+| --- | --- | --- | --- |
+| 기본 (빈칸) | `line` 1 | `bg` | placeholder `text-weak` |
+| 포커스 | `accent` 1.5 | `bg` | `text` |
+| 값 있음 | `line` 1 | `bg` | `text` |
+| 오류 | `danger-text` 1.5 | `bg` | `text` + 아래 오류 문구 `danger-text` caption |
+| 비활성 | `line` 1 | `surface` | `on-disabled` |
+
+- 높이 48, 좌우 안쪽 여백 14. textarea는 3줄(본문 높이 72)에서 6줄까지 늘어난다.
+- 라벨과 입력 사이 8, **입력과 아래 보조 문구(오류·안내) 사이 4**.
+- 카운터 `0/25`는 오른쪽 안쪽에 `caption` `text-weak`, 한도에 닿으면 `text-sub`.
+- 단위(원·개월·회)는 입력 오른쪽 안쪽에 `text-sub`.
+
+### 5-3. 선택 컨트롤
+
+| 컴포넌트 | 기본 | 선택 | 비활성 |
+| --- | --- | --- | --- |
+| 세그먼트 (반복 3단, 2단) | 테두리 `line-strong`, 글자 `text-sub` | 면 `primary`, 글자 `on-primary` | 면 `surface`, 선택 칸 `line-strong` 면 + `on-disabled` 글자 |
+| 카테고리 격자 칸 | 테두리 `line`, 이름 `text-sub` | 테두리 `accent` 1.5 + 면 `tint`, 이름 `on-tint` 700 | – (오류 시 격자 아래 문구만) |
+| 필터 칩 | 테두리 `line-strong`, 글자 `text` | 면 `primary`, 글자 `on-primary` | – |
+| 라디오 (SC-09) | 원 테두리 `line-strong` | 원 테두리 `primary` + 안쪽 점 `primary` | `on-disabled` |
+| 체크박스 | `icon_checkbox_blank` 24, 색 `text-sub` | `icon_checkbox_filled`, 색 `primary` | 색 `on-disabled` |
+| 드롭다운 메뉴 | 면 `bg`, `shadow-1`, 항목 높이 44 | 선택 항목 `tint` 면 + `on-tint` 700 (체크 표시 없음) | – |
+
+### 5-4. 목록 · 배지 · 그래프
+
+- 목록 항목: 높이 56, 아이콘 자리 36 원(`surface`, 카테고리 색 적용 시 그 색 15% 면), 제목 `body` 한 줄 말줄임, 날짜 줄 `caption` `text-sub`, 금액 `num-m` `text`.
+- 배지(정기·할부 n/m): 면 `tint`, 글자 `on-tint` `micro`, `radius-s`.
+- 검색 강조: 일치 부분 면 `highlight`, 글자 굵기 700.
+- 월 구분 줄: `body-strong`, 아래 `line`.
+- 비중 막대: 높이 8, `radius-full`, 바탕 `surface`, 막대 = 카테고리 색. 강조 줄은 그대로, 흐린 줄은 투명도 0.35.
+
+### 5-5. 달력 칸
+
+| 상태 | 날짜 숫자 | 날짜 원 | 금액 |
+| --- | --- | --- | --- |
+| 평일 | `text` | 없음 | `text` `num-cal` |
+| 일요일 | `danger-text` | 없음 | `text` |
+| 토요일 | `text-sub` | 없음 | `text` |
+| 앞뒤 달 | `text-weak` | 없음 | 표시 안 함 |
+| 오늘 | 요일 색 그대로 | 테두리 `brand` 1.5 | `text` |
+| 선택 | `on-primary` 700 | 면 `primary` | `text` |
+| 오늘 + 선택 | `on-primary` 700 | 면 `primary` | `text` |
+
+날짜 원 지름 26. 칸 높이 48 (6줄 고정).
+
+### 5-6. 오버레이 · 상태 표시
+
+- 바텀시트: 면 `bg`, 위쪽 `radius-sheet`, 손잡이 36×4 `line-strong`, 제목 `title-m`, 뒤 `scrim`.
+- 다이얼로그: 폭 화면 − 48 (최대 320), 면 `bg`, `radius-l`, `shadow-2`. 버튼 M 두 개 나란히(확인형) 또는 하나(알림형).
+- 오프라인 띠: 화면 위 고정, 면 `notice`, 글자 `on-notice` `caption`.
+- 같은 조건 다시 불러오기 실패 띠(CM ③): 면 `surface`, 글자 `text-sub`, [다시 시도] text 버튼.
+- 스켈레톤: 면 `surface`, 1.2초 깜박임(투명도 1 → 0.5). 움직임 줄이기 설정이면 깜박이지 않는다.
+- 스피너: 지름 18, 선 2, 색은 놓인 글자색.
+- 빈 상태: 문구 `body` `text-sub` 가운데 정렬, 버튼은 primary outline M.
+
+### 5-7. 탭 바 · 헤더 · 로고
+
+- 탭 바: 높이 56 + 안전 여백, 면 `bg`, 위 `line`. 아이콘 24, 라벨 `micro`. 기본 `text-sub`, 활성 아이콘 `brand` · 라벨 `accent` 700.
+- ＋ 버튼: 지름 52, 면 `primary`, ＋ `on-primary`, `shadow-2`, 탭 바 위로 12 솟는다.
+- 헤더: 높이 52, [‹] 44×44, 제목 `title-m`.
+- 로고: "다씀" `font-logo` + `icon_pencil`, 색 `brand`. 로그인 화면 48, 그 밖 24.
+- 로그인 소개 문구: `font-tagline`, 색 `accent`. 로고 아래 `Money Diary`는 `caption` `text-sub`.
+- [Google로 계속하기]: secondary line L 모양. 아이콘·문구는 Google 로그인 브랜드 가이드를 따른다.

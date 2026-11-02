@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>다씀 디자인 방향 시안</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/variable/woff2/SUIT-Variable.css" rel="stylesheet" />
+<style>
+  @font-face {
+    font-family: "Tenada";
+    src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-2@1.0/Tenada.woff2") format("woff2");
+    font-weight: normal; font-style: normal;
+  }
+  :root {
+    --doc-bg: #f4f5f7; --doc-card: #fff; --doc-ink: #1c1e26; --doc-sub: #5b6070; --doc-line: #dfe2e8;
+    --ui-font: "Pretendard Variable", Pretendard, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--doc-bg); color: var(--doc-ink); font: 14px/1.6 "Pretendard Variable", Pretendard, sans-serif; }
+  main { max-width: 1440px; margin: 0 auto; padding: 40px 32px 80px; }
+  h1 { font-size: 28px; margin: 0 0 6px; }
+  h2 { font-size: 20px; margin: 48px 0 6px; padding-top: 20px; border-top: 2px solid var(--doc-ink); }
+  h3 { font-size: 16px; margin: 0 0 4px; }
+  .lead { color: var(--doc-sub); margin: 0 0 16px; }
+  .box { background: var(--doc-card); border: 1px solid var(--doc-line); border-radius: 12px; padding: 16px 20px; }
+  .box + .box { margin-top: 12px; }
+  table.t { width: 100%; border-collapse: collapse; background: var(--doc-card); border: 1px solid var(--doc-line); }
+  table.t th, table.t td { border-bottom: 1px solid var(--doc-line); padding: 10px 12px; text-align: left; vertical-align: middle; font-size: 13px; }
+  table.t th { background: #eef0f4; font-weight: 700; }
+  .sw { display: inline-flex; align-items: center; gap: 6px; margin: 2px 10px 2px 0; font-size: 12px; font-family: ui-monospace, Menlo, monospace; }
+  .sw i { width: 22px; height: 22px; border-radius: 6px; border: 1px solid rgba(0,0,0,.12); display: inline-block; }
+  .ok { color: #13823e; font-weight: 700; } .ng { color: #c8372a; font-weight: 700; }
+  .ctl { position: sticky; top: 0; z-index: 10; background: rgba(244,245,247,.95); backdrop-filter: blur(4px); padding: 10px 0; border-bottom: 1px solid var(--doc-line); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .ctl button { font: inherit; font-size: 13px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--doc-line); background: #fff; cursor: pointer; }
+  .ctl button.on { background: var(--doc-ink); color: #fff; border-color: var(--doc-ink); }
+  .dir { margin-top: 28px; }
+  .dir-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .dir-head .logo { font-family: "Tenada"; font-size: 26px; }
+  .row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; margin-top: 12px; }
+  .cap { font-size: 12px; color: var(--doc-sub); font-weight: 700; margin-bottom: 6px; }
+  .note { font-size: 12px; color: var(--doc-sub); }
+  ul.dec { margin: 6px 0 0; padding-left: 18px; } ul.dec li { margin: 2px 0; }
+
+  /* ---------- mock (토큰 변수로 그린다) ---------- */
+  .mock { font-family: var(--ui-font); color: var(--text); }
+  .phone { width: 284px; background: var(--bg); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; box-shadow: 0 6px 20px rgba(0,0,0,.08); }
+  .p-hd { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 8px; }
+  .p-hd b { font-size: 17px; }
+  .p-hd .nav { display: flex; gap: 6px; }
+  .p-hd .nav span { width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--line); display: grid; place-items: center; color: var(--text-sub); font-size: 14px; }
+  .p-sum { display: flex; justify-content: space-between; align-items: baseline; padding: 0 16px 8px; }
+  .p-sum span { color: var(--text-sub); font-size: 12px; }
+  .p-sum strong { font-size: 20px; }
+  .num { font-family: var(--num-font, inherit); font-variant-numeric: tabular-nums; }
+  .cal { display: grid; grid-template-columns: repeat(7, 1fr); padding: 0 8px; row-gap: 2px; }
+  .cal .w { text-align: center; font-size: 11px; color: var(--text-sub); padding: 4px 0; }
+  .cal .w.sun { color: var(--sun); }
+  .cal .d { height: 40px; display: flex; flex-direction: column; align-items: center; gap: 1px; padding-top: 2px; }
+  .cal .d .n { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; }
+  .cal .d .a { font-size: 9px; color: var(--text); letter-spacing: -.2px; }
+  .cal .d.sun .n { color: var(--sun); }
+  .cal .d.sat .n { color: var(--sat); }
+  .cal .d.out .n, .cal .d.out .a { color: var(--text-weak); }
+  .cal .d.today .n { box-shadow: inset 0 0 0 1.5px var(--today); }
+  .cal .d.sel .n { background: var(--sel-bg); color: var(--sel-text); font-weight: 700; }
+  .p-day { display: flex; justify-content: space-between; padding: 10px 16px 6px; margin-top: 6px; border-top: 1px solid var(--line); }
+  .p-day span { color: var(--text-sub); font-size: 12px; }
+  .li { display: flex; align-items: center; gap: 10px; padding: 8px 16px; }
+  .li .ic { width: 32px; height: 32px; border-radius: 50%; background: var(--surface); color: var(--text-sub); font-size: 10px; display: grid; place-items: center; flex: none; }
+  .li .tt { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; font-size: 14px; }
+  .li .tt span:first-child { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; min-width: 0; }
+  .li .m { font-size: 14px; font-weight: 600; }
+  .bdg { flex: none; font-size: 10px; padding: 1px 6px; border-radius: 4px; background: var(--badge-bg); color: var(--badge-text); }
+  .tab { display: grid; grid-template-columns: repeat(5, 1fr); align-items: end; text-align: center; border-top: 1px solid var(--line); padding: 8px 0 14px; margin-top: 10px; font-size: 10px; color: var(--text-sub); }
+  .tab .on { color: var(--tab-on); font-weight: 700; }
+  .tab .plus { width: 40px; height: 40px; margin: -18px auto 0; border-radius: 50%; background: var(--pri-bg); color: var(--pri-text); display: grid; place-items: center; font-size: 22px; box-shadow: 0 3px 8px rgba(0,0,0,.18); }
+  .tab i { display: block; width: 18px; height: 18px; margin: 0 auto 3px; border-radius: 5px; border: 1.5px solid currentColor; }
+
+  .panel { width: 284px; background: var(--bg); border: 1px solid var(--line); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .btn { font-family: var(--ui-font); font-size: 14px; font-weight: 600; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 1.5px solid transparent; position: relative; }
+  .btn small { position: absolute; left: 10px; font-size: 10px; font-weight: 500; opacity: .75; font-family: ui-monospace, Menlo, monospace; }
+  .b-pri { background: var(--pri-bg); color: var(--pri-text); }
+  .b-sec { background: var(--tint-bg); color: var(--tint-text); }
+  .b-pout { border-color: var(--accent); color: var(--accent); }
+  .b-sline { border-color: var(--line-strong); color: var(--text); }
+  .b-text { color: var(--text); text-decoration: underline; text-underline-offset: 3px; font-weight: 500; }
+  .b-danger { background: var(--danger-bg); color: var(--danger-text); }
+  .b-dis { background: var(--dis-bg); color: var(--dis-text); }
+  .b-gray { background: var(--gray-bg); color: var(--gray-text); }
+  .b-none { border: 1.5px dashed var(--line-strong); color: var(--text-weak); font-weight: 500; font-size: 12px; }
+  .dlg { border: 1px solid var(--line); background: var(--bg); border-radius: 14px; padding: 16px; box-shadow: 0 6px 18px rgba(0,0,0,.12); }
+  .dlg p { margin: 0 0 12px; font-size: 14px; text-align: center; }
+  .dlg .f { display: flex; gap: 8px; } .dlg .f .btn { flex: 1; height: 40px; }
+  .cr { font-size: 11px; color: var(--text-sub); font-family: ui-monospace, Menlo, monospace; }
+
+  /* 폰트 비교 */
+  .fonts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .fc { background: #fff; border: 1px solid var(--doc-line); border-radius: 12px; padding: 16px; }
+  .fc .nm { font-size: 12px; color: var(--doc-sub); font-weight: 700; margin-bottom: 10px; font-family: "Pretendard Variable", sans-serif; }
+  .fc .h { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .fc .b { font-size: 14px; margin-bottom: 12px; }
+  .fc .amt { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .fc .amt div { text-align: right; font-size: 15px; line-height: 1.7; border-top: 1px solid var(--doc-line); padding-top: 4px; }
+  .fc .amt .lab { font-size: 10px; color: var(--doc-sub); text-align: right; font-family: "Pretendard Variable", sans-serif; border: 0; padding: 0; }
+  .fc .big { font-size: 26px; font-weight: 700; margin-top: 10px; }
+  @media (max-width: 900px) { .fonts { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { main { padding: 24px 16px 60px; } .fonts { grid-template-columns: 1fr; } .phone, .panel { width: 100%; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>다씀 디자인 방향 시안</h1>
+  <p class="lead">레거시(다씀 v1)와 초록 계열 후보 A·B를 같은 화면 조각으로 비교한다. 색·글꼴 방향 하나를 고르기 위한 문서이고, 확정된 토큰은 디자인 토큰 문서에 정리한다. 2026-11-02</p>
+
+  <div class="box">
+    <h3>이미 정한 것</h3>
+    <ul class="dec">
+      <li>버튼 종류: primary filled · secondary filled(옅은 초록 면 + 초록 글자) · primary outline · secondary line · text(밑줄) · danger · disabled · gray(회색 면 + 회색 글자). positive는 두지 않는다.</li>
+      <li>danger 버튼은 모두 채움(filled). SC-08 [삭제]도 채움으로 바꾼다.</li>
+      <li>달력: 일요일만 빨강, 토요일은 회색으로 낮춘다. 오늘 = 테두리, 선택 = 채움.</li>
+      <li>로고: 레거시처럼 "다씀"을 Tenada로 쓴다 (+ 연필 아이콘).</li>
+      <li>카테고리 아이콘은 사용자가 직접 넣는다. 시안의 아이콘 자리는 비워 둔다.</li>
+      <li>금액은 초록이 아니라 기본 글자색. 초록은 브랜드·선택·주요 동작에만 쓴다.</li>
+    </ul>
+  </div>
+
+  <div class="ctl" id="ctl">
+    <span class="note">시안 전체 글꼴:</span>
+    <button data-font='"Pretendard Variable", Pretendard, sans-serif' class="on">Pretendard</button>
+    <button data-font='"SUIT Variable", SUIT, sans-serif'>SUIT</button>
+    <button data-font='"Noto Sans KR", sans-serif'>Noto Sans KR</button>
+  </div>
+
+  <h2>1. 한눈에 비교</h2>
+  <p class="lead">대비는 WCAG 기준. 글자는 4.5:1 이상이어야 한다(비활성은 예외).</p>
+  <table class="t" id="overview"></table>
+
+  <h2>2. 방향별 화면 조각</h2>
+  <p class="lead">왼쪽부터 라이트 달력 · 다크 달력 · 라이트 버튼/다이얼로그 · 다크 버튼/다이얼로그. 버튼 왼쪽 작은 글씨는 그 버튼 글자의 대비.</p>
+  <div id="dirs"></div>
+
+  <h2>3. 글꼴 비교</h2>
+  <p class="lead">숫자 열은 오른쪽 정렬. "고정폭"은 <code>font-variant-numeric: tabular-nums</code>를 켠 상태다. 자릿수가 세로로 맞는지 본다.</p>
+  <div class="fonts" id="fonts"></div>
+
+  <h2>4. 고를 것</h2>
+  <div class="box">
+    <ul class="dec">
+      <li>색 방향: A · B 중 하나 (또는 섞기: 예 "B의 버튼 + A의 다크 모드")</li>
+      <li>글꼴: Pretendard · SUIT · Noto Sans KR 중 하나 (숫자 고정폭 정렬 확인)</li>
+    </ul>
+  </div>
+</main>
+
+<script>
+/* ---------- 대비 계산 ---------- */
+function lum(hex) {
+  const h = hex.replace("#", "");
+  const c = [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16) / 255)
+    .map(x => (x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4)));
+  return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+}
+function cr(a, b) {
+  const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p);
+  return (x + 0.05) / (y + 0.05);
+}
+function crTag(a, b, min = 4.5) {
+  const v = cr(a, b);
+  return `<span class="${v >= min ? "ok" : "ng"}">${v.toFixed(2)}:1</span>`;
+}
+
+/* ---------- 공통 무채색 (신규 후보 공통) ---------- */
+const NEU = {
+  light: { bg: "#FFFFFF", surface: "#F3F6F4", line: "#E3E8E5", "line-strong": "#C9D1CC", text: "#17201B", "text-sub": "#5E6A63", "text-weak": "#A3ACA7",
+    sun: "#D93A2B", sat: "#5E6A63", "gray-bg": "#EBEFEC", "gray-text": "#4A544F", "dis-bg": "#EEF1EF", "dis-text": "#9AA39E",
+    "danger-bg": "#D93A2B", "danger-text": "#FFFFFF" },
+  dark: { bg: "#111513", surface: "#1E2522", line: "#2A322E", "line-strong": "#3B4540", text: "#EEF2EF", "text-sub": "#A3AEA8", "text-weak": "#5C6661",
+    sun: "#FF7A6E", sat: "#A3AEA8", "gray-bg": "#2A322E", "gray-text": "#C9D1CC", "dis-bg": "#1E2522", "dis-text": "#5C6661",
+    "danger-bg": "#FF6B5E", "danger-text": "#1A0A08" },
+};
+
+/* ---------- 방향 ---------- */
+const DIRS = [
+  { id: "legacy", name: "레거시 (다씀 v1)", desc: "청록 #15B2D1 메인 + 남색 글자 + 베이지 면. 금액 초록, 오늘 빨강, 선택 밝은 청록. 다크 모드 없음.",
+    logo: "#17C3E6",
+    light: { bg: "#FDFDFD", surface: "#F8F2ED", line: "#EEEEEE", "line-strong": "#E8D5C4", text: "#0C0908", "text-sub": "#1D5171", "text-weak": "#A6A6A6",
+      sun: "#0C0908", sat: "#0C0908", today: "#FF0000", "sel-bg": "#17C3E6", "sel-text": "#FFFFFF", "tab-on": "#15B2D1", accent: "#15B2D1",
+      "pri-bg": "#15B2D1", "pri-text": "#FFFFFF", "tint-bg": "#F8F2ED", "tint-text": "#A6A6A6", "badge-bg": "#FFF1DC", "badge-text": "#1D5171",
+      "dis-bg": "#F2F2F2", "dis-text": "#A6A6A6", amount: "#00B418" },
+    dark: null,
+    buttons: [["pri", "primary filled (blue1)"], ["sec", "beige3 (회색 글자)"], ["none", "primary outline 없음"], ["none", "secondary line 없음"], ["none", "text 없음"], ["none", "danger 없음"], ["dis", "disabled"], ["none", "gray 없음"]] },
+  { id: "A", name: "A. Spotify형", desc: "밝은 초록 #1DB954(다크 #1ED760) 면에 흰 글자 (원래 Spotify는 검은 글자). 초록 글자는 진한 #13823E. 흰 글자 대비가 기준(4.5:1)에 못 미친다.",
+    logo: "#1DB954",
+    light: { today: "#1DB954", "sel-bg": "#1DB954", "sel-text": "#FFFFFF", "tab-on": "#13823E", accent: "#13823E",
+      "pri-bg": "#1DB954", "pri-text": "#FFFFFF", "tint-bg": "#E3F7EA", "tint-text": "#0E5A2C", "badge-bg": "#E3F7EA", "badge-text": "#0E5A2C" },
+    dark: { today: "#1ED760", "sel-bg": "#1ED760", "sel-text": "#FFFFFF", "tab-on": "#1ED760", accent: "#1ED760",
+      "pri-bg": "#1ED760", "pri-text": "#FFFFFF", "tint-bg": "#173323", "tint-text": "#1ED760", "badge-bg": "#173323", "badge-text": "#1ED760" } },
+  { id: "B", name: "B. 네이버형 (추천)", desc: "브랜드 표시는 #03C75A, 버튼·선택은 한 단계 진한 #0B7A3E에 흰 글자. 다크 모드는 #03C75A 면에 검은 글자. 차분하고 익숙하다.",
+    logo: "#03C75A",
+    light: { today: "#03C75A", "sel-bg": "#0B7A3E", "sel-text": "#FFFFFF", "tab-on": "#0B7A3E", accent: "#0B7A3E",
+      "pri-bg": "#0B7A3E", "pri-text": "#FFFFFF", "tint-bg": "#E4F6EA", "tint-text": "#0B7A3E", "badge-bg": "#E4F6EA", "badge-text": "#0B7A3E" },
+    dark: { today: "#03C75A", "sel-bg": "#03C75A", "sel-text": "#0A1A10", "tab-on": "#03C75A", accent: "#03C75A",
+      "pri-bg": "#03C75A", "pri-text": "#0A1A10", "tint-bg": "#14301F", "tint-text": "#3FDB82", "badge-bg": "#14301F", "badge-text": "#3FDB82" } },
+];
+function tokens(d, mode) {
+  if (d.id === "legacy") return d.light;
+  return Object.assign({}, NEU[mode], d[mode]);
+}
+function vars(t) { return Object.entries(t).map(([k, v]) => `--${k}:${v}`).join(";"); }
+
+/* ---------- 달력 데이터 (2026년 10월, 일요일 시작 6줄) ---------- */
+const AMT = { 1: "8,000", 3: "45,000", 5: "12,300", 7: "3,000", 10: "108만", 13: "9,900", 18: "21,300", 31: "55,000" };
+function calendar() {
+  let h = ["일", "월", "화", "수", "목", "금", "토"].map((w, i) => `<span class="w${i === 0 ? " sun" : ""}">${w}</span>`).join("");
+  const cells = [];
+  [27, 28, 29, 30].forEach(n => cells.push({ n, out: true }));
+  for (let n = 1; n <= 31; n++) cells.push({ n });
+  for (let n = 1; cells.length < 42; n++) cells.push({ n, out: true });
+  cells.forEach((c, i) => {
+    const cls = ["d", i % 7 === 0 ? "sun" : "", i % 7 === 6 ? "sat" : "", c.out ? "out" : "", !c.out && c.n === 18 ? "today sel" : ""].join(" ");
+    const a = !c.out && AMT[c.n] ? `<span class="a num">${AMT[c.n]}</span>` : "";
+    h += `<span class="${cls}"><span class="n num">${c.n}</span>${a}</span>`;
+  });
+  return `<div class="cal">${h}</div>`;
+}
+function phone(d, t) {
+  const amt = d.id === "legacy" ? `style="color:${t.amount}"` : "";
+  return `<div class="mock phone" style="${vars(t)}">
+    <div class="p-hd"><b>2026년 10월 ▾</b><span class="nav"><span>‹</span><span>›</span></span></div>
+    <div class="p-sum"><span>10월 지출</span><strong class="num" ${amt}>1,234,500원</strong></div>
+    ${calendar()}
+    <div class="p-day"><b>10월 18일 (일)</b><span class="num">2건 · 21,300원</span></div>
+    <div class="li"><span class="ic">식비</span><span class="tt"><span>점심 김밥</span></span><span class="m num" ${amt}>8,000원</span></div>
+    <div class="li"><span class="ic">생활</span><span class="tt"><span>넷플릭스 스탠다드 요금제 월 구독료</span><span class="bdg">정기</span></span><span class="m num" ${amt}>13,300원</span></div>
+    <div class="tab"><span class="on"><i></i>달력</span><span><i></i>카테고리</span><span><span class="plus">＋</span></span><span><i></i>검색</span><span><i></i>설정</span></div>
+  </div>`;
+}
+const BTN = [["pri", "primary filled", "저장", "pri-bg", "pri-text"], ["sec", "secondary filled", "보조 동작", "tint-bg", "tint-text"],
+  ["pout", "primary outline", "기록 추가하기", "bg", "accent"], ["sline", "secondary line", "취소", "bg", "text"],
+  ["text", "text", "개인정보처리방침", "bg", "text"], ["danger", "danger", "삭제", "danger-bg", "danger-text"],
+  ["dis", "disabled", "적용", "dis-bg", "dis-text"], ["gray", "gray", "나가기", "gray-bg", "gray-text"]];
+function panel(d, t, mode) {
+  let h = "";
+  if (d.id === "legacy") {
+    d.buttons.forEach(([k, label], i) => {
+      if (k === "none") { h += `<div class="btn b-none">${label}</div>`; return; }
+      const b = BTN.find(x => x[0] === k);
+      h += `<div class="btn b-${k}"><small>${cr(t[b[3]], t[b[4]]).toFixed(2)}</small>${label}</div>`;
+    });
+    h += `<div class="dlg"><p>삭제하시겠습니까?</p><div class="f"><span class="btn b-sec">취소</span><span class="btn b-pri">삭제</span></div></div>`;
+  } else {
+    BTN.forEach(([k, label, txt, bgk, fgk]) => {
+      const v = k === "dis" ? "비활성" : cr(t[bgk], t[fgk]).toFixed(2);
+      h += `<div class="btn b-${k}"><small>${v}</small>${txt}</div>`;
+    });
+    h += `<div class="dlg"><p>작성 중인 내용이 사라집니다.<br />나가시겠습니까?</p><div class="f"><span class="btn b-pri">계속 작성</span><span class="btn b-gray">나가기</span></div></div>`;
+    h += `<div class="dlg"><p>이 기록을 삭제하시겠습니까?</p><div class="f"><span class="btn b-sline">취소</span><span class="btn b-danger">삭제</span></div></div>`;
+  }
+  return `<div class="mock panel" style="${vars(t)}">${h}</div>`;
+}
+function renderDirs() {
+  document.getElementById("dirs").innerHTML = DIRS.map(d => {
+    const L = tokens(d, "light"), D = d.dark ? tokens(d, "dark") : null;
+    return `<section class="dir box"><div class="dir-head"><span class="logo" style="color:${d.logo}">다씀 ✎</span><h3>${d.name}</h3></div>
+      <p class="note">${d.desc}</p>
+      <div class="row">
+        <div><div class="cap">라이트 · 달력</div>${phone(d, L)}</div>
+        <div><div class="cap">다크 · 달력</div>${D ? phone(d, D) : `<div class="panel" style="height:120px;justify-content:center;align-items:center;color:#888">다크 모드 없음</div>`}</div>
+        <div><div class="cap">라이트 · 버튼 · 다이얼로그</div>${panel(d, L, "light")}</div>
+        ${D ? `<div><div class="cap">다크 · 버튼 · 다이얼로그</div>${panel(d, D, "dark")}</div>` : ""}
+      </div></section>`;
+  }).join("");
+}
+function renderOverview() {
+  const sw = (c, n) => `<span class="sw"><i style="background:${c}"></i>${n} ${c}</span>`;
+  let h = `<tr><th>방향</th><th>주요 색</th><th>주 버튼 글자 (라이트)</th><th>초록 글자 on 흰 배경</th><th>주 버튼 글자 (다크)</th></tr>`;
+  DIRS.forEach(d => {
+    const L = tokens(d, "light"), D = d.dark ? tokens(d, "dark") : null;
+    h += `<tr><td><b>${d.name}</b></td><td>${sw(d.logo, "브랜드")}${sw(L["pri-bg"], "버튼")}${sw(L.surface, "면")}${sw(L["text-sub"], "보조 글자")}</td>
+      <td>${crTag(L["pri-bg"], L["pri-text"])}</td><td>${crTag(L.accent, L.bg)}</td><td>${D ? crTag(D["pri-bg"], D["pri-text"]) : "다크 모드 없음"}</td></tr>`;
+  });
+  document.getElementById("overview").innerHTML = h;
+}
+function renderFonts() {
+  const F = [["레거시: Noto Sans KR + 숫자 Rubik", '"Noto Sans KR"', "Rubik"], ["Pretendard", '"Pretendard Variable"', '"Pretendard Variable"'],
+    ["SUIT", '"SUIT Variable"', '"SUIT Variable"'], ["Noto Sans KR", '"Noto Sans KR"', '"Noto Sans KR"']];
+  const nums = ["8,000원", "13,300원", "108,000원", "1,111,111원", "21,300원"];
+  document.getElementById("fonts").innerHTML = F.map(([n, f, nf]) => `<div class="fc" style="font-family:${f}">
+    <div class="nm">${n}</div><div class="h">10월 18일 (일) 지출</div>
+    <div class="b">넷플릭스 스탠다드 요금제 월 구독료 · 제목이나 내용으로 검색할 수 있습니다.</div>
+    <div class="amt"><div class="lab">비례폭</div><div class="lab">고정폭</div>
+      <div style="font-family:${nf}">${nums.join("<br />")}</div>
+      <div style="font-family:${nf};font-variant-numeric:tabular-nums">${nums.join("<br />")}</div></div>
+    <div class="big" style="font-family:${nf};font-variant-numeric:tabular-nums">1,234,500원</div></div>`).join("");
+}
+document.getElementById("ctl").addEventListener("click", e => {
+  const b = e.target.closest("button[data-font]"); if (!b) return;
+  document.querySelectorAll("#ctl button").forEach(x => x.classList.toggle("on", x === b));
+  document.documentElement.style.setProperty("--ui-font", b.dataset.font);
+});
+renderOverview(); renderDirs(); renderFonts();
+</script>
+</body>
+</html>
