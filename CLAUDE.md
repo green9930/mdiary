@@ -19,7 +19,7 @@
 1. 서비스 기획 → `docs/01-product/`
 2. 화면별 구성안 → `docs/02-screens/`
 3. 데이터 아키텍처 → `docs/03-data/`
-4. 개발 준비 (테스트·포맷터·CI·hook 보강, 구현 계획)
+4. 개발 준비 (테스트·포맷터·CI·hook 보강, 구현 계획) → `docs/04-dev/`
 5. 기능 단위 개발 반복 (스펙 → 계획 → TDD → 리뷰)
 6. 배포·회고
 
@@ -34,6 +34,7 @@ MVP 이후 검토할 항목(TODO)은 `docs/01-product/2026-10-17-02-product-brie
 - Node 24 (`.nvmrc`), pnpm 10 (`packageManager`)
 - Next.js 15 (App Router), React 19, TypeScript 5
 - TanStack Query 5, Tailwind CSS 4, ESLint 9
+- 추가 예정 (4단계, `docs/04-dev/2026-11-02-01-dev-setup.md`): Prisma 7 + Neon, Better Auth, zod, Prettier 3, Vitest 4, Testing Library, Playwright 1, lefthook
 
 ## 명령어
 
