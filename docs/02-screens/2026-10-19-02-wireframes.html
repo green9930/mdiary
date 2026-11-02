@@ -322,7 +322,7 @@
   <h1>다씀 화면설계서 (와이어프레임)</h1>
   <p class="doc-sub">로그인 · 월간 달력 · 카테고리별 · 검색 · 지출 등록·수정 · 계산기 · 상세 · 반복 범위 · 설정</p>
   <div class="meta">
-    <span>버전 <b>v0.4</b></span>
+    <span>버전 <b>v0.5</b></span>
     <span>작성일 <b>2026-10-19</b></span>
     <span>수정일 <b>2026-11-02</b></span>
     <span>기반 <b>2026-10-19-01-page-spec.md</b></span>
@@ -1413,6 +1413,27 @@
             <div class="wf-err">2개월까지 입력할 수 있습니다.</div>
             <div class="wf-row" style="flex-wrap:nowrap"><span class="wf-btn full" style="flex:1">취소</span><span class="wf-btn dngr pri full" style="flex:1">삭제</span></div>
           </div></div></div></div>
+        <div class="fr"><div class="fr-l"><span class="kind ok">SHEET</span>⑧ 날짜를 뒤 달로 바꾼 수정 (이후 전체)</div>
+          <div class="ph"><div class="ph-scrim"><div class="sh"><div class="sh-grip"></div>
+            <div class="sh-t">반복 기록 수정</div>
+            <div class="wf-row"><span class="wf-radio"></span>이번 건만</div>
+            <div class="wf-row"><span class="wf-radio on"></span>이후 전체</div>
+            <div class="wf-row" style="color:var(--sub);opacity:.55"><span class="wf-radio"></span>이 건부터 N개월</div>
+            <div class="wf-sub">날짜의 달을 바꾸면 이 건부터 N개월은 선택할 수 없습니다. <i class="c">10</i></div>
+            <div class="wf-note">2027년 1월부터 계속 · 매달 3일 <i class="c">11</i></div>
+            <div class="wf-row" style="flex-wrap:nowrap"><span class="wf-btn full" style="flex:1">취소</span><span class="wf-btn pri full" style="flex:1">저장</span></div>
+          </div></div></div><div class="fr-note">월세(매달 25일, 계속)의 2026년 12월 25일 건을 열어 날짜를 2027년 1월 3일로 바꾼 경우. 12월 건은 비고 1월부터 3일로 이어진다.</div></div>
+
+        <div class="fr"><div class="fr-l"><span class="kind ok">SHEET</span>⑨ 날짜를 앞 달로 바꾼 수정</div>
+          <div class="ph"><div class="ph-scrim"><div class="sh"><div class="sh-grip"></div>
+            <div class="sh-t">반복 기록 수정</div>
+            <div class="wf-row"><span class="wf-radio on"></span>이번 건만</div>
+            <div class="wf-row" style="color:var(--sub);opacity:.55"><span class="wf-radio"></span>이후 전체</div>
+            <div class="wf-row" style="color:var(--sub);opacity:.55"><span class="wf-radio"></span>이 건부터 N개월</div>
+            <div class="wf-sub">앞 달로 옮기면 이번 건만 수정할 수 있습니다.</div>
+            <div class="wf-note">2026년 11월 3일 1건</div>
+            <div class="wf-row" style="flex-wrap:nowrap"><span class="wf-btn full" style="flex:1">취소</span><span class="wf-btn pri full" style="flex:1">저장</span></div>
+          </div></div></div><div class="fr-note">같은 월세의 12월 25일 건을 11월 3일로 바꾼 경우.</div></div>
       </div>
     </div>
     <div class="spec-wrap">
@@ -1421,13 +1442,15 @@
         <tr><td><i class="c">1</i></td><td>시트 제목</td><td><span class="cp">"반복 기록 수정"</span> / <span class="cp">"반복 기록 삭제"</span>. 닫으면 아무것도 하지 않는다 (SC-06 입력값 유지).</td></tr>
         <tr><td><i class="c">2</i></td><td>범위 라디오</td><td>이번 건만(기본) / 이후 전체(할부는 "남은 회차" 덧붙임) / 이 건부터 N개월.</td></tr>
         <tr><td><i class="c">3</i></td><td>N 입력</td><td>"이 건부터 N개월"을 고를 때만 활성. 1 ~ 남은 건수 (계속 반복하는 정기지출은 1~99). 입력 규칙은 CG ⑤. 비었거나 남은 건수를 넘으면 [저장]·[삭제]를 누를 때 칸 아래 오류를 보여주고 진행하지 않는다 (⑦).</td></tr>
-        <tr><td><i class="c">4</i></td><td>범위 미리보기</td><td>영향받는 기간·건수. 계속 반복의 "이후 전체"는 <code>2026년 10월부터 계속</code>. 수정에서 날짜를 바꿨으면 각 건의 결제일을 그 날짜의 일로 옮긴다(없는 달은 말일), 나머지 필드는 범위 전체에 같게.</td></tr>
+        <tr><td><i class="c">4</i></td><td>범위 미리보기</td><td>영향받는 기간·건수. 계속 반복의 "이후 전체"는 <code>2026년 10월부터 계속</code>. 수정에서 날짜를 바꿨으면 각 건의 결제일을 그 날짜의 일로 옮긴다(없는 달은 말일), 나머지 필드는 범위 전체에 같게. 뒤 달로 바꾼 "이후 전체"는 밀린 범위를 보여준다 (⑧).</td></tr>
         <tr><td><i class="c">5</i></td><td>[취소]</td><td>시트 닫기.</td></tr>
         <tr><td><i class="c">6</i></td><td>[저장] / [삭제]</td><td>수정은 바로 저장, 삭제는 ④ 또는 ⑤ 확인을 거친다.
           <div class="stl"><span class="tag">BTN</span><div class="stl-t"><span class="k">기본 상태</span><span>활성</span><span class="k">비활성</span><span>요청 중 · 오프라인</span></div></div></td></tr>
         <tr><td><i class="c">7</i></td><td>삭제 확인 (N건)</td><td><span class="cp">"{N}건을 삭제하시겠습니까?"</span>. 성공: 다이얼로그·범위 시트·상세 시트 닫기 + 목록 다시 불러오기.</td></tr>
         <tr><td><i class="c">8</i></td><td>반복 종료 확인</td><td>계속 반복하는 정기지출의 "이후 전체" 삭제. <span class="cp">"이 건부터 반복이 종료됩니다. 삭제하시겠습니까?"</span></td></tr>
         <tr><td><i class="c">9</i></td><td>실패</td><td>CM ⑤·⑥. [확인] 후 범위 시트와 선택값을 유지하고 다시 누를 수 있다.</td></tr>
+        <tr><td><i class="c">10</i></td><td>비활성 선택지 안내</td><td>수정에서 날짜의 달을 바꾸면 겹치는 선택지를 비활성으로 두고 라디오 아래 안내. 뒤 달: "이 건부터 N개월" 비활성, <span class="cp">"날짜의 달을 바꾸면 이 건부터 N개월은 선택할 수 없습니다."</span> 앞 달: "이번 건만"만 활성, <span class="cp">"앞 달로 옮기면 이번 건만 수정할 수 있습니다."</span> (⑨)</td></tr>
+        <tr><td><i class="c">11</i></td><td>밀기 미리보기</td><td>뒤 달로 바꾼 "이후 전체"는 이 건부터 모든 건을 그만큼 뒤로 민다. 건수는 그대로, 끝 달도 밀린다. 계속 반복은 <code>2027년 1월부터 계속 · 매달 3일</code>, 기간이 있으면 <code>2027년 1월 ~ 2027년 6월 (6건)</code>.</td></tr>
       </table>
     </div>
   </div>
@@ -1516,6 +1539,7 @@
       <tr><td>v0.1</td><td>2026-10-19</td><td>초안. 공통(CG·RT·CM·SC-01), SC-02~SC-11 화면별 변형·콜아웃·명세표, 결정 필요 항목 38건 정리.</td></tr>
       <tr><td>v0.3</td><td>2026-10-22</td><td>스테퍼를 숫자 입력칸으로 교체(정기 개월 수·할부 회차 2~99, 최대 2자리, 범위 밖은 오류 표시). SC-06 ⑬·SC-09 ⑦ 오류 케이스 추가. CM ③ 적용 범위를 같은 조건 다시 불러오기로 한정(조건 변경 실패는 ②). SC-03 ① 날짜 칸·금액 축약 콜아웃을 실제 칸에 붙이고 범례처럼 보이던 줄 삭제. SC-04 비중 막대 줄에 금액 표시 추가. 프레임 안 설명·생략 표시 정리: 빗금(생략·보이지 않는 영역)과 프레임 밖 설명 캡션으로 분리, 생략용 회색 박스 제거. SC-06 ③에 카테고리 오류 추가, SC-07 오류 프레임을 경우별로 분리. 작성 규칙(README)과 점검 스크립트 추가. SC-03 ② 다른 달 상태를 달력 전체(앞뒤 달 날짜 흐리게)로 다시 그림, ① 예시 금액을 월 합계와 맞춤. "머리" 명칭을 요약·구분 줄·표시줄로 변경, 목록 항목 제목 말줄임 추가, [이 날짜로 기록하기] → [기록 추가하기]. 선택 가능 연도를 가장 오래된 기록이 있는 해 ~ 상한 없음(입력 검증용 기술 상한 2099년)으로 변경, SC-03 ⑥을 첫 달 기준으로 다시 그림. 달력을 항상 6줄로 고정(SC-03 ①, SC-06 ⑧ 다시 그림). SC-04 목록 요약을 전체일 때도 건수·합계로, 필터 칩을 한 줄 가로 스크롤로 그림. 빈 상태 문구 "이 기간에" → "해당 기간 내". 기간 빠른 선택에서 "올해" 삭제, 기간 시트에서 미래 달 선택 허용. SC-04·SC-05 기간을 드롭다운(빠른 선택, 즉시 적용) + [기간 선택] 버튼(시트, 직접 지정)으로 분리하고 시트의 빠른 선택 칩 삭제, 각 화면에 드롭다운 열림 프레임 추가. 검색 전체 기간을 이번 달 말일까지로 한정. SC-05 [전체 기간에서 찾기] 버튼 삭제. SC-06 ①② 폼 전체가 보이게 다시 그림(반복 칸이 저장 버튼에 가려 있었음), 내용을 textarea로, 날짜 기본값 오늘 명시, 반복 종류 잠금 범위·이유 상세화(⑦에 기간 잠금 추가), 나가기 다이얼로그 버튼 위계 변경, 문구를 명세 본문으로 맞춤. SC-08 제목을 카테고리 아이콘 옆으로 옮기고 카테고리 이름은 제목 아래로. page-spec 동기화.</td></tr>
       <tr><td>v0.4</td><td>2026-11-02</td><td>디자인 방향 결정 반영: 토요일 색을 회색으로 낮춤(일요일만 빨강), danger 버튼을 모두 채움으로 통일(SC-08 [삭제] 등), 드롭다운 메뉴의 선택 표시를 ✓ 없이 면 강조만으로.</td></tr>
+      <tr><td>v0.5</td><td>2026-11-02</td><td>데이터 아키텍처 반영: SC-09 날짜의 달을 바꾼 범위 수정 규칙 추가(뒤 달 = 이후 전체만 밀기, 앞 달 = 이번 건만), ⑧·⑨ 프레임과 안내 문구 추가.</td></tr>
       <tr><td>v0.2</td><td>2026-10-21</td><td>결정 필요 항목 38건 반영(입력 규칙, 폼 검증을 [저장] 상시 활성 방식으로, 정렬은 펼침 메뉴, 기간 선택·검색·계산기·반복 범위 세부, 상태·오류 처리). page-spec 동기화, 로그인 소개 문구 반영.</td></tr>
     </table>
   </div>

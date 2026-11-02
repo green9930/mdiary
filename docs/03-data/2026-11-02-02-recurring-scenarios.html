@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>반복 기록 시나리오</title>
+<style>
+  :root { --bg: #f4f5f7; --card: #fff; --ink: #1c1e26; --sub: #5b6070; --line: #dfe2e8;
+    --new: #e3f7ea; --new-ink: #0e5a2c; --chg: #fff4d6; --chg-ink: #7a5300; --del: #fde8e6; --del-ink: #b42318; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.6 "Noto Sans KR", -apple-system, sans-serif; }
+  main { max-width: 1180px; margin: 0 auto; padding: 40px 28px 80px; }
+  h1 { font-size: 26px; margin: 0 0 6px; }
+  h2 { font-size: 18px; margin: 40px 0 6px; padding-top: 16px; border-top: 2px solid var(--ink); }
+  .lead { color: var(--sub); margin: 0 0 12px; font-size: 13px; }
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; margin: 10px 0 0; }
+  .legend span { padding: 2px 8px; border-radius: 6px; }
+  .sc { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; margin-top: 14px; }
+  .sc h3 { font-size: 15px; margin: 0 0 4px; }
+  .sc .op { font-size: 13px; background: #eef0f4; border-radius: 8px; padding: 8px 12px; margin: 8px 0; }
+  .sc .op b { font-weight: 700; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .cap { font-size: 11px; font-weight: 700; color: var(--sub); margin-bottom: 4px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th, td { border-bottom: 1px solid var(--line); padding: 5px 8px; text-align: left; white-space: nowrap; }
+  th { background: #f6f7f9; font-weight: 700; font-size: 11.5px; color: var(--sub); }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.new td { background: var(--new); color: var(--new-ink); }
+  tr.del td { background: var(--del); color: var(--del-ink); text-decoration: line-through; }
+  td.chg { background: var(--chg); color: var(--chg-ink); font-weight: 700; }
+  tr.gap td { color: var(--sub); text-align: center; font-size: 11px; background: #fafbfc; }
+  .meta { font: 11.5px/1.6 ui-monospace, Menlo, monospace; color: var(--sub); margin-top: 6px; }
+  .meta .chg { background: var(--chg); color: var(--chg-ink); padding: 0 3px; border-radius: 3px; }
+  .pv { font-size: 12px; margin-top: 4px; color: var(--sub); }
+  .pv b { color: var(--ink); }
+  .note { font-size: 12px; color: var(--sub); margin-top: 8px; }
+  .todo { display: inline-block; font: 700 10.5px/1.6 ui-monospace, Menlo, monospace; padding: 0 6px; border-radius: 4px; background: #fde8e6; color: #c8372a; border: 1px solid #f2b8b1; }
+  @media (max-width: 860px) { .two { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { main { padding: 24px 16px 60px; } .sc { overflow-x: auto; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>반복 기록 시나리오</h1>
+  <p class="lead">정본 <code>2026-11-02-01-data-architecture.md</code> 5장의 규칙을 작은 시뮬레이터로 돌려 그린 표다. 표의 값은 손으로 쓴 것이 아니라 규칙 코드가 계산한 결과다. 오늘은 2026-10-18로 둔다.</p>
+  <div class="legend"><span style="background:var(--new);color:var(--new-ink)">새로 생긴 행</span><span style="background:var(--chg);color:var(--chg-ink)">바뀐 값</span><span style="background:var(--del);color:var(--del-ink);text-decoration:line-through">지운 행</span></div>
+  <div id="out"></div>
+</main>
+
+<script>
+/* ===== 날짜 ===== */
+const pad = n => String(n).padStart(2, "0");
+const lastDay = (y, m) => new Date(Date.UTC(y, m, 0)).getUTCDate();
+const ymOf = d => { const [y, m] = d.split("-").map(Number); return { y, m }; };
+const addMonths = ({ y, m }, k) => { const t = y * 12 + (m - 1) + k; return { y: Math.floor(t / 12), m: (t % 12) + 1 }; };
+const ymKey = ({ y, m }) => y * 12 + m;
+const fit = ({ y, m }, day) => `${y}-${pad(m)}-${pad(Math.min(day, lastDay(y, m)))}`;
+const ymStr = ({ y, m }) => `${y}-${pad(m)}`;
+const ymKo = ({ y, m }) => `${y}년 ${m}월`;
+const won = n => n.toLocaleString("ko-KR") + "원";
+const TODAY = "2026-10-18";
+const CAP = { y: 2099, m: 12 };
+const horizon = (startYM, today) => { const h = addMonths(ymOf(today), 24); const t = ymKey(startYM) > ymKey(h) ? startYM : h; return ymKey(t) > ymKey(CAP) ? CAP : t; };
+const clone = s => JSON.parse(JSON.stringify(s));
+
+/* ===== 규칙 (데이터 아키텍처 5장) ===== */
+function create(o, today = TODAY) {
+  const day = Number(o.date.slice(8)), start = ymOf(o.date);
+  const base = { title: o.title, category: o.category, content: null };
+  const s = { series: { type: o.type, billingDay: day, isContinuous: false, totalCount: null, installmentTotal: null, generatedUntil: null }, rows: [] };
+  const push = (i, amount) => s.rows.push({ seq: i + 1, date: i === 0 ? o.date : fit(addMonths(start, i), day), amount, ...base });
+  if (o.type === "RECURRING" && o.continuous) {
+    const until = horizon(start, today);
+    for (let i = 0; ymKey(addMonths(start, i)) <= ymKey(until); i++) push(i, o.amount);
+    s.series.isContinuous = true; s.series.generatedUntil = ymStr(until);
+  } else if (o.type === "RECURRING") {
+    for (let i = 0; i < o.months; i++) push(i, o.amount);
+    s.series.totalCount = o.months;
+  } else {
+    const n = o.count;
+    if (o.basis === "total") { const per = Math.floor(o.amount / n); for (let i = 0; i < n; i++) push(i, i === 0 ? o.amount - per * (n - 1) : per); s.series.installmentTotal = o.amount; }
+    else { for (let i = 0; i < n; i++) push(i, o.amount); s.series.installmentTotal = o.amount * n; }
+    s.series.totalCount = n;
+  }
+  return s;
+}
+function extend(s, target) {
+  const sr = s.series; if (!sr.isContinuous) return s;
+  const t = ymKey(target) > ymKey(CAP) ? CAP : target;
+  const last = s.rows.reduce((a, r) => (!a || r.seq > a.seq ? r : a), null);
+  let cur = ymOf(sr.generatedUntil + "-01"), seq = last ? last.seq : 0;
+  while (ymKey(cur) < ymKey(t)) {
+    cur = addMonths(cur, 1); seq++;
+    s.rows.push({ seq, date: fit(cur, sr.billingDay), amount: last.amount, title: last.title, category: last.category, content: last.content });
+  }
+  if (ymKey(t) > ymKey(ymOf(sr.generatedUntil + "-01"))) sr.generatedUntil = ymStr(t);
+  return s;
+}
+function targets(s, k, scope) {
+  const after = s.rows.filter(r => r.seq >= k).sort((a, b) => a.seq - b.seq);
+  if (scope.type === "one") return after.filter(r => r.seq === k);
+  if (scope.type === "after") return after;
+  if (s.series.isContinuous && after.length < scope.n) {
+    const last = after[after.length - 1];
+    extend(s, addMonths(ymOf(last.date), scope.n - after.length));
+    return targets(s, k, scope);
+  }
+  return after.slice(0, scope.n);
+}
+function edit(s, k, ch, scope) {
+  const row = s.rows.find(r => r.seq === k);
+  const delta = ch.date ? ymKey(ymOf(ch.date)) - ymKey(ymOf(row.date)) : 0;
+  if (scope.type === "count" && delta !== 0) throw new Error("이 건부터 N개월은 달을 바꿀 수 없다");
+  if (scope.type === "after" && delta < 0) throw new Error("범위 수정은 앞 달로 옮길 수 없다");
+  const tg = targets(s, k, scope);
+  tg.forEach(r => {
+    ["title", "amount", "category", "content"].forEach(f => { if (f in ch) r[f] = ch[f]; });
+    if (ch.date) {
+      if (scope.type === "one") r.date = ch.date;
+      else r.date = fit(addMonths(ymOf(r.date), delta), Number(ch.date.slice(8)));
+    }
+  });
+  if (ch.date && scope.type === "after") {
+    s.series.billingDay = Number(ch.date.slice(8));
+    if (s.series.isContinuous && delta) s.series.generatedUntil = ymStr(addMonths(ymOf(s.series.generatedUntil + "-01"), delta));
+  }
+  return s;
+}
+function del(s, k, scope) {
+  const tg = new Set(targets(s, k, scope).map(r => r.seq));
+  s.rows = s.rows.filter(r => !tg.has(r.seq));
+  if (scope.type === "after" && s.series.isContinuous) s.series.isContinuous = false;
+  if (!s.rows.length && !s.series.isContinuous) s.series = null;
+  return s;
+}
+function preview(s, k, scope) {
+  const after = s.rows.filter(r => r.seq >= k).sort((a, b) => a.seq - b.seq);
+  const remaining = s.series.isContinuous ? "계속" : after.length + "건";
+  let txt;
+  if (scope.type === "one") txt = `${ymKo(ymOf(after[0].date))} (1건)`;
+  else if (scope.type === "after") txt = s.series.isContinuous ? `${ymKo(ymOf(after[0].date))}부터 계속` : `${ymKo(ymOf(after[0].date))} ~ ${ymKo(ymOf(after[after.length - 1].date))} (${after.length}건)`;
+  else { const t = targets(clone(s), k, scope); txt = `${ymKo(ymOf(t[0].date))} ~ ${ymKo(ymOf(t[t.length - 1].date))} (${t.length}건)`; }
+  return `남은 건수 <b>${remaining}</b> · 영향 범위 <b>${txt}</b>`;
+}
+
+/* ===== 그리기 ===== */
+const CAT = { LIVING: "생활", APPLIANCE: "가전", FOOD: "식비" };
+function rowsTable(before, after, opts = {}) {
+  const b = new Map((before ? before.rows : []).map(r => [r.seq, r]));
+  const a = new Map((after ? after.rows : []).map(r => [r.seq, r]));
+  const seqs = [...new Set([...b.keys(), ...a.keys()])].sort((x, y) => x - y);
+  const type = (after && after.series) ? after.series.type : before && before.series && before.series.type;
+  const total = (after && after.series) ? after.series.totalCount : before && before.series && before.series.totalCount;
+  let h = `<table><tr><th>seq</th><th>날짜</th><th>제목</th><th>카테고리</th><th class="num">금액</th>${type === "INSTALLMENT" ? "<th>회차</th>" : ""}</tr>`;
+  const show = opts.show ? new Set(opts.show) : null;
+  let skipped = 0;
+  seqs.forEach((q, i) => {
+    if (show && !show.has(q)) { skipped++; const nx = seqs[i + 1]; if (nx === undefined || show.has(nx)) { h += `<tr class="gap"><td colspan="6">… ${skipped}행 생략 (같은 규칙) …</td></tr>`; skipped = 0; } return; }
+    const ob = b.get(q), oa = a.get(q);
+    const r = oa || ob;
+    const cls = !before ? "" : !ob ? "new" : !oa ? "del" : "";
+    const c = f => (ob && oa && ob[f] !== oa[f] ? ' class="chg"' : "");
+    const cn = f => (ob && oa && ob[f] !== oa[f] ? ' class="num chg"' : ' class="num"');
+    h += `<tr class="${cls}"><td>${q}</td><td${c("date")}>${r.date}</td><td${c("title")}>${r.title}</td><td${c("category")}>${CAT[r.category] || r.category}</td><td${cn("amount")}>${won(r.amount)}</td>${type === "INSTALLMENT" ? `<td>${q}/${total}</td>` : ""}</tr>`;
+  });
+  return h + "</table>";
+}
+function meta(before, after) {
+  const s = after && after.series, p = before && before.series;
+  if (!s) return `<div class="meta">Series: <span class="chg">삭제됨 (남은 행 없음)</span></div>`;
+  const f = k => { const v = s[k] === null ? "null" : s[k]; return p && p[k] !== s[k] ? `<span class="chg">${k}=${v}</span>` : `${k}=${v}`; };
+  return `<div class="meta">Series: ${["type", "billingDay", "isContinuous", "totalCount", "installmentTotal", "generatedUntil"].map(f).join(" · ")}</div>`;
+}
+function scene(o) {
+  let h = `<section class="sc"><h3>${o.title}</h3>`;
+  if (o.op) h += `<div class="op">${o.op}</div>`;
+  if (o.preview) h += `<div class="pv">SC-09 미리보기 — ${o.preview}</div>`;
+  if (o.before) {
+    h += `<div class="two"><div><div class="cap">전</div>${rowsTable(null, o.before, { show: o.show })}${meta(null, o.before)}</div><div><div class="cap">후</div>${rowsTable(o.before, o.after, { show: o.show })}${meta(o.before, o.after)}</div></div>`;
+  } else {
+    h += `${rowsTable(null, o.after, { show: o.show })}${meta(null, o.after)}`;
+  }
+  if (o.note) h += `<div class="note">${o.note}</div>`;
+  return h + "</section>";
+}
+
+/* ===== 시나리오 ===== */
+const out = [];
+const H = t => out.push(`<h2>${t}</h2>`);
+
+H("1. 생성");
+const netflix = create({ type: "RECURRING", date: "2026-10-31", months: 6, title: "넷플릭스", category: "LIVING", amount: 13300 });
+out.push(scene({ title: "1-1. 정기지출 6개월, 31일 결제 (말일 맞추기)", op: "날짜 <b>2026-10-31</b> · 정기지출 · 개월 수 6", after: netflix, note: "30일까지인 달은 30일, 2월은 28일. 원래 결제일(billingDay=31)은 그대로라 31일이 있는 달은 다시 31일이다." }));
+const ipad = create({ type: "INSTALLMENT", date: "2026-11-01", count: 3, basis: "total", title: "아이패드", category: "APPLIANCE", amount: 100000 });
+out.push(scene({ title: "1-2. 할부 총액 100,000원 / 3회", op: "날짜 <b>2026-11-01</b> · 할부 · 총액 기준 · 3회", after: ipad, note: "100,000 ÷ 3 = 33,333 (버림). 끝전 1원은 1회차에 더한다. installmentTotal = 100,000 고정 (D5)." }));
+const rent = create({ type: "RECURRING", date: "2026-10-25", continuous: true, title: "월세", category: "LIVING", amount: 500000 });
+out.push(scene({ title: "1-3. 정기지출 계속", op: "날짜 <b>2026-10-25</b> · 정기지출 · 계속 · 오늘 2026-10-18", after: rent, show: [1, 2, 3, 24, 25], note: "연장 끝 달 = 이번 달(2026-10) + 24개월 = 2028-10. 25행을 만든다." }));
+const leap = create({ type: "RECURRING", date: "2027-12-31", months: 4, title: "구독", category: "LIVING", amount: 9900 });
+out.push(scene({ title: "1-4. 윤년 2월", op: "날짜 <b>2027-12-31</b> · 정기지출 · 개월 수 4", after: leap, note: "2028년은 윤년이라 2월은 29일." }));
+
+H("2. 연장 (계속 정기지출)");
+const rentDaily = extend(clone(rent), addMonths(ymOf("2026-11-02"), 24));
+out.push(scene({ title: "2-1. 정기 작업 (매일)", op: "오늘이 <b>2026-11-02</b>가 되어 정기 작업이 돈다 → 목표 2028-11", before: rent, after: rentDaily, show: [1, 24, 25, 26] }));
+const rentRead = extend(clone(rent), ymOf("2029-03-01"));
+out.push(scene({ title: "2-2. 조회 직전 연장", op: "달력에서 <b>2029년 3월</b>로 이동 → 조회 전에 2029-03까지 연장", before: rent, after: rentRead, show: [1, 25, 26, 27, 28, 29, 30] }));
+
+H("3. 수정");
+out.push(scene({ title: "3-1. 이번 건만 — 금액", op: "넷플릭스 seq 3 (2026-12-31) 금액 13,300 → <b>17,000</b> · 범위 이번 건만", preview: preview(netflix, 3, { type: "one" }), before: netflix, after: edit(clone(netflix), 3, { amount: 17000 }, { type: "one" }) }));
+out.push(scene({ title: "3-2. 이 건부터 N개월 — 제목", op: "넷플릭스 seq 2 제목 → <b>넷플릭스 프리미엄</b> · 범위 이 건부터 2개월", preview: preview(netflix, 2, { type: "count", n: 2 }), before: netflix, after: edit(clone(netflix), 2, { title: "넷플릭스 프리미엄" }, { type: "count", n: 2 }) }));
+const rentAfter = edit(clone(rent), 3, { date: "2026-12-03", amount: 520000 }, { type: "after" });
+out.push(scene({ title: "3-3. 이후 전체 — 날짜(일)와 금액", op: "월세 seq 3 (2026-12-25) → 날짜 <b>2026-12-03</b>, 금액 <b>520,000</b> · 범위 이후 전체", preview: preview(rent, 3, { type: "after" }), before: rent, after: rentAfter, show: [1, 2, 3, 4, 25], note: "각 행의 달은 그대로, 일만 3일로. 묶음 billingDay도 3으로 바뀐다." }));
+out.push(scene({ title: "3-4. 3-3 뒤의 연장", op: "3-3 뒤 정기 작업이 2028-11까지 연장", before: rentAfter, after: extend(clone(rentAfter), ymOf("2028-11-01")), show: [24, 25, 26], note: "연장 행은 마지막 행(seq 25)을 본뜨고 billingDay=3을 쓴다 → 수정이 연장분에도 이어진다." }));
+out.push(scene({ title: "3-5. 이후 전체 — 다음 달 날짜로 (한 달씩 뒤로 밀기)", op: "월세 seq 3 (2026-12-25) → 날짜 <b>2027-01-03</b> · 범위 이후 전체", before: rent, after: edit(clone(rent), 3, { date: "2027-01-03" }, { type: "after" }), show: [2, 3, 4, 5, 25], note: "이 건부터 모든 건이 1개월씩 뒤로, 결제일 3일. 12월 건은 없어지고 11월(seq 2)은 그대로. 계속 반복은 generatedUntil도 1개월 뒤로." }));
+out.push(scene({ title: "3-6. 이후 전체 — 기간이 정해진 반복도 끝 달까지 밀린다", op: "넷플릭스(6개월) seq 3 (2026-12-31) → 날짜 <b>2027-01-03</b> · 범위 이후 전체", before: netflix, after: edit(clone(netflix), 3, { date: "2027-01-03" }, { type: "after" }), note: "건수(6건)는 그대로, 끝 달이 2027-03 → 2027-04로." }));
+out.push(scene({ title: "3-7. 할부 — 남은 회차를 한 달 미루기", op: "아이패드 seq 2 (2026-12-01) → 날짜 <b>2027-01-01</b> · 범위 이후 전체 (남은 회차)", before: ipad, after: edit(clone(ipad), 2, { date: "2027-01-01" }, { type: "after" }), note: "회차 수는 그대로, 2·3회차가 한 달씩 뒤로." }));
+out.push(scene({ title: "3-8. 막는 경우", op: "① 달을 바꾸면서 <b>이 건부터 N개월</b> → 고를 수 없다 (범위 밖의 건과 같은 달에 겹친다) · ② <b>앞 달</b>로 옮기면서 이후 전체 → 고를 수 없다 (앞선 건과 겹친다). 둘 다 SC-09에서 그 선택지를 비활성으로 보여주고, 서버도 400으로 거절한다.", after: rent, show: [1, 2, 3], note: "이번 건만은 언제나 고를 수 있다 (입력한 날짜 그대로)." }));
+out.push(scene({ title: "3-9. 할부 회차 금액 수정", op: "아이패드 seq 2 금액 33,333 → <b>40,000</b> · 이번 건만", preview: preview(ipad, 2, { type: "one" }), before: ipad, after: edit(clone(ipad), 2, { amount: 40000 }, { type: "one" }), note: "installmentTotal은 100,000 그대로 (D5). 상세의 \"총 100,000원\"도 그대로다." }));
+
+H("4. 삭제");
+out.push(scene({ title: "4-1. 할부 이번 건만", op: "아이패드 seq 2 삭제 · 이번 건만", preview: preview(ipad, 2, { type: "one" }), before: ipad, after: del(clone(ipad), 2, { type: "one" }), note: "회차 표시는 seq/totalCount라 1/3, 3/3이 그대로 남는다." }));
+out.push(scene({ title: "4-2. 계속 반복 이후 전체 (반복 종료)", op: "월세 seq 5 (2027-02-25) 삭제 · 이후 전체 → \"이 건부터 반복이 종료됩니다\"", preview: preview(rent, 5, { type: "after" }), before: rent, after: del(clone(rent), 5, { type: "after" }), show: [3, 4, 5, 6, 25], note: "isContinuous=false. 더는 연장하지 않는다." }));
+const rentGap = del(clone(rent), 3, { type: "count", n: 2 });
+out.push(scene({ title: "4-3. 계속 반복 이 건부터 N개월 (중간 비우기)", op: "월세 seq 3 삭제 · 이 건부터 2개월", preview: preview(rent, 3, { type: "count", n: 2 }), before: rent, after: rentGap, show: [2, 3, 4, 5, 25], note: "계속 반복은 그대로 계속된다." }));
+out.push(scene({ title: "4-4. 4-3 뒤의 연장", op: "4-3 뒤 정기 작업이 2028-11까지 연장", before: rentGap, after: extend(clone(rentGap), ymOf("2028-11-01")), show: [2, 5, 25, 26], note: "지운 달(2026-12, 2027-01)은 다시 만들지 않는다. generatedUntil 다음 달부터만 만든다." }));
+const one = create({ type: "RECURRING", date: "2026-10-31", months: 2, title: "헬스", category: "LIVING", amount: 60000 });
+const one1 = del(clone(one), 2, { type: "one" });
+out.push(scene({ title: "4-5. 마지막 남은 행 삭제 → 묶음도 삭제", op: "헬스(2개월) seq 2 삭제 → seq 1 삭제 (각각 이번 건만)", before: one, after: del(clone(one1), 1, { type: "one" }), note: "계속 반복이 아니고 남은 행이 없으면 Series도 지운다." }));
+
+document.getElementById("out").innerHTML = out.join("");
+</script>
+</body>
+</html>
