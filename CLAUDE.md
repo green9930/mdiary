@@ -29,12 +29,13 @@ MVP 이후 검토할 항목(TODO)은 `docs/01-product/2026-10-17-02-product-brie
 
 ## 기술 스택
 
-아래 메이저 버전을 유지한다. 버전을 올릴 때는 메이저를 유지하고 패치만 올린다.
+패키지는 LTS 버전을 쓴다. 지원 정책이 있으면 지원 중인 메이저를, 없으면 최신 메이저를 쓴다. 메이저를 바꿀 때는 사용자와 정하고, 그 밖에는 패치만 올린다.
 
 - Node 24 (`.nvmrc`), pnpm 10 (`packageManager`)
-- Next.js 15 (App Router), React 19, TypeScript 5
-- TanStack Query 5, Tailwind CSS 4, ESLint 9
-- 추가 예정 (4단계, `docs/04-dev/2026-11-02-01-dev-setup.md`): Prisma 7 + Neon, Better Auth, zod, Prettier 3, Vitest 4, Testing Library, Playwright 1, lefthook
+- Next.js 16 (App Router, Turbopack), React 19, TypeScript 6 (7은 typescript-eslint 미지원)
+- TanStack Query 5, Tailwind CSS 4, ESLint 10
+- Prettier 3, Vitest 5, Testing Library, Playwright 1
+- 추가 예정 (4단계, `docs/04-dev/2026-11-02-01-dev-setup.md`): Prisma 7 + Neon, Better Auth, zod, lefthook
 
 ## 명령어
 

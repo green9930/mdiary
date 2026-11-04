@@ -30,7 +30,7 @@
 | DB        | Neon Postgres 18 (서울과 가까운 리전)                              |
 | ORM       | Prisma 7, `@prisma/adapter-neon` (서버리스 연결)                   |
 | 인증      | Better Auth + Prisma 어댑터, Google 제공자                         |
-| 서버      | Next.js 15 Route Handlers (`src/app/api/**/route.ts`), Node 런타임 |
+| 서버      | Next.js 16 Route Handlers (`src/app/api/**/route.ts`), Node 런타임 |
 | 검증      | 서버·클라이언트가 같은 스키마(zod)를 쓴다                          |
 | 정기 작업 | Vercel Cron (Hobby: 하루 1번)                                      |
 
