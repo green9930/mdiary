@@ -1,0 +1,5 @@
+docs/**/*.html
+docs/reference/
+public/
+pnpm-lock.yaml
+src/generated/
