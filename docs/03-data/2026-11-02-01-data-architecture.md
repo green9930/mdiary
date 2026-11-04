@@ -13,7 +13,7 @@
 | --- | --- | --- |
 | D1 | 서버 API | Next.js Route Handlers(REST) + 클라이언트 TanStack Query |
 | D2 | 인증 | Better Auth, Google 로그인, DB 세션 |
-| D3 | DB | Neon Postgres + Prisma 7. 운영은 `main` 브랜치, 개발은 Neon 개발 브랜치 |
+| D3 | DB | Neon Postgres + Prisma 7. 운영은 `production` 브랜치, 개발은 `development` 브랜치 |
 | D4 | 반복 기록 저장 | 모든 건을 행으로 만든다. "계속" 정기지출은 앞으로 24개월치만 만들고 자동 연장한다 |
 | D5 | 할부 총액 | 등록할 때의 총액을 고정 저장한다. 회차를 수정·삭제해도 바뀌지 않는다 |
 | D6 | 제목 추천 사용 횟수 | 반복 묶음은 1번으로 센다 |
@@ -27,7 +27,7 @@
 
 | 항목 | 내용 |
 | --- | --- |
-| DB | Neon Postgres (서울과 가까운 리전) |
+| DB | Neon Postgres 18 (서울과 가까운 리전) |
 | ORM | Prisma 7, `@prisma/adapter-neon` (서버리스 연결) |
 | 인증 | Better Auth + Prisma 어댑터, Google 제공자 |
 | 서버 | Next.js 15 Route Handlers (`src/app/api/**/route.ts`), Node 런타임 |
@@ -44,7 +44,7 @@
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Google 로그인 |
 | `CRON_SECRET` | 정기 작업 호출 확인 |
 
-- 개발: Neon 개발 브랜치를 쓴다. 운영 데이터가 필요하면 브랜치를 새로 따서 쓴다. 운영 브랜치에 개발 마이그레이션을 직접 돌리지 않는다.
+- 개발: Neon `development` 브랜치를 쓴다. 운영 데이터가 필요하면 브랜치를 새로 따서 쓴다. 운영 `production` 브랜치에 개발 마이그레이션을 직접 돌리지 않는다.
 
 ## 3. 공통 규칙
 

@@ -9,11 +9,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet" />
 <style>
   @font-face { font-family: "Tenada"; src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-2@1.0/Tenada.woff2") format("woff2"); }
-  @font-face { font-family: "KorailRoundGothicBold"; src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2212@1.0/KorailRoundGothicBold.woff2") format("woff2"); font-weight: 700; }
   :root {
     --doc-bg: #f4f5f7; --doc-card: #fff; --doc-ink: #1c1e26; --doc-sub: #5b6070; --doc-line: #dfe2e8;
     --font-body: "Noto Sans KR", sans-serif; --font-num: "Rubik", "Noto Sans KR", sans-serif;
-    --font-logo: "Tenada", "Noto Sans KR", sans-serif; --font-tagline: "KorailRoundGothicBold", "Noto Sans KR", sans-serif;
+    --font-logo: "Tenada", "Noto Sans KR", sans-serif;
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--doc-bg); color: var(--doc-ink); font: 14px/1.6 "Noto Sans KR", sans-serif; }
@@ -173,7 +172,7 @@
   .tabbar .plus svg { width: 28px; height: 28px; }
   .tabbar .plus { width: 52px; height: 52px; border-radius: 50%; background: var(--primary); color: var(--on-primary); display: grid; place-items: center; font-size: 26px; margin: -24px auto 0; box-shadow: var(--shadow-2); }
   .logo { font-family: var(--font-logo); color: var(--brand); display: inline-flex; align-items: center; gap: 6px; }
-  .tagline { font-family: var(--font-tagline); color: var(--accent); font-size: 16px; }
+  .tagline { font-family: var(--font-body); color: var(--accent); font-size: 16px; line-height: 24px; font-weight: 700; }
 
   /* 토큰 표·글꼴 */
   .scale td:first-child { width: 110px; }
@@ -193,7 +192,7 @@
 <body>
 <main>
   <h1>다씀 디자인 토큰 견본</h1>
-  <p class="lead">정본은 <code>2026-11-02-02-design-tokens.md</code>. 이 문서는 그 값을 라이트·다크로 펼쳐 모든 컴포넌트 상태를 한 번에 보게 한다. 색 방향 A형(초록 면 + 흰 글자), 글꼴 레거시(Noto Sans KR · Rubik · Tenada · 코레일둥근고딕). 문구는 와이어프레임 초안을 그대로 쓴다. 2026-11-02</p>
+  <p class="lead">정본은 <code>2026-11-02-02-design-tokens.md</code>. 이 문서는 그 값을 라이트·다크로 펼쳐 모든 컴포넌트 상태를 한 번에 보게 한다. 색 방향 A형(초록 면 + 흰 글자), 글꼴 Noto Sans KR · Rubik · Tenada. 문구는 와이어프레임 초안을 그대로 쓴다. 2026-11-02</p>
 
   <div class="ctl" id="view">
     <span class="lead" style="margin:0">보기:</span>
@@ -428,12 +427,12 @@ document.getElementById("tok").textContent = cssVars(".t-light", "light") + cssV
     ["body", "14/22 400", "넷플릭스 스탠다드 요금제 월 구독료", "body"], ["body-strong", "14/22 700", "10월 18일 (일)", "body"], ["caption", "12/18 400", "2부터 입력할 수 있습니다.", "body"],
     ["micro", "10/14 500", "정기 · 할부 2/3 · 카테고리", "body"], ["num-xl", "28/34 700", "8,000원", "num"], ["num-l", "22/28 700", "1,234,500원", "num"],
     ["num-m", "16/24 500", "13,300원", "num"], ["num-date", "14/16 500", "1 2 3 18 31", "num"], ["num-cal", "10/12 400", "21,300 108만", "num"],
-    ["logo", "Tenada", "다씀", "logo"], ["tagline", "코레일둥근고딕 Bold", "나의 지출만 확인하고 싶을 때", "tagline"]];
+    ["logo", "Tenada", "다씀", "logo"], ["소개 문구", "16/24 700", "나의 지출만 확인하고 싶을 때", "tagline"]];
   let h = `<tr><th>토큰</th><th>크기 / 줄 높이 / 굵기</th><th>보기</th></tr>`;
   rows.forEach(([k, s, ex, f]) => {
     const m = s.match(/^(\d+)\/(\d+) (\d+)/);
     const style = m ? `font-size:${m[1]}px;line-height:${m[2]}px;font-weight:${m[3]}` : (f === "logo" ? "font-size:32px" : "font-size:16px");
-    const fam = f === "num" ? "var(--font-num);font-variant-numeric:tabular-nums" : f === "logo" ? "var(--font-logo);color:#1DB954" : f === "tagline" ? "var(--font-tagline);color:#13823E" : "var(--font-body)";
+    const fam = f === "num" ? "var(--font-num);font-variant-numeric:tabular-nums" : f === "logo" ? "var(--font-logo);color:#1DB954" : f === "tagline" ? "var(--font-body);color:#13823E" : "var(--font-body)";
     h += `<tr><td><code>${k}</code></td><td>${s}</td><td style="font-family:${fam};${style}">${ex}</td></tr>`;
   });
   document.getElementById("typeTable").innerHTML = h;
