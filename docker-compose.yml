@@ -1,0 +1,22 @@
+# 로컬 Postgres: 마이그레이션 작성(mdiary_dev)과 DB 테스트(mdiary_test)용.
+# 앱(pnpm dev)은 Neon development 브랜치를 쓴다. 이 DB는 언제 지워도 된다.
+services:
+  db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mdiary_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql
+      - ./docker/init-test-db.sql:/docker-entrypoint-initdb.d/init-test-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d mdiary_dev"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+volumes:
+  db-data:

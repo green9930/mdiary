@@ -48,3 +48,6 @@ yarn-error.log*
 next-env.d.ts
 
 .claude/settings.local.json
+
+# prisma (pnpm install 때 prisma generate로 만든다)
+/src/generated/

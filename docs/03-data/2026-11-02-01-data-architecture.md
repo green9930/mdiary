@@ -28,7 +28,7 @@
 | 항목      | 내용                                                               |
 | --------- | ------------------------------------------------------------------ |
 | DB        | Neon Postgres 18 (서울과 가까운 리전)                              |
-| ORM       | Prisma 7, `@prisma/adapter-neon` (서버리스 연결)                   |
+| ORM       | Prisma 7, `@prisma/adapter-pg` (개발·테스트·운영 같은 연결 방식)   |
 | 인증      | Better Auth + Prisma 어댑터, Google 제공자                         |
 | 서버      | Next.js 16 Route Handlers (`src/app/api/**/route.ts`), Node 런타임 |
 | 검증      | 서버·클라이언트가 같은 스키마(zod)를 쓴다                          |

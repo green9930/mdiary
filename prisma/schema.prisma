@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// 인증 테이블(User·Session·Account·Verification)은 Better Auth CLI(`pnpm exec auth generate`)가 만든 정의다
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+  expenses      Expense[]
+  series        Series[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+// 지출 테이블: 데이터 아키텍처 7장
+enum Category {
+  FOOD
+  APPLIANCE
+  TRANSPORT
+  MEDICAL
+  CLOTHING
+  BEAUTY
+  CULTURE
+  EDUCATION
+  LIVING
+  ETC
+}
+
+enum SeriesType {
+  RECURRING
+  INSTALLMENT
+}
+
+model Expense {
+  id        String   @id @db.Uuid // 앱에서 UUID v7 생성
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date      DateTime @db.Date
+  title     String
+  content   String?
+  category  Category
+  amount    Int
+  seriesId  String?  @db.Uuid
+  series    Series?  @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  seq       Int?
+  createdAt DateTime @default(now()) @db.Timestamptz
+  updatedAt DateTime @updatedAt @db.Timestamptz
+
+  @@unique([seriesId, seq])
+  @@index([userId, date])
+}
+
+model Series {
+  id               String     @id @db.Uuid
+  userId           String
+  user             User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type             SeriesType
+  billingDay       Int        @db.SmallInt
+  isContinuous     Boolean    @default(false)
+  totalCount       Int?       @db.SmallInt
+  installmentTotal Int?
+  generatedUntil   DateTime?  @db.Date
+  createdAt        DateTime   @default(now()) @db.Timestamptz
+  updatedAt        DateTime   @updatedAt @db.Timestamptz
+  expenses         Expense[]
+
+  @@index([userId])
+  @@index([isContinuous, generatedUntil])
+}

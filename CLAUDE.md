@@ -35,14 +35,26 @@ MVP 이후 검토할 항목(TODO)은 `docs/01-product/2026-10-17-02-product-brie
 - Next.js 16 (App Router, Turbopack), React 19, TypeScript 6 (7은 typescript-eslint 미지원)
 - TanStack Query 5, Tailwind CSS 4, zod 4, ESLint 10
 - Prettier 3, Vitest 5, Testing Library, Playwright 1, lefthook 2
-- 추가 예정 (4단계, `docs/04-dev/2026-11-02-01-dev-setup.md`): Prisma 7 + Neon, Better Auth
+- Prisma 7 (`@prisma/adapter-pg`) + Neon Postgres 18, Better Auth 1, Docker Postgres 18 (테스트)
 
 ## 명령어
 
+설명이 붙은 전체 목록: `docs/04-dev/2026-11-04-01-dev-commands.md`
+
 ```bash
-nvm use
-pnpm install
-pnpm dev
-pnpm lint
-pnpm build
+# 처음 (새 기기 포함). .env는 직접 옮긴다 (.env.example 참고)
+nvm install && nvm use
+pnpm install          # 패키지, git hook, Prisma 클라이언트
+pnpm db:up            # 로컬 Postgres (Docker)
+
+pnpm dev              # 개발 서버 (Neon development)
+pnpm lint / typecheck / format
+pnpm test             # 단위·컴포넌트
+pnpm test:db          # DB 테스트 (로컬 mdiary_test를 비우고 시작)
+pnpm test:e2e
+pnpm check:wireframes / check:tokens
+
+pnpm db:migrate       # 스키마 변경 → 로컬에서 마이그레이션 만들기
+pnpm db:deploy        # 마이그레이션을 Neon development에 적용
+pnpm db:seed          # 개발 데이터 (테스트 사용자, Neon development)
 ```
