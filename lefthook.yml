@@ -9,6 +9,11 @@ pre-commit:
     - name: wireframes
       glob: "docs/02-screens/**"
       run: pnpm check:wireframes
+    - name: tokens
+      glob:
+        - "docs/02-screens/*-design-tokens.*"
+        - "src/app/globals.css"
+      run: pnpm check:tokens
 
 pre-push:
   parallel: true

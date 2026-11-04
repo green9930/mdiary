@@ -21,7 +21,8 @@
     "db:down": "docker compose down",
     "db:migrate": "prisma migrate dev",
     "db:seed": "prisma db seed",
-    "check:wireframes": "python3 scripts/check-wireframes.py"
+    "check:wireframes": "python3 scripts/check-wireframes.py",
+    "check:tokens": "python3 scripts/check-tokens.py"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.104.3",
