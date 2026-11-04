@@ -1,0 +1,19 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: prettier
+      run: pnpm prettier --check --ignore-unknown {staged_files}
+    - name: eslint
+      glob: "*.{js,mjs,cjs,ts,tsx}"
+      run: pnpm eslint --no-warn-ignored {staged_files}
+    - name: wireframes
+      glob: "docs/02-screens/**"
+      run: pnpm check:wireframes
+
+pre-push:
+  parallel: true
+  jobs:
+    - name: typecheck
+      run: pnpm typecheck
+    - name: test
+      run: pnpm test
