@@ -33,9 +33,9 @@ MVP 이후 검토할 항목(TODO)은 `docs/01-product/2026-10-17-02-product-brie
 
 - Node 24 (`.nvmrc`), pnpm 10 (`packageManager`)
 - Next.js 16 (App Router, Turbopack), React 19, TypeScript 6 (7은 typescript-eslint 미지원)
-- TanStack Query 5, Tailwind CSS 4, ESLint 10
+- TanStack Query 5, Tailwind CSS 4, zod 4, ESLint 10
 - Prettier 3, Vitest 5, Testing Library, Playwright 1
-- 추가 예정 (4단계, `docs/04-dev/2026-11-02-01-dev-setup.md`): Prisma 7 + Neon, Better Auth, zod, lefthook
+- 추가 예정 (4단계, `docs/04-dev/2026-11-02-01-dev-setup.md`): Prisma 7 + Neon, Better Auth, lefthook
 
 ## 명령어
 
