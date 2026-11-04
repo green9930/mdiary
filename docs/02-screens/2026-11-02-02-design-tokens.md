@@ -46,15 +46,16 @@
 | ------------- | ----------------- | ----------------- | ------------------------------------------------------- |
 | `bg`          | `#FFFFFF`         | `#111513`         | 화면 바탕, 시트·다이얼로그 바탕                         |
 | `surface`     | `#F3F6F4`         | `#1E2522`         | 아이콘 자리, 입력 비활성, 미리보기 상자                 |
-| `line`        | `#E3E8E5`         | `#2A322E`         | 구분선, 입력 테두리                                     |
+| `line`        | `#E3E8E5`         | `#2A322E`         | 구분선, 비활성 입력 테두리                              |
 | `line-strong` | `#C9D1CC`         | `#3B4540`         | secondary line 테두리, 선택 컨트롤 테두리               |
+| `line-input`  | `#8A948E`         | `#5C6661`         | 입력 테두리 (바탕 대비 3:1)                             |
 | `text`        | `#17201B`         | `#EEF2EF`         | 기본 글자, 금액                                         |
 | `text-sub`    | `#5E6A63`         | `#A3AEA8`         | 보조 글자, 토요일, 요일 표시줄                          |
-| `text-weak`   | `#A3ACA7`         | `#5C6661`         | placeholder, 앞뒤 달 날짜, 비활성 글자 (대비 기준 예외) |
+| `text-weak`   | `#7D8781`         | `#6E7873`         | placeholder, 앞뒤 달 날짜, 비활성 글자 (대비 기준 예외) |
 | `gray`        | `#EBEFEC`         | `#2A322E`         | gray 버튼 면                                            |
 | `on-gray`     | `#4A544F`         | `#C9D1CC`         | gray 버튼 글자                                          |
 | `disabled`    | `#EEF1EF`         | `#1E2522`         | 비활성 면                                               |
-| `on-disabled` | `#9AA39E`         | `#5C6661`         | 비활성 글자                                             |
+| `on-disabled` | `#7D8781`         | `#6E7873`         | 비활성 글자                                             |
 | `scrim`       | `rgba(0,0,0,.40)` | `rgba(0,0,0,.60)` | 시트·다이얼로그 뒤 가림막                               |
 
 ### 2-3. 상태
@@ -122,7 +123,7 @@
 | `font-num`  | Rubik → Noto Sans KR           | 금액, 달력 날짜·금액, 건수, 카운터, 비율. Rubik은 한글이 없어 "원·건"은 Noto Sans KR로 이어진다 |
 | `font-logo` | Tenada                         | 로고 "다씀"만                                                                                   |
 
-- 숫자 열을 세로로 맞출 때는 `font-variant-numeric: tabular-nums`를 켠다. Rubik이 고정폭 숫자를 지원하는지는 견본에서 확인한다.
+- 숫자 열을 세로로 맞출 때는 `font-variant-numeric: tabular-nums`(Tailwind `tabular-nums`)를 켠다. Rubik은 고정폭 숫자를 지원한다.
 
 ### 3-2. 크기 단계
 
@@ -161,34 +162,51 @@
 | 다이얼로그     | 150ms 투명도                                                                                                 |
 | 드롭다운       | 120ms                                                                                                        |
 | 누름           | 면 색을 `*-pressed`로, 시간 없음                                                                             |
+| 테두리 두께    | 1 또는 2. 소수(1.5 등)는 쓰지 않는다                                                                         |
+
+### 4-1. 코드 이름
+
+토큰은 `src/app/globals.css`의 Tailwind `@theme`에 있다. 대부분 문서 이름 그대로 클래스가 된다 (`bg-primary`, `text-text-sub`, `text-title-l`, `shadow-2`). 다른 것만 적는다.
+
+| 문서                                | 코드                                                                      |
+| ----------------------------------- | ------------------------------------------------------------------------- |
+| 카테고리 색                         | `cat-` + Category enum 소문자 (`bg-cat-food`, `bg-cat-appliance` …)       |
+| 버튼 L 글자                         | `text-button-l`                                                           |
+| `radius-s` · `-m` · `-l` · `-sheet` | `rounded-sm` · `rounded-md` · `rounded-lg` · `rounded-sheet`              |
+| `radius-full`                       | `rounded-full`                                                            |
+| 간격 `space-N`                      | Tailwind 기본 간격 N (`p-4` = 16)                                         |
+| 움직임                              | CSS 변수 `--duration-sheet` · `--duration-dialog` · `--duration-dropdown` |
+| 숫자 단계(`num-*`)                  | 글꼴은 따로 붙인다: `font-num text-num-m`                                 |
+
+Tailwind 기본 색·글자 크기·모서리·그림자는 꺼 두었다. 이 문서에 없는 값은 클래스로 쓸 수 없다.
 
 ## 5. 컴포넌트
 
 ### 5-1. 버튼
 
-| 종류             | 면         | 글자          | 테두리            | 와이어프레임 쓰임                               |
-| ---------------- | ---------- | ------------- | ----------------- | ----------------------------------------------- |
-| primary filled   | `primary`  | `on-primary`  | 없음              | 저장, 적용, 선택, 수정, 계속 작성, 확인, 로그인 |
-| secondary filled | `tint`     | `on-tint`     | 없음              | 시트 안 보조 동작 (지금은 없음)                 |
-| primary outline  | `bg`       | `accent`      | `accent` 1.5      | 계산, 오늘, 기록 추가하기, 다시 시도            |
-| secondary line   | `bg`       | `text`        | `line-strong` 1.5 | 취소, 정렬·기간 드롭다운, 기간 선택             |
-| text             | 없음       | `text` 밑줄   | 없음              | 개인정보처리방침, 서비스 안내 링크              |
-| danger           | `danger`   | `#FFFFFF`     | 없음              | 삭제, 탈퇴하기                                  |
-| disabled         | `disabled` | `on-disabled` | 없음              | 모든 버튼의 비활성                              |
-| gray             | `gray`     | `on-gray`     | 없음              | 나가기                                          |
+| 종류             | 면         | 글자          | 테두리          | 와이어프레임 쓰임                               |
+| ---------------- | ---------- | ------------- | --------------- | ----------------------------------------------- |
+| primary filled   | `primary`  | `on-primary`  | 없음            | 저장, 적용, 선택, 수정, 계속 작성, 확인, 로그인 |
+| secondary filled | `tint`     | `on-tint`     | 없음            | 시트 안 보조 동작 (지금은 없음)                 |
+| primary outline  | `bg`       | `accent`      | `accent` 2      | 계산, 오늘, 기록 추가하기, 다시 시도            |
+| secondary line   | `bg`       | `text`        | `line-strong` 2 | 취소, 정렬·기간 드롭다운, 기간 선택             |
+| text             | 없음       | `text` 밑줄   | 없음            | 개인정보처리방침, 서비스 안내 링크              |
+| danger           | `danger`   | `#FFFFFF`     | 없음            | 삭제, 탈퇴하기                                  |
+| disabled         | `disabled` | `on-disabled` | 없음            | 모든 버튼의 비활성                              |
+| gray             | `gray`     | `on-gray`     | 없음            | 나가기                                          |
 
 - 크기: L 높이 52 (하단 고정, 폭 전체) · M 44 · S 32 (헤더 안 [오늘], ‹ ›). 누를 수 있는 영역은 최소 44×44.
 - 상태: 기본 · 누름(`*-pressed`, outline·line은 면을 `surface`로) · 로딩(글자 대신 스피너, 같은 색) · 비활성(`disabled` 종류로 바뀜).
 
 ### 5-2. 입력
 
-| 상태        | 테두리            | 면        | 글자                                          |
-| ----------- | ----------------- | --------- | --------------------------------------------- |
-| 기본 (빈칸) | `line` 1          | `bg`      | placeholder `text-weak`                       |
-| 포커스      | `accent` 1.5      | `bg`      | `text`                                        |
-| 값 있음     | `line` 1          | `bg`      | `text`                                        |
-| 오류        | `danger-text` 1.5 | `bg`      | `text` + 아래 오류 문구 `danger-text` caption |
-| 비활성      | `line` 1          | `surface` | `on-disabled`                                 |
+| 상태        | 테두리          | 면        | 글자                                          |
+| ----------- | --------------- | --------- | --------------------------------------------- |
+| 기본 (빈칸) | `line-input` 1  | `bg`      | placeholder `text-weak`                       |
+| 포커스      | `accent` 2      | `bg`      | `text`                                        |
+| 값 있음     | `line-input` 1  | `bg`      | `text`                                        |
+| 오류        | `danger-text` 2 | `bg`      | `text` + 아래 오류 문구 `danger-text` caption |
+| 비활성      | `line` 1        | `surface` | `on-disabled`                                 |
 
 - 높이 48, 좌우 안쪽 여백 14. textarea는 3줄(본문 높이 72)에서 6줄까지 늘어난다.
 - 라벨과 입력 사이 8, **입력과 아래 보조 문구(오류·안내) 사이 4**.
@@ -200,7 +218,7 @@
 | 컴포넌트                 | 기본                                    | 선택                                                 | 비활성                                                      |
 | ------------------------ | --------------------------------------- | ---------------------------------------------------- | ----------------------------------------------------------- |
 | 세그먼트 (반복 3단, 2단) | 테두리 `line-strong`, 글자 `text-sub`   | 면 `primary`, 글자 `on-primary`                      | 면 `surface`, 선택 칸 `line-strong` 면 + `on-disabled` 글자 |
-| 카테고리 격자 칸         | 테두리 `line`, 이름 `text-sub`          | 테두리 `accent` 1.5 + 면 `tint`, 이름 `on-tint` 700  | – (오류 시 격자 아래 문구만)                                |
+| 카테고리 격자 칸         | 테두리 `line`, 이름 `text-sub`          | 테두리 `accent` 2 + 면 `tint`, 이름 `on-tint` 700    | – (오류 시 격자 아래 문구만)                                |
 | 필터 칩                  | 테두리 `line-strong`, 글자 `text`       | 면 `primary`, 글자 `on-primary`                      | –                                                           |
 | 라디오 (SC-09)           | 원 테두리 `line-strong`                 | 원 테두리 `primary` + 안쪽 점 `primary`              | `on-disabled`                                               |
 | 체크박스                 | `icon_checkbox_blank` 24, 색 `text-sub` | `icon_checkbox_filled`, 색 `primary`                 | 색 `on-disabled`                                            |
@@ -216,15 +234,15 @@
 
 ### 5-5. 달력 칸
 
-| 상태        | 날짜 숫자        | 날짜 원            | 금액             |
-| ----------- | ---------------- | ------------------ | ---------------- |
-| 평일        | `text`           | 없음               | `text` `num-cal` |
-| 일요일      | `danger-text`    | 없음               | `text`           |
-| 토요일      | `text-sub`       | 없음               | `text`           |
-| 앞뒤 달     | `text-weak`      | 없음               | 표시 안 함       |
-| 오늘        | 요일 색 그대로   | 테두리 `brand` 1.5 | `text`           |
-| 선택        | `on-primary` 700 | 면 `primary`       | `text`           |
-| 오늘 + 선택 | `on-primary` 700 | 면 `primary`       | `text`           |
+| 상태        | 날짜 숫자        | 날짜 원          | 금액             |
+| ----------- | ---------------- | ---------------- | ---------------- |
+| 평일        | `text`           | 없음             | `text` `num-cal` |
+| 일요일      | `danger-text`    | 없음             | `text`           |
+| 토요일      | `text-sub`       | 없음             | `text`           |
+| 앞뒤 달     | `text-weak`      | 없음             | 표시 안 함       |
+| 오늘        | 요일 색 그대로   | 테두리 `brand` 2 | `text`           |
+| 선택        | `on-primary` 700 | 면 `primary`     | `text`           |
+| 오늘 + 선택 | `on-primary` 700 | 면 `primary`     | `text`           |
 
 날짜 원 지름 26. 칸 높이 48 (6줄 고정).
 

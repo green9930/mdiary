@@ -48,7 +48,7 @@
   .tnum { font-variant-numeric: tabular-nums; }
 
   /* 버튼 */
-  .btn { font-family: var(--font-body); font-weight: 700; border: 1.5px solid transparent; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0 16px; white-space: nowrap; }
+  .btn { font-family: var(--font-body); font-weight: 700; border: 2px solid transparent; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0 16px; white-space: nowrap; }
   .sz-l { height: 52px; font-size: 16px; width: 100%; } .sz-m { height: 44px; font-size: 14px; } .sz-s { height: 32px; font-size: 12px; padding: 0 10px; border-radius: 6px; }
   .v-pri { background: var(--primary); color: var(--on-primary); } .v-pri.pressed { background: var(--primary-pressed); }
   .v-sec { background: var(--tint); color: var(--on-tint); } .v-sec.pressed { filter: brightness(.95); }
@@ -68,9 +68,9 @@
   .fld { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
   .fld > .errm, .fld > .k, .fld > .help { margin-top: -4px; } /* 입력과 보조 문구 사이 4 */
   .lbl { font-size: 14px; font-weight: 500; color: var(--text); }
-  .inp { height: 48px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); padding: 0 14px; display: flex; align-items: center; gap: 8px; font-size: 16px; color: var(--text); }
+  .inp { height: 48px; border: 1px solid var(--line-input); border-radius: 8px; background: var(--bg); padding: 0 14px; display: flex; align-items: center; gap: 8px; font-size: 16px; color: var(--text); }
   .inp .ph { color: var(--text-weak); } .inp .cnt { margin-left: auto; font-size: 12px; color: var(--text-weak); font-family: var(--font-num); } .inp .unit { margin-left: auto; color: var(--text-sub); }
-  .inp.focus { border: 1.5px solid var(--accent); } .inp.err { border: 1.5px solid var(--danger-text); } .inp.dis { background: var(--surface); color: var(--on-disabled); }
+  .inp.focus { border: 2px solid var(--accent); } .inp.err { border: 2px solid var(--danger-text); } .inp.dis { border-color: var(--line); background: var(--surface); color: var(--on-disabled); }
   .inp.ta { height: auto; min-height: 96px; align-items: flex-start; padding: 12px 14px 26px; position: relative; line-height: 24px; }
   .inp.ta .cnt { position: absolute; right: 12px; bottom: 6px; }
   .caret { width: 1.5px; height: 20px; background: var(--accent); display: inline-block; vertical-align: middle; animation: bl 1s steps(1) infinite; }
@@ -87,19 +87,19 @@
   .cgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
   .cc { height: 64px; border: 1px solid var(--line); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 12px; color: var(--text-sub); }
   .cc i { width: 26px; height: 26px; border-radius: 50%; background: var(--surface); display: block; }
-  .cc.on { border: 1.5px solid var(--accent); background: var(--tint); color: var(--on-tint); font-weight: 700; }
+  .cc.on { border: 2px solid var(--accent); background: var(--tint); color: var(--on-tint); font-weight: 700; }
   .chips { display: flex; gap: 6px; overflow: hidden; }
   .chip { flex: none; height: 32px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line-strong); display: grid; place-items: center; font-size: 14px; color: var(--text); }
   .chip.on { background: var(--primary); border-color: var(--primary); color: var(--on-primary); font-weight: 700; }
   .radio, .check { display: flex; align-items: center; gap: 10px; font-size: 14px; min-height: 44px; }
-  .radio i { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--line-strong); display: grid; place-items: center; flex: none; }
+  .radio i { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--line-strong); display: grid; place-items: center; flex: none; }
   .radio.on i { border-color: var(--primary); } .radio.on i::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--primary); }
   .radio.dis { color: var(--on-disabled); } .radio.dis i { border-color: var(--disabled); background: var(--disabled); }
   .check i { width: 24px; height: 24px; flex: none; color: var(--text-sub); display: block; }
   .check.on i { color: var(--primary); }
   .check.dis i { color: var(--on-disabled); }
   .check.dis { color: var(--on-disabled); }
-  .inline-n { width: 56px; height: 36px; border: 1px solid var(--line); border-radius: 8px; display: inline-grid; place-items: center; font-family: var(--font-num); }
+  .inline-n { width: 56px; height: 36px; border: 1px solid var(--line-input); border-radius: 8px; display: inline-grid; place-items: center; font-family: var(--font-num); }
   .dd { position: relative; display: inline-block; }
   .menu { position: absolute; top: 40px; left: 0; min-width: 150px; background: var(--bg); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow-1); padding: 6px 0; z-index: 2; }
   .menu div { height: 44px; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; font-size: 14px; }
@@ -128,7 +128,7 @@
   .cal .n { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font: 500 14px/1 var(--font-num); color: var(--text); }
   .cal .a { font: 400 10px/12px var(--font-num); color: var(--text); letter-spacing: -.2px; }
   .cal .sun .n { color: var(--danger-text); } .cal .sat .n { color: var(--text-sub); } .cal .out .n { color: var(--text-weak); }
-  .cal .today .n { box-shadow: inset 0 0 0 1.5px var(--brand); }
+  .cal .today .n { box-shadow: inset 0 0 0 2px var(--brand); }
   .cal .sel .n { background: var(--primary); color: var(--on-primary); font-weight: 700; box-shadow: none; }
   .cstates { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
   .cstates > div { border: 1px dashed var(--line); border-radius: 8px; padding-bottom: 4px; }
@@ -179,7 +179,7 @@
   .spc { display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap; }
   .spc div { background: #1DB954; opacity: .7; }
   .rad { display: flex; gap: 14px; flex-wrap: wrap; }
-  .rad div { width: 72px; height: 52px; background: #E3F7EA; border: 1.5px solid #13823E; display: grid; place-items: center; font-size: 11px; }
+  .rad div { width: 72px; height: 52px; background: #E3F7EA; border: 2px solid #13823E; display: grid; place-items: center; font-size: 11px; }
   .catsw { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
   .catsw div { display: flex; align-items: center; gap: 8px; font-size: 14px; }
   .catsw i { width: 32px; height: 32px; border-radius: 50%; display: block; flex: none; }
@@ -366,13 +366,13 @@ function paintIcons(root) {
 /* ===== 토큰 (정본: 2026-11-02-02-design-tokens.md) ===== */
 const T = {
   light: { brand: "#1DB954", primary: "#1DB954", "primary-pressed": "#17A14B", "on-primary": "#FFFFFF", accent: "#13823E", tint: "#E3F7EA", "on-tint": "#0E5A2C",
-    bg: "#FFFFFF", surface: "#F3F6F4", line: "#E3E8E5", "line-strong": "#C9D1CC", text: "#17201B", "text-sub": "#5E6A63", "text-weak": "#A3ACA7",
-    gray: "#EBEFEC", "on-gray": "#4A544F", disabled: "#EEF1EF", "on-disabled": "#9AA39E", scrim: "rgba(0,0,0,.40)",
+    bg: "#FFFFFF", surface: "#F3F6F4", line: "#E3E8E5", "line-strong": "#C9D1CC", "line-input": "#8A948E", text: "#17201B", "text-sub": "#5E6A63", "text-weak": "#7D8781",
+    gray: "#EBEFEC", "on-gray": "#4A544F", disabled: "#EEF1EF", "on-disabled": "#7D8781", scrim: "rgba(0,0,0,.40)",
     danger: "#D93A2B", "danger-pressed": "#BF3022", "danger-text": "#D93A2B", notice: "#FFF4D6", "on-notice": "#7A5300", highlight: "#CFF2DB",
     "shadow-1": "0 2px 8px rgba(0,0,0,.08)", "shadow-2": "0 8px 24px rgba(0,0,0,.16)", "shadow-sheet": "0 -4px 16px rgba(0,0,0,.10)", "dlg-line": "transparent" },
   dark: { brand: "#1ED760", primary: "#1ED760", "primary-pressed": "#19C257", "on-primary": "#FFFFFF", accent: "#1ED760", tint: "#173323", "on-tint": "#1ED760",
-    bg: "#111513", surface: "#1E2522", line: "#2A322E", "line-strong": "#3B4540", text: "#EEF2EF", "text-sub": "#A3AEA8", "text-weak": "#5C6661",
-    gray: "#2A322E", "on-gray": "#C9D1CC", disabled: "#1E2522", "on-disabled": "#5C6661", scrim: "rgba(0,0,0,.60)",
+    bg: "#111513", surface: "#1E2522", line: "#2A322E", "line-strong": "#3B4540", "line-input": "#5C6661", text: "#EEF2EF", "text-sub": "#A3AEA8", "text-weak": "#6E7873",
+    gray: "#2A322E", "on-gray": "#C9D1CC", disabled: "#1E2522", "on-disabled": "#6E7873", scrim: "rgba(0,0,0,.60)",
     danger: "#D93A2B", "danger-pressed": "#BF3022", "danger-text": "#FF7A6E", notice: "#2B2412", "on-notice": "#FFD98A", highlight: "#1F4A30",
     "shadow-1": "none", "shadow-2": "none", "shadow-sheet": "none", "dlg-line": "#2A322E" },
 };
@@ -384,9 +384,9 @@ const CAT = {
 const PAIR = { primary: ["on-primary", "면 위 흰 글자"], "primary-pressed": ["on-primary", "면 위 흰 글자"], tint: ["on-tint", "면 위 글자"], gray: ["on-gray", "면 위 글자"],
   danger: ["#FFFFFF", "면 위 흰 글자"], "danger-pressed": ["#FFFFFF", "면 위 흰 글자"], notice: ["on-notice", "면 위 글자"], highlight: ["text", "면 위 글자"],
   accent: ["bg", "바탕 위 글자"], text: ["bg", "바탕 위 글자"], "text-sub": ["bg", "바탕 위 글자"], "danger-text": ["bg", "바탕 위 글자"],
-  "text-weak": ["bg", "예외(placeholder·비활성)"], "on-disabled": ["disabled", "예외(비활성)"], brand: ["bg", "테두리·아이콘(3:1)"], "line-strong": ["bg", "테두리(3:1)"] };
+  "text-weak": ["bg", "예외(placeholder·비활성)"], "on-disabled": ["disabled", "예외(비활성)"], brand: ["bg", "테두리·아이콘(3:1)"], "line-strong": ["bg", "테두리(3:1)"], "line-input": ["bg", "입력 테두리(3:1)"] };
 const DESC = { brand: "로고, 오늘 테두리, 탭 활성 아이콘", primary: "주 버튼·선택 날짜·＋ 면", "primary-pressed": "주 버튼 누름", "on-primary": "주 버튼 글자", accent: "초록 글자, outline, 포커스",
-  tint: "secondary filled·배지 면", "on-tint": "secondary filled·배지 글자", bg: "바탕", surface: "아이콘 자리·비활성 입력·상자", line: "구분선·입력 테두리", "line-strong": "line 버튼·컨트롤 테두리",
+  tint: "secondary filled·배지 면", "on-tint": "secondary filled·배지 글자", bg: "바탕", surface: "아이콘 자리·비활성 입력·상자", line: "구분선·비활성 입력 테두리", "line-strong": "line 버튼·컨트롤 테두리", "line-input": "입력 테두리",
   text: "기본 글자·금액", "text-sub": "보조 글자·토요일", "text-weak": "placeholder·앞뒤 달", gray: "gray 버튼 면", "on-gray": "gray 버튼 글자", disabled: "비활성 면", "on-disabled": "비활성 글자",
   scrim: "가림막", danger: "danger 버튼 면", "danger-pressed": "danger 누름", "danger-text": "오류 문구·일요일", notice: "오프라인 띠 면", "on-notice": "오프라인 띠 글자", highlight: "검색 일치 면" };
 
