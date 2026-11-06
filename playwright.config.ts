@@ -19,6 +19,6 @@ export default defineConfig({
     url: `http://localhost:${PORT}`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
-    env: { E2E_TEST_LOGIN: "1" },
+    env: { E2E_TEST_LOGIN: "1", BETTER_AUTH_URL: `http://localhost:${PORT}` },
   },
 });

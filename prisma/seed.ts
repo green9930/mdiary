@@ -5,13 +5,8 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { v7 as uuidv7 } from "uuid";
 
 import { type Category, PrismaClient } from "../src/generated/prisma/client";
+import { TEST_USER } from "../src/server/testUser";
 import { cliDatabaseUrl } from "./db-url";
-
-const TEST_USER = {
-  id: "test-user",
-  name: "테스트",
-  email: "test@mdiary.local",
-};
 
 type Item = [
   date: string,
@@ -96,7 +91,7 @@ const EXPECTED = {
 };
 
 /** 'YYYY-MM-DD'를 그 달 기준으로 n개월 옮기고 결제일을 맞춘다 (없는 날은 말일). */
-function monthDate(start: string, n: number, billingDay: number): string {
+const monthDate = (start: string, n: number, billingDay: number): string => {
   const [y, m] = start.split("-").map(Number) as [number, number];
   const first = new Date(Date.UTC(y, m - 1 + n, 1));
   const last = new Date(
@@ -104,29 +99,29 @@ function monthDate(start: string, n: number, billingDay: number): string {
   ).getUTCDate();
   first.setUTCDate(Math.min(billingDay, last));
   return first.toISOString().slice(0, 10);
-}
+};
 
 /** 데이터 아키텍처 5-2 연장 끝 달: max(시작 달, 이번 달 + 24개월)의 1일 (Asia/Seoul). */
-function extendUntil(start: string): string {
+const extendUntil = (start: string): string => {
   const today = new Date().toLocaleDateString("sv-SE", {
     timeZone: "Asia/Seoul",
   });
   const target = monthDate(today, 24, 1);
   const startMonth = `${start.slice(0, 7)}-01`;
   return target > startMonth ? target : startMonth;
-}
+};
 
-function check(label: string, actual: number, expected: number) {
+const check = (label: string, actual: number, expected: number) => {
   if (actual !== expected)
     throw new Error(
       `seed 값이 와이어프레임과 다릅니다: ${label} ${actual} ≠ ${expected}`,
     );
-}
+};
 
 const sum = (items: Item[]) =>
   items.reduce((total, item) => total + item[3], 0);
 
-async function main() {
+const main = async () => {
   const food = OCTOBER.filter((item) => item[2] === "FOOD");
 
   const october = [
@@ -246,7 +241,7 @@ async function main() {
   const count = await prisma.expense.count({ where: { userId } });
   console.log(`seed: ${TEST_USER.email} 지출 ${count}건`);
   await prisma.$disconnect();
-}
+};
 
 main().catch((error) => {
   console.error(error);

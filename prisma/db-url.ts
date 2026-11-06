@@ -5,7 +5,7 @@ const LOCAL_URLS = {
   test: "postgresql://postgres:postgres@localhost:5432/mdiary_test",
 } as const;
 
-export function cliDatabaseUrl(): string | undefined {
+export const cliDatabaseUrl = (): string | undefined => {
   const target = process.env.DB_TARGET;
   if (target === "local" || target === "test") return LOCAL_URLS[target];
   if (target)
@@ -18,6 +18,6 @@ export function cliDatabaseUrl(): string | undefined {
   }
   // prisma generate처럼 DB에 붙지 않는 명령은 주소가 없어도 된다
   return process.env.DIRECT_URL;
-}
+};
 
 export const TEST_DATABASE_URL = LOCAL_URLS.test;

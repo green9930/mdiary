@@ -151,6 +151,7 @@ Better Auth 기본 스키마(`user`, `session`, `account`, `verification`)를 Pr
 
 - User에서 화면이 쓰는 값은 `email`뿐이다 (SC-10).
 - Expense·Series는 `user.id`를 참조하고, 사용자 삭제 시 함께 지워진다.
+- 세션은 30일 유지하고, 쓰는 동안 하루에 한 번 만료일을 늘린다.
 
 ## 5. 반복 기록 규칙
 

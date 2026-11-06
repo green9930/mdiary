@@ -6,7 +6,7 @@ import { TEST_DATABASE_URL } from "./prisma/db-url";
 
 // DB 테스트를 시작할 때마다 mdiary_test를 비우고 마이그레이션을 처음부터 다시 적용한다.
 // 로컬 테스트 DB가 아니면 지우지 않는다.
-export default async function setup() {
+const setup = async () => {
   const url = new URL(TEST_DATABASE_URL);
   if (url.hostname !== "localhost" || url.pathname !== "/mdiary_test") {
     throw new Error(
@@ -23,4 +23,6 @@ export default async function setup() {
     env: { ...process.env, DB_TARGET: "test" },
     stdio: "pipe",
   });
-}
+};
+
+export default setup;

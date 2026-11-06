@@ -27,7 +27,7 @@ Neon development에는 이미 테이블과 개발 데이터가 있으므로 새 
 | `pnpm start` | `pnpm build` 결과를 운영 모드로 띄운다                                                   |
 
 - 개발 서버는 한 폴더에 하나만 뜬다. "Another next dev server is already running"이 나오면 안내된 `kill <PID>`로 기존 서버를 끈다.
-- 개발 데이터는 테스트 사용자(`test@mdiary.local`)의 것이다. 화면에서 보려면 테스트 로그인으로 들어간다 (3-4 이후).
+- 개발 데이터는 테스트 사용자(`test@mdiary.local`)의 것이다. E2E는 테스트 로그인으로 이 사용자가 된다. `pnpm dev` 화면에서는 Google 계정으로 로그인하므로 개발 데이터가 보이지 않는다.
 
 ## 3. 로컬 DB (Docker)
 

@@ -35,7 +35,7 @@ const envSchema = z
 export type Env = z.infer<typeof envSchema>;
 
 // 실패하면 변수 이름과 이유만 알린다. 값은 출력하지 않는다.
-export function parseEnv(source: Record<string, string | undefined>): Env {
+export const parseEnv = (source: Record<string, string | undefined>): Env => {
   const result = envSchema.safeParse(source);
   if (result.success) return result.data;
 
@@ -46,6 +46,6 @@ export function parseEnv(source: Record<string, string | undefined>): Env {
     return `- ${name}: ${reason}`;
   });
   throw new Error(`환경 변수가 올바르지 않습니다.\n${lines.join("\n")}`);
-}
+};
 
 export const env = parseEnv(process.env);
