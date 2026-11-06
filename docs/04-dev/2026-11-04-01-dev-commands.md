@@ -4,16 +4,27 @@
 
 ## 1. 처음 준비 (새 기기 포함)
 
-필요한 것: nvm, Docker Desktop, Python 3, `.env` 파일(저장소에 없다. 직접 옮기거나 `.env.example`을 보고 채운다).
+필요한 것: nvm, Docker Desktop, Python 3, GitHub CLI(`gh`), `.env` 파일(저장소에 없다. 직접 옮기거나 `.env.example`을 보고 채운다).
 
-| 순서 | 명령                     | 하는 일                                                                        |
-| ---- | ------------------------ | ------------------------------------------------------------------------------ |
-| 1    | `nvm install && nvm use` | `.nvmrc`의 Node 24를 설치하고 쓴다                                             |
-| 2    | `corepack enable`        | `package.json`에 적힌 pnpm 10을 쓰게 한다 (처음 한 번)                         |
-| 3    | `pnpm install`           | 패키지 설치. git hook(lefthook)과 Prisma 클라이언트도 함께 만든다              |
-| 4    | Docker Desktop 실행      | 로컬 DB를 띄우기 전에 켜 둔다                                                  |
-| 5    | `pnpm db:up`             | 로컬 Postgres 18을 띄운다 (`mdiary_dev`·`mdiary_test`). 준비될 때까지 기다린다 |
-| 6    | `pnpm test:db`           | DB 테스트가 통과하면 로컬 DB 준비 완료                                         |
+| 순서 | 명령                                    | 하는 일                                                                                     |
+| ---- | --------------------------------------- | ------------------------------------------------------------------------------------------- |
+| 1    | `nvm install && nvm use`                | `.nvmrc`의 Node 24를 설치하고 쓴다                                                          |
+| 2    | `corepack enable`                       | `package.json`에 적힌 pnpm 10을 쓰게 한다 (처음 한 번)                                      |
+| 3    | `pnpm install`                          | 패키지 설치. git hook(lefthook)과 Prisma 클라이언트도 함께 만든다                           |
+| 4    | Docker Desktop 실행                     | 로컬 DB를 띄우기 전에 켜 둔다                                                               |
+| 5    | `pnpm db:up`                            | 로컬 Postgres 18을 띄운다 (`mdiary_dev`·`mdiary_test`·`mdiary_e2e`). 준비될 때까지 기다린다 |
+| 6    | `pnpm test:db`                          | DB 테스트가 통과하면 로컬 DB 준비 완료                                                      |
+| 7    | `pnpm exec playwright install chromium` | E2E용 브라우저 설치 (처음 한 번)                                                            |
+
+개인 계정 설정 (저장소를 받은 뒤 한 번). 커밋과 push가 회사 계정으로 남지 않게 저장소에만 적용한다:
+
+```bash
+gh auth login                       # green9930 계정으로 로그인 (이미 있으면 생략)
+git config user.name geuna
+git config user.email geuna0204@gmail.com
+git config credential.https://github.com.helper ''
+git config --add credential.https://github.com.helper '!f() { test "$1" = get && echo username=green9930 && echo "password=$(gh auth token -u green9930)"; }; f'
+```
 
 Neon development에는 이미 테이블과 개발 데이터가 있으므로 새 기기에서 다시 넣을 필요가 없다.
 
