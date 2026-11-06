@@ -5,7 +5,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { v7 as uuidv7 } from "uuid";
 
 import { type Category, PrismaClient } from "../src/generated/prisma/client";
-import { TEST_USER } from "../src/server/testUser";
+import { TEST_USER } from "../src/server/tests/testUserConstants";
 import { cliDatabaseUrl } from "./db-url";
 
 type Item = [

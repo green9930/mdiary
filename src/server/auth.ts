@@ -3,9 +3,12 @@ import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
 
 import { env } from "@/env";
-import { SESSION_EXPIRES_IN, SESSION_UPDATE_AGE } from "@/server/constants";
 import { prisma } from "@/server/db";
-import { testLogin } from "@/server/testLogin";
+import {
+  SESSION_EXPIRES_IN,
+  SESSION_UPDATE_AGE,
+} from "@/server/sessionConstants";
+import { testLogin } from "@/server/tests/testLogin";
 
 const enableTestLogin =
   env.E2E_TEST_LOGIN === "1" && env.NODE_ENV !== "production";

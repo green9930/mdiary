@@ -1,6 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
-import { E2E_DATABASE_URL } from "./prisma/db-url";
+import { E2E_DATABASE_URL } from "./prisma/dbUrlConstants";
 
 const PORT = 3100;
 

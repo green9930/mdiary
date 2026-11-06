@@ -2,6 +2,7 @@ import { getSessionCookie } from "better-auth/cookies";
 import { type NextRequest, NextResponse } from "next/server";
 
 import { loginPath, safeNextPath } from "@/shared/nextPath";
+import { PATHS } from "@/shared/sharedConstants";
 
 /**
  * 화면 경로의 로그인 확인 (화면 명세 RT). 세션 쿠키가 있는지만 본다.
@@ -12,7 +13,7 @@ export const redirectTarget = (
   url: URL,
   hasSession: boolean,
 ): string | null => {
-  if (url.pathname === "/login") {
+  if (url.pathname === PATHS.login) {
     // 만료·탈퇴로 온 경우는 쿠키가 남아 있어도 로그인 화면을 보여준다 (되돌려 보내면 무한 반복)
     if (!hasSession || url.searchParams.has("reason")) return null;
     return safeNextPath(url.searchParams.get("next"));

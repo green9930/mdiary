@@ -1,6 +1,13 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Noto_Sans_KR, Rubik } from "next/font/google";
 import localFont from "next/font/local";
+import { cookies } from "next/headers";
+
+import { parseTheme } from "@/shared/theme";
+import { THEME_COOKIE } from "@/shared/themeConstants";
+
+import InAppHistoryTracker from "./InAppHistoryTracker";
+
 import "./globals.css";
 
 const notoSansKr = Noto_Sans_KR({
@@ -24,17 +31,29 @@ export const metadata: Metadata = {
   title: "Money Diary",
 };
 
-const RootLayout = ({
+// 안전 여백(env(safe-area-inset-*))을 쓰려면 화면 끝까지 그려야 한다
+export const viewport: Viewport = {
+  viewportFit: "cover",
+};
+
+const RootLayout = async ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
+  // 화면 모드 (SC-10): 시스템 설정 따름이면 data-theme를 두지 않는다 (globals.css)
+  const theme = parseTheme((await cookies()).get(THEME_COOKIE)?.value);
+
   return (
     <html
       lang="ko"
+      data-theme={theme === "system" ? undefined : theme}
       className={`${notoSansKr.variable} ${rubik.variable} ${tenada.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <InAppHistoryTracker />
+        {children}
+      </body>
     </html>
   );
 };

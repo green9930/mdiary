@@ -147,3 +147,13 @@
 body {
   @apply bg-bg font-body text-body text-text;
 }
+
+/* iOS 홈 인디케이터 영역 (화면 명세 SC-01). layout.tsx의 viewportFit: cover와 함께 쓴다 */
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 하단 탭 바(높이 56 + 안전 여백)에 내용이 가리지 않도록 비우는 여백 */
+@utility pb-tab-bar {
+  padding-bottom: calc(--spacing(14) + env(safe-area-inset-bottom));
+}

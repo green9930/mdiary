@@ -1,5 +1,4 @@
 import { execSync } from "node:child_process";
-
 import pg from "pg";
 
 // 로컬 테스트 DB(mdiary_test·mdiary_e2e)를 비우고 마이그레이션을 처음부터 다시 적용한다.

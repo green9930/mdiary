@@ -3,6 +3,7 @@ import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
 import checkFile from "eslint-plugin-check-file";
+import simpleImportSort from "eslint-plugin-simple-import-sort";
 
 // Next가 이름을 정한 파일 (개발 준비 4장 파일 이름 규칙의 예외)
 const NEXT_FILES =
@@ -37,6 +38,24 @@ export default defineConfig([
           unnamedComponents: "arrow-function",
         },
       ],
+    },
+  },
+  // import 순서: 외부 → @/ (assets는 맨 뒤) → 상대 경로 → 스타일. 묶음 사이는 한 줄 띄운다 (개발 준비 4장)
+  {
+    plugins: { "simple-import-sort": simpleImportSort },
+    rules: {
+      "simple-import-sort/imports": [
+        "error",
+        {
+          groups: [
+            ["^node:", "^@?\\w"],
+            ["^@/(?!assets/)", "^@/assets/"],
+            ["^\\.\\.(?!/?$)", "^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
+            ["^\\u0000"],
+          ],
+        },
+      ],
+      "simple-import-sort/exports": "error",
     },
   },
   globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),

@@ -2,7 +2,7 @@ import type { BetterAuthPlugin } from "better-auth";
 import { createAuthEndpoint } from "better-auth/api";
 import { setSessionCookie } from "better-auth/cookies";
 
-import { TEST_USER } from "@/server/testUser";
+import { TEST_USER } from "@/server/tests/testUserConstants";
 
 // 테스트 로그인(P3): POST /api/auth/test-login → 테스트 사용자로 세션을 만든다.
 // auth.ts가 E2E_TEST_LOGIN=1이고 운영이 아닐 때만 붙이므로, 운영에는 경로가 없다.

@@ -1,13 +1,7 @@
+import { LOCAL_URLS, type LocalTarget } from "./dbUrlConstants";
+
 // Prisma CLI(migrate·seed)가 붙을 DB 주소.
 // DB_TARGET이 local·test·e2e면 docker-compose의 로컬 Postgres, 없으면 .env의 DIRECT_URL(Neon development).
-const LOCAL_URLS = {
-  local: "postgresql://postgres:postgres@localhost:5432/mdiary_dev",
-  test: "postgresql://postgres:postgres@localhost:5432/mdiary_test",
-  e2e: "postgresql://postgres:postgres@localhost:5432/mdiary_e2e",
-} as const;
-
-type LocalTarget = keyof typeof LOCAL_URLS;
-
 const isLocalTarget = (target: string): target is LocalTarget =>
   Object.hasOwn(LOCAL_URLS, target);
 
@@ -25,6 +19,3 @@ export const cliDatabaseUrl = (): string | undefined => {
   // prisma generate처럼 DB에 붙지 않는 명령은 주소가 없어도 된다
   return process.env.DIRECT_URL;
 };
-
-export const TEST_DATABASE_URL = LOCAL_URLS.test;
-export const E2E_DATABASE_URL = LOCAL_URLS.e2e;

@@ -16,7 +16,7 @@ test.describe("로그인과 세션 (화면 명세 RT)", () => {
   test("로그인하면 들어갈 수 있다", async ({ page }) => {
     await loginAsTestUser(page);
     await page.goto("/");
-    await expect(page.getByText("로그인: test@mdiary.local")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "달력" })).toBeVisible();
   });
 
   test("로그인한 채로 로그인 화면에 오면 next로 보낸다", async ({ page }) => {
