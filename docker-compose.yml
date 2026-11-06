@@ -1,4 +1,5 @@
-# 로컬 Postgres: 마이그레이션 작성(mdiary_dev)과 DB 테스트(mdiary_test)용.
+# 로컬 Postgres: 마이그레이션 작성(mdiary_dev), DB 테스트(mdiary_test), E2E(mdiary_e2e)용.
+# 테스트 DB는 테스트가 시작할 때 없으면 만든다.
 # 앱(pnpm dev)은 Neon development 브랜치를 쓴다. 이 DB는 언제 지워도 된다.
 services:
   db:

@@ -27,7 +27,7 @@ Neon development에는 이미 테이블과 개발 데이터가 있으므로 새 
 | `pnpm start` | `pnpm build` 결과를 운영 모드로 띄운다                                                   |
 
 - 개발 서버는 한 폴더에 하나만 뜬다. "Another next dev server is already running"이 나오면 안내된 `kill <PID>`로 기존 서버를 끈다.
-- 개발 데이터는 테스트 사용자(`test@mdiary.local`)의 것이다. E2E는 테스트 로그인으로 이 사용자가 된다. `pnpm dev` 화면에서는 Google 계정으로 로그인하므로 개발 데이터가 보이지 않는다.
+- 개발 데이터는 테스트 사용자(`test@mdiary.local`)의 것이다. `pnpm dev` 화면에서는 Google 계정으로 로그인하므로 개발 데이터가 보이지 않는다.
 
 ## 3. 로컬 DB (Docker)
 
@@ -54,16 +54,19 @@ Neon development에는 이미 테이블과 개발 데이터가 있으므로 새 
 | `pnpm prisma generate`         | Prisma 클라이언트를 다시 만든다 (`pnpm install` 때 자동)                           |
 | `pnpm prisma migrate status`   | Neon development에 적용 안 된 마이그레이션이 있는지 본다                           |
 
-- CLI가 붙는 DB: `DB_TARGET` 없음 → Neon development(`.env`의 `DIRECT_URL`), `local` → 로컬 `mdiary_dev`, `test` → 로컬 `mdiary_test`.
+- CLI가 붙는 DB: `DB_TARGET` 없음 → Neon development(`.env`의 `DIRECT_URL`), `local` → 로컬 `mdiary_dev`, `test` → 로컬 `mdiary_test`, `e2e` → 로컬 `mdiary_e2e`.
 - 운영(`production`) 브랜치에는 개발 중에 마이그레이션을 돌리지 않는다.
 
 ## 5. 테스트
 
-| 명령            | 하는 일                                                                    |
-| --------------- | -------------------------------------------------------------------------- |
-| `pnpm test`     | 단위·컴포넌트 테스트 (`*.test.ts`, `*.test.tsx`)                           |
-| `pnpm test:db`  | DB 테스트 (`src/server/**/*.db.test.ts`). 로컬 `mdiary_test`를 비우고 시작 |
-| `pnpm test:e2e` | E2E 테스트 (Playwright, 모바일 화면). 개발 서버를 3100 포트에 띄워 돌린다  |
+| 명령            | 하는 일                                                                                                         |
+| --------------- | --------------------------------------------------------------------------------------------------------------- |
+| `pnpm test`     | 단위·컴포넌트 테스트 (`*.test.ts`, `*.test.tsx`)                                                                |
+| `pnpm test:db`  | DB 테스트 (`src/server/**/*.db.test.ts`). 로컬 `mdiary_test`를 비우고 시작                                      |
+| `pnpm test:e2e` | E2E 테스트 (Playwright, 모바일 화면). 개발 서버를 3100 포트에 띄워 돌린다. DB는 로컬 `mdiary_e2e`를 비우고 시작 |
+
+- `test:db`·`test:e2e`는 로컬 Docker DB가 떠 있어야 한다 (`pnpm db:up`).
+- 개발 서버는 한 폴더에 하나만 뜨므로, `pnpm dev`를 켜 둔 채로는 `test:e2e`가 돌지 않는다. 개발 서버를 끄고 돌린다.
 
 ## 6. 코드 점검
 
@@ -78,10 +81,12 @@ Neon development에는 이미 테이블과 개발 데이터가 있으므로 새 
 
 ## 7. 자동으로 도는 검사
 
-| 시점                      | 실행                                                                                                   |
-| ------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `git commit`              | 커밋할 파일만 Prettier 확인·ESLint. 화면 문서가 있으면 와이어프레임 점검, 토큰 파일이 있으면 토큰 점검 |
-| `git push`                | `typecheck`, `test`                                                                                    |
-| Claude가 파일을 고친 직후 | Prettier 정리, 화면 문서·토큰 파일이면 해당 점검 결과를 Claude에게 전달                                |
+| 시점                         | 실행                                                                                                   |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `git commit`                 | 커밋할 파일만 Prettier 확인·ESLint. 화면 문서가 있으면 와이어프레임 점검, 토큰 파일이 있으면 토큰 점검 |
+| `git push`                   | `typecheck`, `test`                                                                                    |
+| GitHub push (`renewal-main`) | CI: `lint`, `format:check`, `typecheck`, `test`, `test:db`, `build`, 와이어프레임·토큰 점검            |
+| PR, Actions 수동 실행        | 위 CI + `test:e2e`                                                                                     |
+| Claude가 파일을 고친 직후    | Prettier 정리, 화면 문서·토큰 파일이면 해당 점검 결과를 Claude에게 전달                                |
 
 검사에 걸리면 커밋·푸시가 멈춘다. 고친 뒤 다시 실행한다.

@@ -51,7 +51,7 @@ pnpm dev              # 개발 서버 (Neon development)
 pnpm lint / typecheck / format
 pnpm test             # 단위·컴포넌트
 pnpm test:db          # DB 테스트 (로컬 mdiary_test를 비우고 시작)
-pnpm test:e2e
+pnpm test:e2e         # E2E (로컬 mdiary_e2e를 비우고 시작)
 pnpm check:wireframes / check:tokens
 
 pnpm db:migrate       # 스키마 변경 → 로컬에서 마이그레이션 만들기
