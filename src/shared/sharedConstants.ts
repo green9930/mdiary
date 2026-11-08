@@ -27,4 +27,4 @@ export const TABS_LIST = [
   { label: PAGE_TITLES.settings, path: PATHS.settings },
 ] as const;
 
-export type Tab = (typeof TABS_LIST)[number];
+export type TTab = (typeof TABS_LIST)[number];

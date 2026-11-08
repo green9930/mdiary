@@ -5,7 +5,11 @@ import { useState } from "react";
 import { authClient } from "@/lib/authClient";
 
 // 임시: F1에서 SC-02 로그인 화면으로 바꾼다
-const GoogleSignInButton = ({ next }: { next: string }) => {
+interface GoogleSignInButtonProps {
+  next: string;
+}
+
+const GoogleSignInButton = ({ next }: GoogleSignInButtonProps) => {
   const [pending, setPending] = useState(false);
 
   return (

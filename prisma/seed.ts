@@ -8,7 +8,7 @@ import { type Category, PrismaClient } from "../src/generated/prisma/client";
 import { TEST_USER } from "../src/server/tests/testUserConstants";
 import { cliDatabaseUrl } from "./db-url";
 
-type Item = [
+type TSeedItem = [
   date: string,
   title: string,
   category: Category,
@@ -17,7 +17,7 @@ type Item = [
 ];
 
 // 2026년 10월: 합계 1,234,500원, 42건 (SC-03①, SC-04①)
-const OCTOBER: Item[] = [
+const OCTOBER: TSeedItem[] = [
   ["2026-10-01", "점심", "FOOD", 8_000],
   ["2026-10-03", "장보기", "FOOD", 45_000, "쿠팡 프레시 주문"],
   ["2026-10-05", "커피", "FOOD", 4_500],
@@ -63,7 +63,7 @@ const OCTOBER: Item[] = [
 ];
 
 // 2026년 8월: 합계 812,000원 (SC-03②)
-const AUGUST: Item[] = [
+const AUGUST: TSeedItem[] = [
   ["2026-08-01", "커피", "FOOD", 4_500],
   ["2026-08-04", "교통카드 충전", "TRANSPORT", 31_000],
   ["2026-08-07", "점심", "FOOD", 12_000],
@@ -118,7 +118,7 @@ const check = (label: string, actual: number, expected: number) => {
     );
 };
 
-const sum = (items: Item[]) =>
+const sum = (items: TSeedItem[]) =>
   items.reduce((total, item) => total + item[3], 0);
 
 const main = async () => {
@@ -126,7 +126,7 @@ const main = async () => {
 
   const october = [
     ...OCTOBER,
-    ["2026-10-18", NETFLIX.title, "LIVING", NETFLIX.amount] as Item,
+    ["2026-10-18", NETFLIX.title, "LIVING", NETFLIX.amount] as TSeedItem,
   ];
   check("10월 합계", sum(october), EXPECTED.october.total);
   check("10월 건수", october.length, EXPECTED.october.count);
@@ -144,7 +144,7 @@ const main = async () => {
     adapter: new PrismaPg({ connectionString: cliDatabaseUrl()! }),
   });
   const userId = TEST_USER.id;
-  const row = ([date, title, category, amount, content]: Item) => ({
+  const row = ([date, title, category, amount, content]: TSeedItem) => ({
     id: uuidv7(),
     userId,
     date: new Date(date),

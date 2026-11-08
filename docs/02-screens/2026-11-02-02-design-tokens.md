@@ -38,25 +38,27 @@
 | `on-primary`      | `#FFFFFF` | `#FFFFFF` | 주 버튼·선택 날짜 글자 (대비 예외)                   |
 | `accent`          | `#13823E` | `#1ED760` | 초록 글자: outline 버튼, 탭 활성 라벨, 포커스 테두리 |
 | `tint`            | `#E3F7EA` | `#173323` | secondary filled 면, 배지 면, 목록 강조              |
+| `tint-pressed`    | `#D4EFDE` | `#1E4029` | secondary filled 누름                                |
 | `on-tint`         | `#0E5A2C` | `#1ED760` | secondary filled 글자, 배지 글자                     |
 
 ### 2-2. 무채색
 
-| 토큰          | 라이트            | 다크              | 쓰임                                                    |
-| ------------- | ----------------- | ----------------- | ------------------------------------------------------- |
-| `bg`          | `#FFFFFF`         | `#111513`         | 화면 바탕, 시트·다이얼로그 바탕                         |
-| `surface`     | `#F3F6F4`         | `#1E2522`         | 아이콘 자리, 입력 비활성, 미리보기 상자                 |
-| `line`        | `#E3E8E5`         | `#2A322E`         | 구분선, 비활성 입력 테두리                              |
-| `line-strong` | `#C9D1CC`         | `#3B4540`         | secondary line 테두리, 선택 컨트롤 테두리               |
-| `line-input`  | `#8A948E`         | `#5C6661`         | 입력 테두리 (바탕 대비 3:1)                             |
-| `text`        | `#17201B`         | `#EEF2EF`         | 기본 글자, 금액                                         |
-| `text-sub`    | `#5E6A63`         | `#A3AEA8`         | 보조 글자, 토요일, 요일 표시줄                          |
-| `text-weak`   | `#7D8781`         | `#6E7873`         | placeholder, 앞뒤 달 날짜, 비활성 글자 (대비 기준 예외) |
-| `gray`        | `#EBEFEC`         | `#2A322E`         | gray 버튼 면                                            |
-| `on-gray`     | `#4A544F`         | `#C9D1CC`         | gray 버튼 글자                                          |
-| `disabled`    | `#EEF1EF`         | `#1E2522`         | 비활성 면                                               |
-| `on-disabled` | `#7D8781`         | `#6E7873`         | 비활성 글자                                             |
-| `scrim`       | `rgba(0,0,0,.40)` | `rgba(0,0,0,.60)` | 시트·다이얼로그 뒤 가림막                               |
+| 토큰           | 라이트            | 다크              | 쓰임                                                    |
+| -------------- | ----------------- | ----------------- | ------------------------------------------------------- |
+| `bg`           | `#FFFFFF`         | `#111513`         | 화면 바탕, 시트·다이얼로그 바탕                         |
+| `surface`      | `#F3F6F4`         | `#1E2522`         | 아이콘 자리, 입력 비활성, 미리보기 상자                 |
+| `line`         | `#E3E8E5`         | `#2A322E`         | 구분선, 비활성 입력 테두리                              |
+| `line-strong`  | `#C9D1CC`         | `#3B4540`         | secondary line 테두리, 선택 컨트롤 테두리               |
+| `line-input`   | `#8A948E`         | `#5C6661`         | 입력 테두리 (바탕 대비 3:1)                             |
+| `text`         | `#17201B`         | `#EEF2EF`         | 기본 글자, 금액                                         |
+| `text-sub`     | `#5E6A63`         | `#A3AEA8`         | 보조 글자, 토요일, 요일 표시줄                          |
+| `text-weak`    | `#7D8781`         | `#6E7873`         | placeholder, 앞뒤 달 날짜, 비활성 글자 (대비 기준 예외) |
+| `gray`         | `#EBEFEC`         | `#2A322E`         | gray 버튼 면                                            |
+| `gray-pressed` | `#DDE3DF`         | `#343D39`         | gray 버튼 누름                                          |
+| `on-gray`      | `#4A544F`         | `#C9D1CC`         | gray 버튼 글자                                          |
+| `disabled`     | `#EEF1EF`         | `#1E2522`         | 비활성 면                                               |
+| `on-disabled`  | `#7D8781`         | `#6E7873`         | 비활성 글자                                             |
+| `scrim`        | `rgba(0,0,0,.40)` | `rgba(0,0,0,.60)` | 시트·다이얼로그 뒤 가림막                               |
 
 ### 2-3. 상태
 
@@ -64,6 +66,7 @@
 | ---------------- | --------- | --------- | ----------------------------------- |
 | `danger`         | `#D93A2B` | `#D93A2B` | danger 버튼 면 (흰 글자 4.57:1)     |
 | `danger-pressed` | `#BF3022` | `#BF3022` | danger 누름                         |
+| `on-danger`      | `#FFFFFF` | `#FFFFFF` | danger 버튼 글자                    |
 | `danger-text`    | `#D93A2B` | `#FF7A6E` | 필드 오류 문구, 오류 테두리, 일요일 |
 | `notice`         | `#FFF4D6` | `#2B2412` | 오프라인 띠 면                      |
 | `on-notice`      | `#7A5300` | `#FFD98A` | 오프라인 띠 글자                    |
@@ -191,7 +194,7 @@ Tailwind 기본 색·글자 크기·모서리·그림자는 꺼 두었다. 이 �
 | primary outline  | `bg`       | `accent`      | `accent` 2      | 계산, 오늘, 기록 추가하기, 다시 시도            |
 | secondary line   | `bg`       | `text`        | `line-strong` 2 | 취소, 정렬·기간 드롭다운, 기간 선택             |
 | text             | 없음       | `text` 밑줄   | 없음            | 개인정보처리방침, 서비스 안내 링크              |
-| danger           | `danger`   | `#FFFFFF`     | 없음            | 삭제, 탈퇴하기                                  |
+| danger           | `danger`   | `on-danger`   | 없음            | 삭제, 탈퇴하기                                  |
 | disabled         | `disabled` | `on-disabled` | 없음            | 모든 버튼의 비활성                              |
 | gray             | `gray`     | `on-gray`     | 없음            | 나가기                                          |
 
@@ -215,14 +218,14 @@ Tailwind 기본 색·글자 크기·모서리·그림자는 꺼 두었다. 이 �
 
 ### 5-3. 선택 컨트롤
 
-| 컴포넌트                 | 기본                                    | 선택                                                 | 비활성                                                      |
-| ------------------------ | --------------------------------------- | ---------------------------------------------------- | ----------------------------------------------------------- |
-| 세그먼트 (반복 3단, 2단) | 테두리 `line-strong`, 글자 `text-sub`   | 면 `primary`, 글자 `on-primary`                      | 면 `surface`, 선택 칸 `line-strong` 면 + `on-disabled` 글자 |
-| 카테고리 격자 칸         | 테두리 `line`, 이름 `text-sub`          | 테두리 `accent` 2 + 면 `tint`, 이름 `on-tint` 700    | – (오류 시 격자 아래 문구만)                                |
-| 필터 칩                  | 테두리 `line-strong`, 글자 `text`       | 면 `primary`, 글자 `on-primary`                      | –                                                           |
-| 라디오 (SC-09)           | 원 테두리 `line-strong`                 | 원 테두리 `primary` + 안쪽 점 `primary`              | `on-disabled`                                               |
-| 체크박스                 | `icon_checkbox_blank` 24, 색 `text-sub` | `icon_checkbox_filled`, 색 `primary`                 | 색 `on-disabled`                                            |
-| 드롭다운 메뉴            | 면 `bg`, `shadow-1`, 항목 높이 44       | 선택 항목 `tint` 면 + `on-tint` 700 (체크 표시 없음) | –                                                           |
+| 컴포넌트                 | 기본                                    | 선택                                                 | 비활성                                                                   |
+| ------------------------ | --------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------ |
+| 세그먼트 (반복 3단, 2단) | 테두리 `line-strong`, 글자 `text-sub`   | 면 `primary`, 글자 `on-primary`                      | 면 `surface`, 선택 칸 `line-strong` 면 + `on-disabled` 글자              |
+| 카테고리 격자 칸         | 테두리 `line`, 이름 `text-sub`          | 테두리 `accent` 2 + 면 `tint`, 이름 `on-tint` 700    | – (오류 시 격자 아래 문구만)                                             |
+| 필터 칩                  | 테두리 `line-strong`, 글자 `text`       | 면 `primary`, 글자 `on-primary`                      | –                                                                        |
+| 라디오 (SC-09)           | 원 테두리 `line-strong`                 | 원 테두리 `primary` + 안쪽 점 `primary`              | 원 테두리·라벨 `on-disabled`, 안내 문구는 라벨 아래 `caption` `text-sub` |
+| 체크박스                 | `icon_checkbox_blank` 24, 색 `text-sub` | `icon_checkbox_filled`, 색 `primary`                 | 색 `on-disabled`                                                         |
+| 드롭다운 메뉴            | 면 `bg`, `shadow-1`, 항목 높이 44       | 선택 항목 `tint` 면 + `on-tint` 700 (체크 표시 없음) | –                                                                        |
 
 ### 5-4. 목록 · 배지 · 그래프
 

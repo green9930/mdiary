@@ -51,13 +51,13 @@
   .btn { font-family: var(--font-body); font-weight: 700; border: 2px solid transparent; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0 16px; white-space: nowrap; }
   .sz-l { height: 52px; font-size: 16px; width: 100%; } .sz-m { height: 44px; font-size: 14px; } .sz-s { height: 32px; font-size: 12px; padding: 0 10px; border-radius: 6px; }
   .v-pri { background: var(--primary); color: var(--on-primary); } .v-pri.pressed { background: var(--primary-pressed); }
-  .v-sec { background: var(--tint); color: var(--on-tint); } .v-sec.pressed { filter: brightness(.95); }
+  .v-sec { background: var(--tint); color: var(--on-tint); } .v-sec.pressed { background: var(--tint-pressed); }
   .v-pout { background: var(--bg); color: var(--accent); border-color: var(--accent); } .v-pout.pressed { background: var(--surface); }
   .v-line { background: var(--bg); color: var(--text); border-color: var(--line-strong); } .v-line.pressed { background: var(--surface); }
   .v-text { background: none; color: var(--text); text-decoration: underline; text-underline-offset: 3px; font-weight: 500; padding: 0 4px; } .v-text.pressed { color: var(--text-sub); }
-  .v-danger { background: var(--danger); color: #fff; } .v-danger.pressed { background: var(--danger-pressed); }
+  .v-danger { background: var(--danger); color: var(--on-danger); } .v-danger.pressed { background: var(--danger-pressed); }
   .v-dis { background: var(--disabled); color: var(--on-disabled); }
-  .v-gray { background: var(--gray); color: var(--on-gray); } .v-gray.pressed { filter: brightness(.95); }
+  .v-gray { background: var(--gray); color: var(--on-gray); } .v-gray.pressed { background: var(--gray-pressed); }
   .spin { width: 18px; height: 18px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; display: inline-block; animation: sp 0.8s linear infinite; }
   @keyframes sp { to { transform: rotate(360deg); } }
   .btable { display: grid; grid-template-columns: 112px 1fr 1fr 1fr 1fr; gap: 8px 10px; align-items: center; }
@@ -94,7 +94,8 @@
   .radio, .check { display: flex; align-items: center; gap: 10px; font-size: 14px; min-height: 44px; }
   .radio i { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--line-strong); display: grid; place-items: center; flex: none; }
   .radio.on i { border-color: var(--primary); } .radio.on i::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--primary); }
-  .radio.dis { color: var(--on-disabled); } .radio.dis i { border-color: var(--disabled); background: var(--disabled); }
+  .radio.dis { color: var(--on-disabled); } .radio.dis i { border-color: var(--on-disabled); }
+  .radio-hint { display: block; font-size: 12px; line-height: 18px; color: var(--text-sub); }
   .check i { width: 24px; height: 24px; flex: none; color: var(--text-sub); display: block; }
   .check.on i { color: var(--primary); }
   .check.dis i { color: var(--on-disabled); }
@@ -273,7 +274,7 @@
     <div class="chips"><span class="chip on">전체</span><span class="chip">식비</span><span class="chip">가전</span><span class="chip">교통</span><span class="chip">의료</span><span class="chip">의류</span><span class="chip">미용</span></div></div>
   <div class="grid2">
     <div class="grp"><div class="gl">라디오 (SC-09)</div>
-      <div class="radio on"><i></i>이번 건만</div><div class="radio"><i></i>이후 전체</div><div class="radio"><i></i>이 건부터 <span class="inline-n">3</span> 개월</div><div class="radio dis"><i></i>비활성</div></div>
+      <div class="radio on"><i></i>이번 건만</div><div class="radio"><i></i>이후 전체</div><div class="radio"><i></i>이 건부터 <span class="inline-n">3</span> 개월</div><div class="radio dis"><i></i><span>비활성<span class="radio-hint">안내 문구 (caption text-sub)</span></span></div></div>
     <div class="grp"><div class="gl">체크박스 (icon_checkbox_blank / icon_checkbox_filled, 24)</div>
       <div class="check on"><i></i>계산식을 내용에 기록</div><div class="check"><i></i>위 내용을 확인했습니다</div><div class="check dis"><i></i>비활성</div></div>
   </div>
@@ -365,15 +366,15 @@ function paintIcons(root) {
 }
 /* ===== 토큰 (정본: 2026-11-02-02-design-tokens.md) ===== */
 const T = {
-  light: { brand: "#1DB954", primary: "#1DB954", "primary-pressed": "#17A14B", "on-primary": "#FFFFFF", accent: "#13823E", tint: "#E3F7EA", "on-tint": "#0E5A2C",
+  light: { brand: "#1DB954", primary: "#1DB954", "primary-pressed": "#17A14B", "on-primary": "#FFFFFF", accent: "#13823E", tint: "#E3F7EA", "tint-pressed": "#D4EFDE", "on-tint": "#0E5A2C",
     bg: "#FFFFFF", surface: "#F3F6F4", line: "#E3E8E5", "line-strong": "#C9D1CC", "line-input": "#8A948E", text: "#17201B", "text-sub": "#5E6A63", "text-weak": "#7D8781",
-    gray: "#EBEFEC", "on-gray": "#4A544F", disabled: "#EEF1EF", "on-disabled": "#7D8781", scrim: "rgba(0,0,0,.40)",
-    danger: "#D93A2B", "danger-pressed": "#BF3022", "danger-text": "#D93A2B", notice: "#FFF4D6", "on-notice": "#7A5300", highlight: "#CFF2DB",
+    gray: "#EBEFEC", "gray-pressed": "#DDE3DF", "on-gray": "#4A544F", disabled: "#EEF1EF", "on-disabled": "#7D8781", scrim: "rgba(0,0,0,.40)",
+    danger: "#D93A2B", "danger-pressed": "#BF3022", "on-danger": "#FFFFFF", "danger-text": "#D93A2B", notice: "#FFF4D6", "on-notice": "#7A5300", highlight: "#CFF2DB",
     "shadow-1": "0 2px 8px rgba(0,0,0,.08)", "shadow-2": "0 8px 24px rgba(0,0,0,.16)", "shadow-sheet": "0 -4px 16px rgba(0,0,0,.10)", "dlg-line": "transparent" },
-  dark: { brand: "#1ED760", primary: "#1ED760", "primary-pressed": "#19C257", "on-primary": "#FFFFFF", accent: "#1ED760", tint: "#173323", "on-tint": "#1ED760",
+  dark: { brand: "#1ED760", primary: "#1ED760", "primary-pressed": "#19C257", "on-primary": "#FFFFFF", accent: "#1ED760", tint: "#173323", "tint-pressed": "#1E4029", "on-tint": "#1ED760",
     bg: "#111513", surface: "#1E2522", line: "#2A322E", "line-strong": "#3B4540", "line-input": "#5C6661", text: "#EEF2EF", "text-sub": "#A3AEA8", "text-weak": "#6E7873",
-    gray: "#2A322E", "on-gray": "#C9D1CC", disabled: "#1E2522", "on-disabled": "#6E7873", scrim: "rgba(0,0,0,.60)",
-    danger: "#D93A2B", "danger-pressed": "#BF3022", "danger-text": "#FF7A6E", notice: "#2B2412", "on-notice": "#FFD98A", highlight: "#1F4A30",
+    gray: "#2A322E", "gray-pressed": "#343D39", "on-gray": "#C9D1CC", disabled: "#1E2522", "on-disabled": "#6E7873", scrim: "rgba(0,0,0,.60)",
+    danger: "#D93A2B", "danger-pressed": "#BF3022", "on-danger": "#FFFFFF", "danger-text": "#FF7A6E", notice: "#2B2412", "on-notice": "#FFD98A", highlight: "#1F4A30",
     "shadow-1": "none", "shadow-2": "none", "shadow-sheet": "none", "dlg-line": "#2A322E" },
 };
 const CAT = {
@@ -381,14 +382,14 @@ const CAT = {
   dark: { 식비: "#FBBF24", 가전: "#818CF8", 교통: "#38BDF8", 의료: "#FB7185", 의류: "#C084FC", 미용: "#F472B6", 문화: "#2DD4BF", 교육: "#60A5FA", 생활: "#FB923C", 기타: "#94A3B8" },
 };
 /* 표에서 "이 색은 무엇 위의 글자인가" */
-const PAIR = { primary: ["on-primary", "면 위 흰 글자"], "primary-pressed": ["on-primary", "면 위 흰 글자"], tint: ["on-tint", "면 위 글자"], gray: ["on-gray", "면 위 글자"],
-  danger: ["#FFFFFF", "면 위 흰 글자"], "danger-pressed": ["#FFFFFF", "면 위 흰 글자"], notice: ["on-notice", "면 위 글자"], highlight: ["text", "면 위 글자"],
+const PAIR = { primary: ["on-primary", "면 위 흰 글자"], "primary-pressed": ["on-primary", "면 위 흰 글자"], tint: ["on-tint", "면 위 글자"], "tint-pressed": ["on-tint", "면 위 글자"], gray: ["on-gray", "면 위 글자"], "gray-pressed": ["on-gray", "면 위 글자"],
+  danger: ["on-danger", "면 위 흰 글자"], "danger-pressed": ["on-danger", "면 위 흰 글자"], notice: ["on-notice", "면 위 글자"], highlight: ["text", "면 위 글자"],
   accent: ["bg", "바탕 위 글자"], text: ["bg", "바탕 위 글자"], "text-sub": ["bg", "바탕 위 글자"], "danger-text": ["bg", "바탕 위 글자"],
   "text-weak": ["bg", "예외(placeholder·비활성)"], "on-disabled": ["disabled", "예외(비활성)"], brand: ["bg", "테두리·아이콘(3:1)"], "line-strong": ["bg", "테두리(3:1)"], "line-input": ["bg", "입력 테두리(3:1)"] };
 const DESC = { brand: "로고, 오늘 테두리, 탭 활성 아이콘", primary: "주 버튼·선택 날짜·＋ 면", "primary-pressed": "주 버튼 누름", "on-primary": "주 버튼 글자", accent: "초록 글자, outline, 포커스",
-  tint: "secondary filled·배지 면", "on-tint": "secondary filled·배지 글자", bg: "바탕", surface: "아이콘 자리·비활성 입력·상자", line: "구분선·비활성 입력 테두리", "line-strong": "line 버튼·컨트롤 테두리", "line-input": "입력 테두리",
-  text: "기본 글자·금액", "text-sub": "보조 글자·토요일", "text-weak": "placeholder·앞뒤 달", gray: "gray 버튼 면", "on-gray": "gray 버튼 글자", disabled: "비활성 면", "on-disabled": "비활성 글자",
-  scrim: "가림막", danger: "danger 버튼 면", "danger-pressed": "danger 누름", "danger-text": "오류 문구·일요일", notice: "오프라인 띠 면", "on-notice": "오프라인 띠 글자", highlight: "검색 일치 면" };
+  tint: "secondary filled·배지 면", "tint-pressed": "secondary filled 누름", "on-tint": "secondary filled·배지 글자", bg: "바탕", surface: "아이콘 자리·비활성 입력·상자", line: "구분선·비활성 입력 테두리", "line-strong": "line 버튼·컨트롤 테두리", "line-input": "입력 테두리",
+  text: "기본 글자·금액", "text-sub": "보조 글자·토요일", "text-weak": "placeholder·앞뒤 달", gray: "gray 버튼 면", "gray-pressed": "gray 버튼 누름", "on-gray": "gray 버튼 글자", disabled: "비활성 면", "on-disabled": "비활성 글자",
+  scrim: "가림막", danger: "danger 버튼 면", "danger-pressed": "danger 누름", "on-danger": "danger 버튼 글자", "danger-text": "오류 문구·일요일", notice: "오프라인 띠 면", "on-notice": "오프라인 띠 글자", highlight: "검색 일치 면" };
 
 function lum(hex) {
   const h = hex.replace("#", ""); if (h.length !== 6) return null;

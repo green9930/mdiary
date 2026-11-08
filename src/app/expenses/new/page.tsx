@@ -1,4 +1,4 @@
-import PageHeader from "@/components/PageHeader";
+import PageHeader from "@/components/layout/PageHeader";
 import { requireSessionUser } from "@/server/session";
 import { PAGE_TITLES, PATHS } from "@/shared/sharedConstants";
 

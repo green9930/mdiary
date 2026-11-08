@@ -30,6 +30,7 @@
   --color-on-primary: light-dark(#ffffff, #ffffff);
   --color-accent: light-dark(#13823e, #1ed760);
   --color-tint: light-dark(#e3f7ea, #173323);
+  --color-tint-pressed: light-dark(#d4efde, #1e4029);
   --color-on-tint: light-dark(#0e5a2c, #1ed760);
 
   /* 2-2. 무채색 */
@@ -42,6 +43,7 @@
   --color-text-sub: light-dark(#5e6a63, #a3aea8);
   --color-text-weak: light-dark(#7d8781, #6e7873);
   --color-gray: light-dark(#ebefec, #2a322e);
+  --color-gray-pressed: light-dark(#dde3df, #343d39);
   --color-on-gray: light-dark(#4a544f, #c9d1cc);
   --color-disabled: light-dark(#eef1ef, #1e2522);
   --color-on-disabled: light-dark(#7d8781, #6e7873);
@@ -50,6 +52,7 @@
   /* 2-3. 상태 */
   --color-danger: light-dark(#d93a2b, #d93a2b);
   --color-danger-pressed: light-dark(#bf3022, #bf3022);
+  --color-on-danger: light-dark(#ffffff, #ffffff);
   --color-danger-text: light-dark(#d93a2b, #ff7a6e);
   --color-notice: light-dark(#fff4d6, #2b2412);
   --color-on-notice: light-dark(#7a5300, #ffd98a);
@@ -148,9 +151,28 @@ body {
   @apply bg-bg font-body text-body text-text;
 }
 
+/* 바텀시트·다이얼로그가 열려 있으면 뒤 화면이 스크롤되지 않게 한다 (iOS는 모달 <dialog>만으로 막히지 않는다) */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
 /* iOS 홈 인디케이터 영역 (화면 명세 SC-01). layout.tsx의 viewportFit: cover와 함께 쓴다 */
 @utility pb-safe {
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 누르는 영역을 최소 44×44로 넓힌다 (화면 명세 공통 규약). 보이는 크기는 그대로 */
+@utility touch-44 {
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, --spacing(11));
+    height: max(100%, --spacing(11));
+    transform: translate(-50%, -50%);
+  }
 }
 
 /* 하단 탭 바(높이 56 + 안전 여백)에 내용이 가리지 않도록 비우는 여백 */

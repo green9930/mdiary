@@ -53,4 +53,13 @@ describe("PageHeader (토큰 5-7 헤더)", () => {
     expect(router.replace).toHaveBeenCalledWith("/");
     expect(router.back).not.toHaveBeenCalled();
   });
+
+  it("요청 중이면 [‹]를 누를 수 없다", async () => {
+    visit("/", "/expenses/new");
+    render(<PageHeader title="기록하기" backDisabled />);
+    const back = screen.getByRole("button", { name: "뒤로" });
+    expect(back).toBeDisabled();
+    await userEvent.click(back);
+    expect(router.back).not.toHaveBeenCalled();
+  });
 });

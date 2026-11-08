@@ -7,8 +7,8 @@ import { useTabNavigation } from "@/hooks/useTabNavigation";
 import {
   PAGE_TITLES,
   PATHS,
-  type Tab,
   TABS_LIST,
+  type TTab,
 } from "@/shared/sharedConstants";
 import AddIcon from "@/assets/icon_add.svg";
 import CalendarIcon from "@/assets/icon_calendar.svg";
@@ -17,7 +17,7 @@ import SearchIcon from "@/assets/icon_search.svg";
 import SettingsIcon from "@/assets/icon_settings.svg";
 
 // 탭 아이콘 (토큰 2-5)
-const TAB_ICONS: Record<Tab["path"], FC<SVGProps<SVGSVGElement>>> = {
+const TAB_ICONS: Record<TTab["path"], FC<SVGProps<SVGSVGElement>>> = {
   [PATHS.calendar]: CalendarIcon,
   [PATHS.categories]: GridIcon,
   [PATHS.search]: SearchIcon,
@@ -29,7 +29,7 @@ const TabBar = () => {
   const { current, tabHref, newExpenseHref } = useTabNavigation();
 
   const [left, right] = [TABS_LIST.slice(0, 2), TABS_LIST.slice(2)];
-  const renderTab = (tab: Tab) => {
+  const renderTab = (tab: TTab) => {
     const active = tab === current;
     const Icon = TAB_ICONS[tab.path];
     return (

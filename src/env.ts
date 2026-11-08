@@ -32,10 +32,10 @@ const envSchema = z
     },
   );
 
-export type Env = z.infer<typeof envSchema>;
+export type TEnv = z.infer<typeof envSchema>;
 
 // 실패하면 변수 이름과 이유만 알린다. 값은 출력하지 않는다.
-export const parseEnv = (source: Record<string, string | undefined>): Env => {
+export const parseEnv = (source: Record<string, string | undefined>): TEnv => {
   const result = envSchema.safeParse(source);
   if (result.success) return result.data;
 

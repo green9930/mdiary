@@ -40,6 +40,28 @@ export default defineConfig([
       ],
     },
   },
+  // 객체 모양 타입은 interface (컴포넌트 props는 {이름}Props), 그 밖의 type은 T{이름} (개발 준비 4장)
+  {
+    files: ["**/*.{ts,tsx}"],
+    ignores: ["src/generated/**"],
+    rules: {
+      "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
+      "@typescript-eslint/naming-convention": [
+        "error",
+        {
+          selector: "interface",
+          format: ["PascalCase"],
+          custom: { regex: "^[TI][A-Z]", match: false },
+        },
+        {
+          selector: "typeAlias",
+          format: ["PascalCase"],
+          prefix: ["T"],
+          custom: { regex: "Props$", match: false },
+        },
+      ],
+    },
+  },
   // import 순서: 외부 → @/ (assets는 맨 뒤) → 상대 경로 → 스타일. 묶음 사이는 한 줄 띄운다 (개발 준비 4장)
   {
     plugins: { "simple-import-sort": simpleImportSort },

@@ -2,11 +2,11 @@ import GoogleSignInButton from "@/features/auth/GoogleSignInButton";
 import { safeNextPath } from "@/shared/nextPath";
 
 // 임시: F1에서 SC-02 로그인 화면으로 바꾼다
-const LoginPage = async ({
-  searchParams,
-}: {
+interface LoginPageProps {
   searchParams: Promise<{ next?: string }>;
-}) => {
+}
+
+const LoginPage = async ({ searchParams }: LoginPageProps) => {
   const { next } = await searchParams;
 
   return (

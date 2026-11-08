@@ -4,7 +4,10 @@ import { redirect } from "next/navigation";
 import { auth } from "@/server/auth";
 import { loginPath } from "@/shared/nextPath";
 
-export type SessionUser = { id: string; email: string };
+export interface SessionUser {
+  id: string;
+  email: string;
+}
 
 /** 지금 요청의 로그인 사용자. 없으면 null. */
 export const getSessionUser = async (): Promise<SessionUser | null> => {
