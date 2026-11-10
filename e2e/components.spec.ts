@@ -35,4 +35,17 @@ test.describe("공통 컴포넌트 견본 (F0-2)", () => {
     await page.getByText("이후 전체").click();
     await expect(page.getByRole("radio", { name: "이후 전체" })).toBeChecked();
   });
+
+  test("공통 상태: [다시 시도]는 조회 중에도 이름이 읽히고 비활성이다 (F0-3)", async ({
+    page,
+  }) => {
+    const states = page.locator("#states");
+    await states.getByRole("button", { name: "다시 시도" }).first().click();
+    await expect(
+      states.getByRole("button", { name: "다시 시도" }).first(),
+    ).toBeDisabled();
+    await expect(
+      states.getByRole("status", { name: "불러오는 중" }).first(),
+    ).toBeVisible();
+  });
 });

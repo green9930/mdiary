@@ -81,4 +81,14 @@ test.describe("겹쳐 뜨는 화면 (F0-2b)", () => {
       page.getByRole("button", { name: "정렬: 금액 큰 순" }),
     ).toBeVisible();
   });
+
+  test("저장 실패 알림은 [확인]으로만 닫힌다 (F0-3)", async ({ page }) => {
+    await page.getByRole("button", { name: "저장 실패 알림" }).click();
+    const alert = page.getByRole("alertdialog", { name: "저장하기" });
+    await expect(alert).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(alert).toBeVisible();
+    await alert.getByRole("button", { name: "확인", exact: true }).click();
+    await expect(alert).toBeHidden();
+  });
 });

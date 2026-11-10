@@ -14,9 +14,20 @@ import Segment from "@/components/elements/Segment";
 import Spinner from "@/components/elements/Spinner";
 import TextArea from "@/components/elements/TextArea";
 import TextInput from "@/components/elements/TextInput";
+import AlertDialog from "@/components/overlays/AlertDialog";
 import BottomSheet from "@/components/overlays/BottomSheet";
 import Dialog from "@/components/overlays/Dialog";
 import Dropdown from "@/components/overlays/Dropdown";
+import EmptyState from "@/components/states/EmptyState";
+import LoadError from "@/components/states/LoadError";
+import LoadMoreStatus from "@/components/states/LoadMoreStatus";
+import RefreshErrorBar from "@/components/states/RefreshErrorBar";
+import {
+  SkeletonArea,
+  SkeletonLine,
+  SkeletonListItem,
+} from "@/components/states/Skeleton";
+import { DIALOG_TEXTS } from "@/shared/sharedConstants";
 import type { ButtonSizeType, ButtonVariantType } from "@/types/styleTypes";
 import ArrowLeftIcon from "@/assets/icon_arrow_left.svg";
 import CardIcon from "@/assets/icon_card.svg";
@@ -53,7 +64,10 @@ const SORT_OPTIONS = [
   { value: "amount", label: "금액 큰 순" },
 ] as const;
 
-type OpenDialogType = "leave" | "delete" | "alert" | null;
+type OpenDialogType = "leave" | "delete" | "saveFailed" | "deleteFailed" | null;
+
+// [다시 시도]를 누르면 잠깐 조회 중으로 보인다
+const RETRY_PREVIEW_MS = 1500;
 
 const CHIPS = ["전체", "식비", "가전", "교통", "의료", "의류", "미용"];
 
@@ -99,6 +113,11 @@ const ComponentsPreview = () => {
   const [dialog, setDialog] = useState<OpenDialogType>(null);
   const [sheetMemo, setSheetMemo] = useState("");
   const closeDialog = () => setDialog(null);
+  const [retrying, setRetrying] = useState(false);
+  const retry = () => {
+    setRetrying(true);
+    window.setTimeout(() => setRetrying(false), RETRY_PREVIEW_MS);
+  };
 
   return (
     <main className="mx-auto min-h-dvh max-w-120 min-w-80 pb-16">
@@ -308,8 +327,11 @@ const ComponentsPreview = () => {
           <Button variant="line" onClick={() => setDialog("delete")}>
             삭제 확인
           </Button>
-          <Button variant="line" onClick={() => setDialog("alert")}>
-            알림 다이얼로그
+          <Button variant="line" onClick={() => setDialog("saveFailed")}>
+            저장 실패 알림
+          </Button>
+          <Button variant="line" onClick={() => setDialog("deleteFailed")}>
+            삭제 실패 알림
           </Button>
         </div>
         <div className="flex justify-end">
@@ -348,6 +370,41 @@ const ComponentsPreview = () => {
             amount="100,000원"
           />
         </div>
+      </Section>
+
+      <Section id="states" title="공통 상태">
+        <SkeletonArea>
+          <SkeletonLine width="1/3" />
+          <SkeletonLine width="full" />
+          <SkeletonLine width="1/2" />
+          <SkeletonListItem />
+          <SkeletonListItem />
+        </SkeletonArea>
+        <Caption>
+          ① 첫 로딩 스켈레톤: 글자 줄 1/3 · 전체 · 1/2, 목록 항목
+        </Caption>
+        <LoadError onRetry={retry} retrying={retrying} />
+        <Caption>② 조회 실패: [다시 시도]를 누르면 조회 중 비활성</Caption>
+        <div>
+          <RefreshErrorBar onRetry={retry} retrying={retrying} />
+          <ListItem
+            icon={<FoodIcon />}
+            iconClassName="bg-cat-food/15 text-cat-food"
+            title="이전에 불러온 목록"
+            amount="8,000원"
+          />
+        </div>
+        <Caption>③ 같은 조건 다시 불러오기 실패: 데이터 위 띠</Caption>
+        <LoadMoreStatus loading={false} failed onRetry={retry} />
+        <LoadMoreStatus loading failed={false} onRetry={retry} />
+        <Caption>④ 목록 끝: 추가 로딩 실패 · 불러오는 중</Caption>
+        <EmptyState
+          message="기록이 없습니다"
+          actionLabel="기록 추가하기"
+          onAction={() => {}}
+        />
+        <EmptyState message="조건에 맞는 기록이 없습니다" />
+        <Caption>빈 상태: 기록 0건 · 조건 결과 없음</Caption>
       </Section>
 
       <BottomSheet
@@ -393,6 +450,7 @@ const ComponentsPreview = () => {
 
       <Dialog
         open={dialog === "leave"}
+        title="작성 취소"
         confirmLabel="나가기"
         confirmVariant="gray"
         onConfirm={closeDialog}
@@ -406,6 +464,7 @@ const ComponentsPreview = () => {
       </Dialog>
       <Dialog
         open={dialog === "delete"}
+        title={DIALOG_TEXTS.deleteTitle}
         confirmLabel="삭제"
         confirmVariant="danger"
         onConfirm={closeDialog}
@@ -414,14 +473,20 @@ const ComponentsPreview = () => {
       >
         이 기록을 삭제하시겠습니까?
       </Dialog>
-      <Dialog
-        open={dialog === "alert"}
-        title="저장하지 못했습니다"
-        confirmLabel="확인"
-        onConfirm={closeDialog}
+      <AlertDialog
+        open={dialog === "saveFailed"}
+        title={DIALOG_TEXTS.saveTitle}
+        onClose={closeDialog}
       >
-        잠시 후 다시 시도해 주세요.
-      </Dialog>
+        {DIALOG_TEXTS.saveFailed}
+      </AlertDialog>
+      <AlertDialog
+        open={dialog === "deleteFailed"}
+        title={DIALOG_TEXTS.deleteTitle}
+        onClose={closeDialog}
+      >
+        {DIALOG_TEXTS.deleteFailed}
+      </AlertDialog>
     </main>
   );
 };

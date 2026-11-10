@@ -84,16 +84,17 @@ const Button = ({
       aria-controls={ariaControls}
       aria-busy={loading || undefined}
       className={cn(
-        "relative inline-flex items-center justify-center gap-1.5 border whitespace-nowrap select-none",
+        "relative inline-flex cursor-pointer items-center justify-center gap-1.5 border whitespace-nowrap select-none disabled:cursor-not-allowed",
         SIZE_CLASSES[size],
         !isText && PADDING_CLASSES[size],
         VARIANT_CLASSES[style],
-        loading && "pointer-events-none",
+        loading && "pointer-events-none cursor-not-allowed",
       )}
     >
-      {/* 요청 중에도 버튼 폭이 바뀌지 않도록 글자는 자리만 남긴다 */}
+      {/* 요청 중에도 버튼 폭이 바뀌지 않도록 글자는 자리만 남긴다.
+          invisible이 아닌 opacity-0: 스크린 리더가 버튼 이름을 계속 읽는다 */}
       <span
-        className={cn("inline-flex items-center gap-1", loading && "invisible")}
+        className={cn("inline-flex items-center gap-1", loading && "opacity-0")}
       >
         {children}
       </span>

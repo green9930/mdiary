@@ -32,13 +32,8 @@ describe("Dialog (CG ⑧)", () => {
     expect(screen.getAllByRole("button", { hidden: true })).toHaveLength(2);
 
     rerender(
-      <Dialog
-        open
-        title="저장하지 못했습니다"
-        confirmLabel="확인"
-        onConfirm={() => {}}
-      >
-        잠시 후 다시 시도해 주세요.
+      <Dialog open title="저장하기" confirmLabel="확인" onConfirm={() => {}}>
+        저장하지 못했습니다. 잠시 후 다시 시도해 주세요.
       </Dialog>,
     );
     expect(screen.getAllByRole("button", { hidden: true })).toHaveLength(1);
@@ -50,6 +45,7 @@ describe("Dialog (CG ⑧)", () => {
     render(
       <Dialog
         open
+        title="삭제하기"
         confirmLabel="삭제"
         onConfirm={onConfirm}
         cancelLabel="취소"
@@ -72,6 +68,7 @@ describe("Dialog (CG ⑧)", () => {
     render(
       <Dialog
         open
+        title="삭제하기"
         confirmLabel="삭제"
         onConfirm={() => {}}
         cancelLabel="취소"
@@ -90,7 +87,7 @@ describe("Dialog (CG ⑧)", () => {
     render(
       <Dialog
         open
-        title="나가기"
+        title="작성 취소"
         confirmLabel="나가기"
         onConfirm={() => {}}
         cancelLabel="계속 작성"
@@ -99,7 +96,7 @@ describe("Dialog (CG ⑧)", () => {
         작성 중인 내용이 사라집니다.
       </Dialog>,
     );
-    const dialog = dialogByName("나가기") as HTMLDialogElement;
+    const dialog = dialogByName("작성 취소") as HTMLDialogElement;
     fireEvent.click(dialog);
     const esc = new Event("cancel", { cancelable: true });
     dialog.dispatchEvent(esc);
@@ -123,6 +120,7 @@ describe("Dialog (CG ⑧)", () => {
     render(
       <Dialog
         open
+        title="삭제하기"
         confirmLabel="삭제"
         onConfirm={() => {}}
         cancelLabel="취소"

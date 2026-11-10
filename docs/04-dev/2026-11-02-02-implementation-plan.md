@@ -41,8 +41,9 @@
 - [x] F0-2 공통 컴포넌트
   - [x] F0-2a 기본 조각 (`Button`·`IconButton`·`Spinner`, `TextInput`·`TextArea`·`NumberInput`, `Segment`·`Chip`·`Checkbox`·`Radio`, `lib/text.ts`·`lib/cn.ts`, 견본 화면 `/dev/components`)
   - [x] F0-2b 겹쳐 뜨는 것·목록 (`BottomSheet`·`Dialog`·`Dropdown`, `ListItem`·`Badge`, 뒤로 가기 공통 처리 `useHistoryLayer`)
-- [ ] F0-3 공통 상태 ← 다음
-- [ ] F1 ~ F12
+- [x] F0-3 공통 상태 (`components/states/`의 스켈레톤·`LoadError`·`RefreshErrorBar`·`LoadMoreStatus`·`EmptyState`, `AlertDialog`, TanStack Query 연결 `QueryProvider`·`lib/queryClient.ts`, 영역 상태 판단 `lib/queryView.ts`의 `getQueryView`)
+- [ ] F1 ← 다음
+- [ ] F2 ~ F12
 
 미뤄 둔 작업:
 

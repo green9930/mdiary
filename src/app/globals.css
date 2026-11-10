@@ -47,7 +47,7 @@
   --color-on-gray: light-dark(#4a544f, #c9d1cc);
   --color-disabled: light-dark(#eef1ef, #1e2522);
   --color-on-disabled: light-dark(#7d8781, #6e7873);
-  --color-scrim: light-dark(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
+  --color-scrim: light-dark(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.7));
 
   /* 2-3. 상태 */
   --color-danger: light-dark(#d93a2b, #d93a2b);
@@ -121,6 +121,9 @@
   --shadow-1: 0 2px 8px light-dark(rgba(0, 0, 0, 0.08), transparent);
   --shadow-2: 0 8px 24px light-dark(rgba(0, 0, 0, 0.16), transparent);
   --shadow-sheet: 0 -4px 16px light-dark(rgba(0, 0, 0, 0.1), transparent);
+
+  /* 4. 움직임: 스켈레톤 깜박임 (토큰 5-6, 아래 @keyframes skeleton) */
+  --animate-skeleton: skeleton 1.2s ease-in-out infinite;
 }
 
 /* 3-1. 글꼴 묶음. 변수는 layout.tsx의 next/font가 html에 붙인다 */
@@ -178,4 +181,11 @@ html:has(dialog[open]) {
 /* 하단 탭 바(높이 56 + 안전 여백)에 내용이 가리지 않도록 비우는 여백 */
 @utility pb-tab-bar {
   padding-bottom: calc(--spacing(14) + env(safe-area-inset-bottom));
+}
+
+/* 스켈레톤 깜박임 (토큰 5-6): 투명도 1 → 0.5 */
+@keyframes skeleton {
+  50% {
+    opacity: 0.5;
+  }
 }

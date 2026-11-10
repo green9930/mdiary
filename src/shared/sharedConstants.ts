@@ -27,12 +27,30 @@ export const PAGE_TITLES = {
 /** 버튼 글자 */
 export const BTN_TEXTS = {
   googleSignIn: "Google로 계속하기",
+  retry: "다시 시도",
+  confirm: "확인",
+} as const;
+
+/** 불러오기 상태 문구 (와이어프레임 CM ②~④) */
+export const STATE_TEXTS = {
+  loadFailed: "불러오지 못했습니다.",
+  refreshFailed: "최신 내용을 불러오지 못했습니다.",
+  loadMoreFailed: "더 불러오지 못했습니다.",
+} as const;
+
+/** 알림 다이얼로그 문구 (와이어프레임 CM ⑤⑥) */
+export const DIALOG_TEXTS = {
+  saveTitle: "저장하기",
+  saveFailed: "저장하지 못했습니다. 잠시 후 다시 시도해 주세요.",
+  deleteTitle: "삭제하기",
+  deleteFailed: "삭제하지 못했습니다. 잠시 후 다시 시도해 주세요.",
 } as const;
 
 /** 화면에는 보이지 않고 스크린 리더가 읽는 이름 */
 export const ARIA_LABELS = {
   back: "뒤로",
   mainNav: "주요 화면",
+  loading: "불러오는 중",
 } as const;
 
 /** 쿠키 이름 */

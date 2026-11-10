@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import { cookies } from "next/headers";
 
 import InAppHistoryTracker from "@/app/InAppHistoryTracker";
+import QueryProvider from "@/app/QueryProvider";
 import { APP_NAME, COOKIES } from "@/shared/sharedConstants";
 import { parseTheme } from "@/shared/theme";
 
@@ -51,7 +52,7 @@ const RootLayout = async ({
     >
       <body>
         <InAppHistoryTracker />
-        {children}
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );

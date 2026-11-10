@@ -9,9 +9,8 @@ import type { ButtonVariantType } from "@/types/styleTypes";
 
 interface DialogProps {
   open: boolean;
-  title?: string;
-  /** 본문. 제목이 없으면 본문이 주 문구라 text01 색으로 보인다 */
-  children: ReactNode;
+  title: string;
+  children: ReactNode; // 본문
   confirmLabel: string;
   confirmVariant?: Extract<ButtonVariantType, "primary" | "danger" | "gray">;
   onConfirm: () => void;
@@ -59,25 +58,20 @@ const Dialog = ({
       ref={ref}
       role="alertdialog"
       tabIndex={-1}
-      aria-labelledby={title ? titleId : undefined}
+      aria-labelledby={titleId}
       aria-describedby={bodyId}
       onCancel={keepOpen}
       onClose={reopen}
       className="m-auto w-full max-w-92 bg-transparent px-6 text-text01 transition-opacity duration-(--duration-dialog) outline-none backdrop:bg-scrim data-opening:opacity-0"
     >
-      <div className="rounded-lg bg-bg px-4.5 pt-5.5 pb-4 shadow-2 dark:border dark:border-line">
-        {title && (
-          <h2 id={titleId} className="mb-1.5 text-center text-title-md">
+      <div className="flex min-h-50 flex-col justify-between gap-4 rounded-lg bg-bg px-4.5 pt-5.5 pb-4 shadow-2 dark:border dark:border-line">
+        <div className="flex flex-col gap-4">
+          <h2 id={titleId} className="text-center text-title-md">
             {title}
           </h2>
-        )}
-        <div
-          id={bodyId}
-          className={`mb-4.5 text-center text-body ${
-            title ? "text-text02" : "text-text01"
-          }`}
-        >
-          {children}
+          <div id={bodyId} className="text-center text-body text-text02">
+            {children}
+          </div>
         </div>
         {/* 버튼이 둘이면 같은 폭으로 나눈다 */}
         <div className="grid auto-cols-fr grid-flow-col gap-2">
