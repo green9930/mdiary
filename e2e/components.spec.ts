@@ -21,7 +21,7 @@ test.describe("공통 컴포넌트 견본 (F0-2)", () => {
     await title.fill("가".repeat(30));
     await expect(title).toHaveValue("가".repeat(25));
 
-    const months = page.getByLabel("기간", { exact: true });
+    const months = page.getByRole("textbox", { name: "기간" });
     await months.pressSequentially("0a123");
     await expect(months).toHaveValue("12");
   });

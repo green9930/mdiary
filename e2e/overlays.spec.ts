@@ -9,8 +9,14 @@ test.describe("겹쳐 뜨는 화면 (F0-2b)", () => {
     page
       .getByRole("alertdialog")
       .filter({ hasText: "이 기록을 삭제하시겠습니까?" });
-  const openSheet = (page: Page) =>
-    page.getByRole("button", { name: "시트 열기", exact: true }).click();
+  // 올라오는 움직임이 끝날 때까지 기다린다 (그 전에는 위치가 계속 바뀐다)
+  const openSheet = async (page: Page) => {
+    await page.getByRole("button", { name: "시트 열기", exact: true }).click();
+    await expect(sheet(page)).not.toHaveAttribute("data-opening");
+    await sheet(page).evaluate((el) =>
+      Promise.all(el.getAnimations().map((animation) => animation.finished)),
+    );
+  };
 
   test.beforeEach(async ({ page }) => {
     await loginAsTestUser(page);
