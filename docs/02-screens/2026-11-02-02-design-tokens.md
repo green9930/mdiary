@@ -191,8 +191,8 @@ Tailwind 기본 색·글자 크기·모서리·그림자는 꺼 두었다. 이 �
 | ---------------- | ---------- | ------------- | --------------- | ----------------------------------------------- |
 | primary filled   | `primary`  | `on-primary`  | 없음            | 저장, 적용, 선택, 수정, 계속 작성, 확인, 로그인 |
 | secondary filled | `tint`     | `on-tint`     | 없음            | 시트 안 보조 동작 (지금은 없음)                 |
-| primary outline  | `bg`       | `accent`      | `accent` 2      | 계산, 오늘, 기록 추가하기, 다시 시도            |
-| secondary line   | `bg`       | `text01`      | `line-strong` 2 | 취소, 정렬·기간 드롭다운, 기간 선택             |
+| primary outline  | `bg`       | `accent`      | `accent` 1      | 계산, 오늘, 기록 추가하기, 다시 시도            |
+| secondary line   | `bg`       | `text01`      | `line-strong` 1 | 취소, 정렬·기간 드롭다운, 기간 선택             |
 | text             | 없음       | `text01` 밑줄 | 없음            | 개인정보처리방침, 서비스 안내 링크              |
 | danger           | `danger`   | `on-danger`   | 없음            | 삭제, 탈퇴하기                                  |
 | disabled         | `disabled` | `on-disabled` | 없음            | 모든 버튼의 비활성                              |
@@ -206,7 +206,7 @@ Tailwind 기본 색·글자 크기·모서리·그림자는 꺼 두었다. 이 �
 | 상태        | 테두리          | 면        | 글자                                            |
 | ----------- | --------------- | --------- | ----------------------------------------------- |
 | 기본 (빈칸) | `line-input` 1  | `bg`      | placeholder `text03`                            |
-| 포커스      | `accent` 2      | `bg`      | `text01`                                        |
+| 포커스      | `accent` 1      | `bg`      | `text01`                                        |
 | 값 있음     | `line-input` 1  | `bg`      | `text01`                                        |
 | 오류        | `danger-text` 2 | `bg`      | `text01` + 아래 오류 문구 `danger-text` caption |
 | 비활성      | `line` 1        | `surface` | `on-disabled`                                   |
