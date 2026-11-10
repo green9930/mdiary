@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 
-import { cn } from "@/lib/cn";
 import CheckboxBlankIcon from "@/assets/icon_checkbox_blank.svg";
 import CheckboxFilledIcon from "@/assets/icon_checkbox_filled.svg";
 
@@ -8,7 +7,6 @@ interface CheckboxProps {
   checked: boolean;
   onCheckedChange: (checked: boolean) => void;
   disabled?: boolean;
-  className?: string;
   children: ReactNode;
 }
 
@@ -17,18 +15,17 @@ const Checkbox = ({
   checked,
   onCheckedChange,
   disabled = false,
-  className,
   children,
 }: CheckboxProps) => {
   const Icon = checked ? CheckboxFilledIcon : CheckboxBlankIcon;
 
   return (
     <label
-      className={cn(
-        "flex min-h-11 items-center gap-2.5 text-body",
-        disabled ? "text-on-disabled" : "text-text",
-        className,
-      )}
+      className={`flex min-h-11 items-center gap-2 text-body ${
+        disabled
+          ? "text-on-disabled hover:cursor-not-allowed"
+          : "text-text01 hover:cursor-pointer"
+      }`}
     >
       <input
         type="checkbox"
@@ -39,14 +36,13 @@ const Checkbox = ({
       />
       <Icon
         aria-hidden
-        className={cn(
-          "size-6 shrink-0 rounded-sm peer-focus-visible:outline-2 peer-focus-visible:outline-accent",
+        className={`size-6 shrink-0 rounded-sm peer-focus-visible:outline-2 peer-focus-visible:outline-accent ${
           disabled
             ? "text-on-disabled"
             : checked
               ? "text-primary"
-              : "text-text-sub",
-        )}
+              : "text-text02"
+        }`}
       />
       {children}
     </label>

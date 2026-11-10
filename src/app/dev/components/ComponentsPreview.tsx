@@ -3,10 +3,7 @@
 import { type ReactNode, useState } from "react";
 
 import Badge from "@/components/elements/Badge";
-import Button, {
-  type TButtonSize,
-  type TButtonVariant,
-} from "@/components/elements/Button";
+import Button from "@/components/elements/Button";
 import Checkbox from "@/components/elements/Checkbox";
 import Chip from "@/components/elements/Chip";
 import IconButton from "@/components/elements/IconButton";
@@ -20,13 +17,14 @@ import TextInput from "@/components/elements/TextInput";
 import BottomSheet from "@/components/overlays/BottomSheet";
 import Dialog from "@/components/overlays/Dialog";
 import Dropdown from "@/components/overlays/Dropdown";
+import type { ButtonSizeType, ButtonVariantType } from "@/types/styleTypes";
 import ArrowLeftIcon from "@/assets/icon_arrow_left.svg";
 import CardIcon from "@/assets/icon_card.svg";
 import CloseIcon from "@/assets/icon_close.svg";
 import ElectricalIcon from "@/assets/icon_electrical.svg";
 import FoodIcon from "@/assets/icon_food.svg";
 
-const VARIANTS: { variant: TButtonVariant; label: string }[] = [
+const VARIANTS: { variant: ButtonVariantType; label: string }[] = [
   { variant: "primary", label: "저장" },
   { variant: "secondary", label: "보조 동작" },
   { variant: "outline", label: "기록 추가하기" },
@@ -36,7 +34,7 @@ const VARIANTS: { variant: TButtonVariant; label: string }[] = [
   { variant: "gray", label: "나가기" },
 ];
 
-const SIZES: TButtonSize[] = ["m", "s"];
+const SIZES: ButtonSizeType[] = ["md", "sm"];
 
 const REPEAT_OPTIONS = [
   { value: "none", label: "없음" },
@@ -55,7 +53,7 @@ const SORT_OPTIONS = [
   { value: "amount", label: "금액 큰 순" },
 ] as const;
 
-type TOpenDialog = "leave" | "delete" | "alert" | null;
+type OpenDialogType = "leave" | "delete" | "alert" | null;
 
 const CHIPS = ["전체", "식비", "가전", "교통", "의료", "의류", "미용"];
 
@@ -70,7 +68,7 @@ const Section = ({ id, title, children }: SectionProps) => (
     id={id}
     className="flex flex-col gap-4 border-b border-line px-4 py-6"
   >
-    <h2 className="text-title-m">{title}</h2>
+    <h2 className="text-title-md">{title}</h2>
     {children}
   </section>
 );
@@ -80,7 +78,7 @@ interface CaptionProps {
 }
 
 const Caption = ({ children }: CaptionProps) => (
-  <p className="text-caption text-text-sub">{children}</p>
+  <p className="text-caption text-text02">{children}</p>
 );
 
 const ComponentsPreview = () => {
@@ -98,13 +96,13 @@ const ComponentsPreview = () => {
   const [sort, setSort] = useState<"latest" | "oldest" | "amount">("latest");
   const [sheetOpen, setSheetOpen] = useState(false);
   const [longSheetOpen, setLongSheetOpen] = useState(false);
-  const [dialog, setDialog] = useState<TOpenDialog>(null);
+  const [dialog, setDialog] = useState<OpenDialogType>(null);
   const [sheetMemo, setSheetMemo] = useState("");
   const closeDialog = () => setDialog(null);
 
   return (
     <main className="mx-auto min-h-dvh max-w-120 min-w-80 pb-16">
-      <h1 className="px-4 pt-6 text-title-l">공통 컴포넌트</h1>
+      <h1 className="px-4 pt-6 text-title-lg">공통 컴포넌트</h1>
 
       <Section id="buttons" title="버튼">
         {VARIANTS.map(({ variant, label }) => (
@@ -114,20 +112,22 @@ const ComponentsPreview = () => {
                 {label}
               </Button>
             ))}
-            <Button variant={variant} loading>
-              {label}
-            </Button>
+            {SIZES.map((size) => (
+              <Button key={size} variant={variant} size={size} loading>
+                {label}
+              </Button>
+            ))}
             <Button variant={variant} disabled>
               {label}
             </Button>
           </div>
         ))}
-        <Caption>종류별: 기본 M · S · 요청 중 · 비활성</Caption>
-        <Button size="l">저장</Button>
-        <Button size="l" disabled>
+        <Caption>종류별: 기본 md · sm · 요청 중 md · sm · 비활성</Caption>
+        <Button size="lg">저장</Button>
+        <Button size="lg" disabled>
           저장
         </Button>
-        <Caption>L (하단 고정, 폭 전체) · 비활성</Caption>
+        <Caption>lg (하단 고정, 폭 전체) · 비활성</Caption>
       </Section>
 
       <Section id="icon-buttons" title="아이콘 버튼 · 스피너">
@@ -141,7 +141,9 @@ const ComponentsPreview = () => {
           <IconButton aria-label="뒤로 (비활성)" disabled>
             <ArrowLeftIcon />
           </IconButton>
-          <Spinner label="불러오는 중" className="text-text-sub" />
+          <span className="grid text-text02">
+            <Spinner label="불러오는 중" />
+          </span>
         </div>
       </Section>
 
@@ -175,8 +177,7 @@ const ComponentsPreview = () => {
         />
         <TextInput
           label="금액 (단위)"
-          inputMode="numeric"
-          className="font-num"
+          numeric
           value="8,000"
           unit="원"
           onValueChange={() => {}}
@@ -354,7 +355,7 @@ const ComponentsPreview = () => {
         onClose={() => setSheetOpen(false)}
         title="기간 선택"
         footer={
-          <Button size="l" onClick={() => setSheetOpen(false)}>
+          <Button size="lg" onClick={() => setSheetOpen(false)}>
             적용
           </Button>
         }

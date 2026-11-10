@@ -26,6 +26,8 @@ git config credential.https://github.com.helper ''
 git config --add credential.https://github.com.helper '!f() { test "$1" = get && echo username=green9930 && echo "password=$(gh auth token -u green9930)"; }; f'
 ```
 
+VS Code로 열면 권장 확장 Tailwind CSS IntelliSense 설치 안내가 뜬다. 설치하면 `.vscode/settings.json` 설정으로 CSS 파일을 Tailwind 문법으로 읽어서 `@theme`·`@utility` 경고가 없어지고 토큰 자동완성이 된다.
+
 Neon development에는 이미 테이블과 개발 데이터가 있으므로 새 기기에서 다시 넣을 필요가 없다.
 
 ## 2. 개발 서버
@@ -37,6 +39,7 @@ Neon development에는 이미 테이블과 개발 데이터가 있으므로 새 
 | `pnpm build` | 운영 빌드. 빌드 오류 확인용                                                              |
 | `pnpm start` | `pnpm build` 결과를 운영 모드로 띄운다                                                   |
 
+- 휴대폰에서 보려면 같은 Wi-Fi에서 `pnpm dev`가 출력하는 Network 주소(`http://192.168.x.x:3000`)로 연다. `next.config.ts`의 `allowedDevOrigins`가 `192.168.*.*`를 허용한다. 공통 컴포넌트 견본 `/dev/components`는 로그인 없이 열린다.
 - 개발 서버는 한 폴더에 하나만 뜬다. "Another next dev server is already running"이 나오면 안내된 `kill <PID>`로 기존 서버를 끈다.
 - 개발 데이터는 테스트 사용자(`test@mdiary.local`)의 것이다. `pnpm dev` 화면에서는 Google 계정으로 로그인하므로 개발 데이터가 보이지 않는다.
 

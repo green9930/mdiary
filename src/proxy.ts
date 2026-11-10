@@ -13,6 +13,7 @@ export const redirectTarget = (
   url: URL,
   hasSession: boolean,
 ): string | null => {
+  if (url.pathname === PATHS.devComponents) return null;
   if (url.pathname === PATHS.login) {
     // 만료·탈퇴로 온 경우는 쿠키가 남아 있어도 로그인 화면을 보여준다 (되돌려 보내면 무한 반복)
     if (!hasSession || url.searchParams.has("reason")) return null;

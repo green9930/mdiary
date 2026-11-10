@@ -7,7 +7,7 @@ const SearchPage = async () => {
 
   return (
     <main className="p-4">
-      <h1 className="text-title-l">{PAGE_TITLES.search}</h1>
+      <h1 className="text-title-lg">{PAGE_TITLES.search}</h1>
     </main>
   );
 };

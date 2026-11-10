@@ -1,34 +1,26 @@
-import type { ButtonHTMLAttributes } from "react";
+import type { ReactNode } from "react";
 
-import { cn } from "@/lib/cn";
-
-interface ChipProps extends Omit<
-  ButtonHTMLAttributes<HTMLButtonElement>,
-  "aria-pressed"
-> {
+interface ChipProps {
+  children: ReactNode;
   selected: boolean;
+  onClick?: () => void;
 }
 
 // 필터 칩 (토큰 5-3): 높이 32, 누르는 영역은 44
-const Chip = ({
-  selected,
-  type = "button",
-  className,
-  ...props
-}: ChipProps) => {
+const Chip = ({ children, selected, onClick }: ChipProps) => {
   return (
     <button
-      type={type}
+      type="button"
       aria-pressed={selected}
-      className={cn(
-        "touch-44 h-8 shrink-0 rounded-full border px-3.5 text-body whitespace-nowrap",
+      onClick={onClick}
+      className={`touch-44 h-8 shrink-0 rounded-full border px-3 text-body whitespace-nowrap ${
         selected
           ? "border-primary bg-primary font-bold text-on-primary"
-          : "border-line-strong text-text",
-        className,
-      )}
-      {...props}
-    />
+          : "border-line-strong text-text01"
+      }`}
+    >
+      {children}
+    </button>
   );
 };
 

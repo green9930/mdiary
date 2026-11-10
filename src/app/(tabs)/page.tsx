@@ -7,7 +7,7 @@ const CalendarPage = async () => {
 
   return (
     <main className="p-4">
-      <h1 className="text-title-l">{PAGE_TITLES.calendar}</h1>
+      <h1 className="text-title-lg">{PAGE_TITLES.calendar}</h1>
     </main>
   );
 };

@@ -25,7 +25,7 @@ vi.hoisted(() => {
   });
 });
 
-const { parseEnv } = await import("./env");
+const { parseEnv } = await import("@/env");
 
 describe("parseEnv", () => {
   it("올바른 값이면 그대로 돌려준다", () => {

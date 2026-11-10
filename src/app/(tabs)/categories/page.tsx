@@ -7,7 +7,7 @@ const CategoriesPage = async () => {
 
   return (
     <main className="p-4">
-      <h1 className="text-title-l">{PAGE_TITLES.categories}</h1>
+      <h1 className="text-title-lg">{PAGE_TITLES.categories}</h1>
     </main>
   );
 };

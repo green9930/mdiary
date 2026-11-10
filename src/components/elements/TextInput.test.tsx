@@ -7,12 +7,12 @@ import {
 } from "react";
 import { describe, expect, it } from "vitest";
 
-import NumberInput from "./NumberInput";
-import TextArea from "./TextArea";
-import TextInput from "./TextInput";
+import NumberInput from "@/components/elements/NumberInput";
+import TextArea from "@/components/elements/TextArea";
+import TextInput from "@/components/elements/TextInput";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- 아무 컴포넌트나 받는다
-type TControlled<T extends JSXElementConstructor<any>> = Omit<
+type ControlledType<T extends JSXElementConstructor<any>> = Omit<
   ComponentProps<T>,
   "value" | "onValueChange"
 > & { initial?: string };
@@ -20,7 +20,7 @@ type TControlled<T extends JSXElementConstructor<any>> = Omit<
 const ControlledText = ({
   initial = "",
   ...props
-}: TControlled<typeof TextInput>) => {
+}: ControlledType<typeof TextInput>) => {
   const [value, setValue] = useState(initial);
   return <TextInput value={value} onValueChange={setValue} {...props} />;
 };
@@ -28,7 +28,7 @@ const ControlledText = ({
 const ControlledArea = ({
   initial = "",
   ...props
-}: TControlled<typeof TextArea>) => {
+}: ControlledType<typeof TextArea>) => {
   const [value, setValue] = useState(initial);
   return <TextArea value={value} onValueChange={setValue} {...props} />;
 };
@@ -36,7 +36,7 @@ const ControlledArea = ({
 const ControlledNumber = ({
   initial = "",
   ...props
-}: TControlled<typeof NumberInput>) => {
+}: ControlledType<typeof NumberInput>) => {
   const [value, setValue] = useState(initial);
   return <NumberInput value={value} onValueChange={setValue} {...props} />;
 };
@@ -64,9 +64,9 @@ describe("TextInput (CG ②③)", () => {
 
   it("카운터는 이모지를 1자로 세고, 한도에 닿으면 강조한다", async () => {
     render(<ControlledText label="제목" maxLength={3} initial="👨‍👩‍👧" />);
-    expect(screen.getByText("1/3")).toHaveClass("text-text-weak");
+    expect(screen.getByText("1/3")).toHaveClass("text-text03");
     await userEvent.type(screen.getByLabelText("제목"), "가나");
-    expect(screen.getByText("3/3")).toHaveClass("text-text-sub");
+    expect(screen.getByText("3/3")).toHaveClass("text-text02");
   });
 
   it("오류가 있으면 아래에 문구를 보여 주고 입력칸과 잇는다", () => {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { redirectTarget } from "./proxy";
+import { redirectTarget } from "@/proxy";
 
 const url = (path: string) => new URL(path, "http://localhost:3000");
 
@@ -9,6 +9,10 @@ describe("redirectTarget (화면 명세 RT)", () => {
     expect(redirectTarget(url("/calendar?month=2026-10"), false)).toBe(
       "/login?next=%2Fcalendar%3Fmonth%3D2026-10",
     );
+  });
+
+  it("개발용 견본 화면은 세션이 없어도 그대로 둔다 (운영 빌드에서는 404)", () => {
+    expect(redirectTarget(url("/dev/components"), false)).toBeNull();
   });
 
   it("세션이 있으면 그대로 둔다", () => {

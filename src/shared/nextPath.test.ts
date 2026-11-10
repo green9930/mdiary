@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { loginPath, safeNextPath } from "./nextPath";
+import { loginPath, safeNextPath } from "@/shared/nextPath";
 
 describe("safeNextPath (화면 명세 RT)", () => {
   it.each([

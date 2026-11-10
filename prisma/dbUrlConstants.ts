@@ -5,7 +5,5 @@ export const LOCAL_URLS = {
   e2e: "postgresql://postgres:postgres@localhost:5432/mdiary_e2e",
 } as const;
 
-export type TLocalTarget = keyof typeof LOCAL_URLS;
-
 export const TEST_DATABASE_URL = LOCAL_URLS.test;
 export const E2E_DATABASE_URL = LOCAL_URLS.e2e;

@@ -1,9 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import TabBar from "@/components/layout/TabBar";
 import { clearTabUrls } from "@/hooks/useTabNavigation";
-
-import TabBar from "./TabBar";
 
 const navigation = vi.hoisted(() => ({ pathname: "/", search: "" }));
 

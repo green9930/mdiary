@@ -2,10 +2,11 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 import { todayInSeoul } from "@/lib/date";
-import { PATHS, TABS_LIST, type TTab } from "@/shared/sharedConstants";
+import { PATHS, TABS_LIST } from "@/shared/sharedConstants";
+import type { TabType } from "@/types/tabTypes";
 
 /** 경로가 속한 탭. 하위 경로도 그 탭으로 본다 */
-const findTab = (pathname: string): TTab | undefined =>
+const findTab = (pathname: string): TabType | undefined =>
   TABS_LIST.find((tab) =>
     tab.path === "/"
       ? pathname === "/"
@@ -33,7 +34,7 @@ export const useTabNavigation = () => {
   }, [current, url]);
 
   // 현재 탭을 다시 누르면 기본 상태, 다른 탭은 마지막으로 본 상태
-  const tabHref = (tab: TTab) =>
+  const tabHref = (tab: TabType) =>
     tab === current ? tab.path : (lastUrls.get(tab.path) ?? tab.path);
 
   // F3: 달력에서 날짜를 골라둔 상태면 그 날짜를 쓴다

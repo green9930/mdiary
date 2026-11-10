@@ -37,39 +37,39 @@
   .panes { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   body.only-light .panes { grid-template-columns: 1fr; } body.only-light .pane.t-dark { display: none; }
   body.only-dark .panes { grid-template-columns: 1fr; } body.only-dark .pane.t-light { display: none; }
-  .pane { background: var(--bg); color: var(--text); font-family: var(--font-body); border: 1px solid var(--doc-line); border-radius: 14px; padding: 18px; min-width: 0; }
-  .pane > .ph { font: 700 11px/1 ui-monospace, Menlo, monospace; color: var(--text-sub); letter-spacing: .5px; margin-bottom: 14px; text-transform: uppercase; }
+  .pane { background: var(--bg); color: var(--text01); font-family: var(--font-body); border: 1px solid var(--doc-line); border-radius: 14px; padding: 18px; min-width: 0; }
+  .pane > .ph { font: 700 11px/1 ui-monospace, Menlo, monospace; color: var(--text02); letter-spacing: .5px; margin-bottom: 14px; text-transform: uppercase; }
   .grp { margin-bottom: 18px; } .grp:last-child { margin-bottom: 0; }
-  .gl { font-size: 11px; color: var(--text-sub); margin-bottom: 8px; font-weight: 500; }
+  .gl { font-size: 11px; color: var(--text02); margin-bottom: 8px; font-weight: 500; }
   .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
   .col { display: flex; flex-direction: column; gap: 10px; }
-  .k { font: 10.5px/1.3 ui-monospace, Menlo, monospace; color: var(--text-sub); }
+  .k { font: 10.5px/1.3 ui-monospace, Menlo, monospace; color: var(--text02); }
   .num { font-family: var(--font-num); }
   .tnum { font-variant-numeric: tabular-nums; }
 
   /* 버튼 */
   .btn { font-family: var(--font-body); font-weight: 700; border: 2px solid transparent; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0 16px; white-space: nowrap; }
-  .sz-l { height: 52px; font-size: 16px; width: 100%; } .sz-m { height: 44px; font-size: 14px; } .sz-s { height: 32px; font-size: 12px; padding: 0 10px; border-radius: 6px; }
+  .sz-lg { height: 48px; font-size: 16px; width: 100%; } .sz-md { height: 40px; font-size: 14px; } .sz-sm { height: 32px; font-size: 12px; padding: 0 10px; border-radius: 6px; }
   .v-pri { background: var(--primary); color: var(--on-primary); } .v-pri.pressed { background: var(--primary-pressed); }
   .v-sec { background: var(--tint); color: var(--on-tint); } .v-sec.pressed { background: var(--tint-pressed); }
   .v-pout { background: var(--bg); color: var(--accent); border-color: var(--accent); } .v-pout.pressed { background: var(--surface); }
-  .v-line { background: var(--bg); color: var(--text); border-color: var(--line-strong); } .v-line.pressed { background: var(--surface); }
-  .v-text { background: none; color: var(--text); text-decoration: underline; text-underline-offset: 3px; font-weight: 500; padding: 0 4px; } .v-text.pressed { color: var(--text-sub); }
+  .v-line { background: var(--bg); color: var(--text01); border-color: var(--line-strong); } .v-line.pressed { background: var(--surface); }
+  .v-text { background: none; color: var(--text01); text-decoration: underline; text-underline-offset: 3px; font-weight: 500; padding: 0 4px; } .v-text.pressed { color: var(--text02); }
   .v-danger { background: var(--danger); color: var(--on-danger); } .v-danger.pressed { background: var(--danger-pressed); }
   .v-dis { background: var(--disabled); color: var(--on-disabled); }
   .v-gray { background: var(--gray); color: var(--on-gray); } .v-gray.pressed { background: var(--gray-pressed); }
-  .spin { width: 18px; height: 18px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; display: inline-block; animation: sp 0.8s linear infinite; }
+  .spin { width: 16px; height: 16px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; display: inline-block; animation: sp 0.8s linear infinite; }
   @keyframes sp { to { transform: rotate(360deg); } }
   .btable { display: grid; grid-template-columns: 112px 1fr 1fr 1fr 1fr; gap: 8px 10px; align-items: center; }
-  .btable .h { font-size: 10.5px; color: var(--text-sub); }
+  .btable .h { font-size: 10.5px; color: var(--text02); }
   .btable .full { grid-column: 2 / -1; }
 
   /* 입력 */
   .fld { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
   .fld > .errm, .fld > .k, .fld > .help { margin-top: -4px; } /* 입력과 보조 문구 사이 4 */
-  .lbl { font-size: 14px; font-weight: 500; color: var(--text); }
-  .inp { height: 48px; border: 1px solid var(--line-input); border-radius: 8px; background: var(--bg); padding: 0 14px; display: flex; align-items: center; gap: 8px; font-size: 16px; color: var(--text); }
-  .inp .ph { color: var(--text-weak); } .inp .cnt { margin-left: auto; font-size: 12px; color: var(--text-weak); font-family: var(--font-num); } .inp .unit { margin-left: auto; color: var(--text-sub); }
+  .lbl { font-size: 14px; font-weight: 500; color: var(--text01); }
+  .inp { height: 48px; border: 1px solid var(--line-input); border-radius: 8px; background: var(--bg); padding: 0 14px; display: flex; align-items: center; gap: 8px; font-size: 16px; color: var(--text01); }
+  .inp .ph { color: var(--text03); } .inp .cnt { margin-left: auto; font-size: 12px; color: var(--text03); font-family: var(--font-num); } .inp .unit { margin-left: auto; color: var(--text02); }
   .inp.focus { border: 2px solid var(--accent); } .inp.err { border: 2px solid var(--danger-text); } .inp.dis { border-color: var(--line); background: var(--surface); color: var(--on-disabled); }
   .inp.ta { height: auto; min-height: 96px; align-items: flex-start; padding: 12px 14px 26px; position: relative; line-height: 24px; }
   .inp.ta .cnt { position: absolute; right: 12px; bottom: 6px; }
@@ -80,23 +80,23 @@
 
   /* 선택 컨트롤 */
   .seg { display: flex; border: 1px solid var(--line-strong); border-radius: 8px; overflow: hidden; height: 40px; }
-  .seg span { flex: 1; display: grid; place-items: center; font-size: 14px; color: var(--text-sub); }
+  .seg span { flex: 1; display: grid; place-items: center; font-size: 14px; color: var(--text02); }
   .seg span + span { border-left: 1px solid var(--line-strong); }
   .seg span.on { background: var(--primary); color: var(--on-primary); font-weight: 700; }
   .seg.dis { background: var(--surface); } .seg.dis span { color: var(--on-disabled); } .seg.dis span.on { background: var(--line-strong); color: var(--on-disabled); }
   .cgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-  .cc { height: 64px; border: 1px solid var(--line); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 12px; color: var(--text-sub); }
+  .cc { height: 64px; border: 1px solid var(--line); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 12px; color: var(--text02); }
   .cc i { width: 26px; height: 26px; border-radius: 50%; background: var(--surface); display: block; }
   .cc.on { border: 2px solid var(--accent); background: var(--tint); color: var(--on-tint); font-weight: 700; }
   .chips { display: flex; gap: 6px; overflow: hidden; }
-  .chip { flex: none; height: 32px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line-strong); display: grid; place-items: center; font-size: 14px; color: var(--text); }
+  .chip { flex: none; height: 32px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line-strong); display: grid; place-items: center; font-size: 14px; color: var(--text01); }
   .chip.on { background: var(--primary); border-color: var(--primary); color: var(--on-primary); font-weight: 700; }
   .radio, .check { display: flex; align-items: center; gap: 10px; font-size: 14px; min-height: 44px; }
-  .radio i { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--line-strong); display: grid; place-items: center; flex: none; }
+  .radio i { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--line-input); display: grid; place-items: center; flex: none; }
   .radio.on i { border-color: var(--primary); } .radio.on i::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--primary); }
-  .radio.dis { color: var(--on-disabled); } .radio.dis i { border-color: var(--on-disabled); }
-  .radio-hint { display: block; font-size: 12px; line-height: 18px; color: var(--text-sub); }
-  .check i { width: 24px; height: 24px; flex: none; color: var(--text-sub); display: block; }
+  .radio.dis { color: var(--on-disabled); } .radio.dis i { border-color: var(--line); }
+  .radio-hint { display: block; font-size: 12px; line-height: 18px; color: var(--text02); }
+  .check i { width: 24px; height: 24px; flex: none; color: var(--text02); display: block; }
   .check.on i { color: var(--primary); }
   .check.dis i { color: var(--on-disabled); }
   .check.dis { color: var(--on-disabled); }
@@ -113,34 +113,34 @@
   .li .tt { flex: 1; min-width: 0; display: flex; flex-direction: column; }
   .li .t1 { display: flex; align-items: center; gap: 6px; min-width: 0; font-size: 14px; }
   .li .t1 .x { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; min-width: 0; }
-  .li .t2 { font-size: 12px; color: var(--text-sub); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .li .t2 { font-size: 12px; color: var(--text02); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
   .li .m { font-family: var(--font-num); font-size: 16px; font-weight: 500; font-variant-numeric: tabular-nums; }
   .bdg { flex: none; font-size: 10px; font-weight: 500; padding: 1px 6px; border-radius: 6px; background: var(--tint); color: var(--on-tint); }
   .hl { background: var(--highlight); font-weight: 700; border-radius: 3px; padding: 0 1px; }
   .mdiv { font-size: 14px; font-weight: 700; padding: 14px 0 6px; border-bottom: 1px solid var(--line); }
   .sumrow { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 14px; }
-  .sumrow .s { color: var(--text-sub); font-size: 12px; }
+  .sumrow .s { color: var(--text02); font-size: 12px; }
 
   /* 달력 */
   .cal { display: grid; grid-template-columns: repeat(7, 1fr); }
-  .cal .w { text-align: center; font-size: 12px; font-weight: 500; color: var(--text-sub); padding: 6px 0; }
+  .cal .w { text-align: center; font-size: 12px; font-weight: 500; color: var(--text02); padding: 6px 0; }
   .cal .w.sun { color: var(--danger-text); }
   .cal .d { height: 48px; display: flex; flex-direction: column; align-items: center; gap: 1px; }
-  .cal .n { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font: 500 14px/1 var(--font-num); color: var(--text); }
-  .cal .a { font: 400 10px/12px var(--font-num); color: var(--text); letter-spacing: -.2px; }
-  .cal .sun .n { color: var(--danger-text); } .cal .sat .n { color: var(--text-sub); } .cal .out .n { color: var(--text-weak); }
+  .cal .n { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font: 500 14px/1 var(--font-num); color: var(--text01); }
+  .cal .a { font: 400 10px/12px var(--font-num); color: var(--text01); letter-spacing: -.2px; }
+  .cal .sun .n { color: var(--danger-text); } .cal .sat .n { color: var(--text02); } .cal .out .n { color: var(--text03); }
   .cal .today .n { box-shadow: inset 0 0 0 2px var(--brand); }
   .cal .sel .n { background: var(--primary); color: var(--on-primary); font-weight: 700; box-shadow: none; }
   .cstates { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
   .cstates > div { border: 1px dashed var(--line); border-radius: 8px; padding-bottom: 4px; }
-  .cstates .cap { font-size: 10px; color: var(--text-sub); text-align: center; line-height: 1.3; padding: 2px; }
+  .cstates .cap { font-size: 10px; color: var(--text02); text-align: center; line-height: 1.3; padding: 2px; }
 
   /* 그래프 */
   .bar { display: grid; grid-template-columns: 54px 1fr 50px 84px; gap: 8px; align-items: center; height: 32px; font-size: 14px; }
   .bar .tr { height: 8px; border-radius: 999px; background: var(--surface); overflow: hidden; }
   .bar .tr i { display: block; height: 100%; border-radius: 999px; min-width: 2px; }
   .bar .v, .bar .w { text-align: right; font-family: var(--font-num); font-variant-numeric: tabular-nums; }
-  .bar .v { color: var(--text-sub); font-size: 12px; }
+  .bar .v { color: var(--text02); font-size: 12px; }
   .bar.dim { opacity: .35; } .bar.on { font-weight: 700; }
 
   /* 오버레이 */
@@ -151,23 +151,23 @@
   .sh-t { font-size: 18px; font-weight: 700; margin-bottom: 12px; }
   .dlg { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: calc(100% - 48px); max-width: 320px; background: var(--bg); border-radius: 16px; box-shadow: var(--shadow-2); padding: 22px 18px 16px; border: 1px solid var(--dlg-line); }
   .dlg .dt { font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 6px; }
-  .dlg .db { font-size: 14px; text-align: center; color: var(--text-sub); margin-bottom: 18px; }
+  .dlg .db { font-size: 14px; text-align: center; color: var(--text02); margin-bottom: 18px; }
   .dlg .df { display: flex; gap: 8px; } .dlg .df .btn { flex: 1; }
 
   /* 상태 */
   .band { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px; border-radius: 8px; font-size: 12px; }
   .band.notice { background: var(--notice); color: var(--on-notice); }
-  .band.retry { background: var(--surface); color: var(--text-sub); }
+  .band.retry { background: var(--surface); color: var(--text02); }
   .skel { background: var(--surface); border-radius: 6px; animation: pulse 1.2s ease-in-out infinite alternate; }
   @keyframes pulse { to { opacity: .5; } }
   @media (prefers-reduced-motion: reduce) { .skel, .spin, .caret { animation: none; } }
-  .empty { text-align: center; padding: 22px 0; color: var(--text-sub); font-size: 14px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .empty { text-align: center; padding: 22px 0; color: var(--text02); font-size: 14px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
 
   /* 내비 */
   .hdr { display: flex; align-items: center; height: 52px; border-bottom: 1px solid var(--line); }
   .hdr .back { width: 44px; height: 44px; display: grid; place-items: center; font-size: 22px; }
   .hdr .tt { font-size: 18px; font-weight: 700; }
-  .tabbar { display: grid; grid-template-columns: repeat(5, 1fr); height: 64px; border-top: 1px solid var(--line); align-items: center; text-align: center; font-size: 10px; font-weight: 500; color: var(--text-sub); background: var(--bg); padding-bottom: 6px; }
+  .tabbar { display: grid; grid-template-columns: repeat(5, 1fr); height: 64px; border-top: 1px solid var(--line); align-items: center; text-align: center; font-size: 10px; font-weight: 500; color: var(--text02); background: var(--bg); padding-bottom: 6px; }
   .tabbar i { display: block; width: 24px; height: 24px; margin: 0 auto 2px; }
   .tabbar .on { color: var(--accent); font-weight: 700; } .tabbar .on i { color: var(--brand); }
   .tabbar .plus svg { width: 28px; height: 28px; }
@@ -233,15 +233,15 @@
 <template data-id="s-btn" data-title="4. 버튼" data-lead="8종 × 크기(L·M·S) × 상태(기본·누름·로딩). disabled는 모든 버튼의 비활성 모습이다. danger는 채움만 쓴다.">
   <div class="btable">
     <span class="h">종류</span><span class="h">기본 M</span><span class="h">누름 M</span><span class="h">로딩 M</span><span class="h">S</span>
-    <span class="k">primary filled</span><span class="btn sz-m v-pri">저장</span><span class="btn sz-m v-pri pressed">저장</span><span class="btn sz-m v-pri"><i class="spin"></i></span><span class="btn sz-s v-pri">선택</span>
-    <span class="k">secondary filled</span><span class="btn sz-m v-sec">보조 동작</span><span class="btn sz-m v-sec pressed">보조 동작</span><span class="btn sz-m v-sec"><i class="spin"></i></span><span class="btn sz-s v-sec">보조</span>
-    <span class="k">primary outline</span><span class="btn sz-m v-pout">기록 추가하기</span><span class="btn sz-m v-pout pressed">기록 추가하기</span><span class="btn sz-m v-pout"><i class="spin"></i></span><span class="btn sz-s v-pout">오늘</span>
-    <span class="k">secondary line</span><span class="btn sz-m v-line">취소</span><span class="btn sz-m v-line pressed">취소</span><span class="btn sz-m v-line"><i class="spin"></i></span><span class="btn sz-s v-line">‹</span>
-    <span class="k">text</span><span class="btn sz-m v-text">개인정보처리방침</span><span class="btn sz-m v-text pressed">개인정보처리방침</span><span class="btn sz-m v-text"><i class="spin"></i></span><span class="btn sz-s v-text">서비스 안내</span>
-    <span class="k">danger</span><span class="btn sz-m v-danger">삭제</span><span class="btn sz-m v-danger pressed">삭제</span><span class="btn sz-m v-danger"><i class="spin"></i></span><span class="btn sz-s v-danger">삭제</span>
-    <span class="k">disabled</span><span class="btn sz-m v-dis">적용</span><span class="k">누름 없음</span><span class="k">로딩 없음</span><span class="btn sz-s v-dis">선택</span>
-    <span class="k">gray</span><span class="btn sz-m v-gray">나가기</span><span class="btn sz-m v-gray pressed">나가기</span><span class="btn sz-m v-gray"><i class="spin"></i></span><span class="btn sz-s v-gray">나가기</span>
-    <span class="k">L (하단 고정)</span><span class="full col"><span class="btn sz-l v-pri">저장</span><span class="btn sz-l v-dis">저장</span></span>
+    <span class="k">primary filled</span><span class="btn sz-md v-pri">저장</span><span class="btn sz-md v-pri pressed">저장</span><span class="btn sz-md v-pri"><i class="spin"></i></span><span class="btn sz-sm v-pri">선택</span>
+    <span class="k">secondary filled</span><span class="btn sz-md v-sec">보조 동작</span><span class="btn sz-md v-sec pressed">보조 동작</span><span class="btn sz-md v-sec"><i class="spin"></i></span><span class="btn sz-sm v-sec">보조</span>
+    <span class="k">primary outline</span><span class="btn sz-md v-pout">기록 추가하기</span><span class="btn sz-md v-pout pressed">기록 추가하기</span><span class="btn sz-md v-pout"><i class="spin"></i></span><span class="btn sz-sm v-pout">오늘</span>
+    <span class="k">secondary line</span><span class="btn sz-md v-line">취소</span><span class="btn sz-md v-line pressed">취소</span><span class="btn sz-md v-line"><i class="spin"></i></span><span class="btn sz-sm v-line">‹</span>
+    <span class="k">text</span><span class="btn sz-md v-text">개인정보처리방침</span><span class="btn sz-md v-text pressed">개인정보처리방침</span><span class="btn sz-md v-text"><i class="spin"></i></span><span class="btn sz-sm v-text">서비스 안내</span>
+    <span class="k">danger</span><span class="btn sz-md v-danger">삭제</span><span class="btn sz-md v-danger pressed">삭제</span><span class="btn sz-md v-danger"><i class="spin"></i></span><span class="btn sz-sm v-danger">삭제</span>
+    <span class="k">disabled</span><span class="btn sz-md v-dis">적용</span><span class="k">누름 없음</span><span class="k">로딩 없음</span><span class="btn sz-sm v-dis">선택</span>
+    <span class="k">gray</span><span class="btn sz-md v-gray">나가기</span><span class="btn sz-md v-gray pressed">나가기</span><span class="btn sz-md v-gray"><i class="spin"></i></span><span class="btn sz-sm v-gray">나가기</span>
+    <span class="k">lg (하단 고정)</span><span class="full col"><span class="btn sz-lg v-pri">저장</span><span class="btn sz-lg v-dis">저장</span></span>
   </div>
 </template>
 
@@ -251,22 +251,22 @@
     <div class="fld"><span class="lbl">제목</span><span class="inp focus">점심 김<span class="caret"></span><span class="cnt">4/25</span></span><span class="k">포커스</span></div>
     <div class="fld"><span class="lbl">제목</span><span class="inp">점심 김밥<span class="cnt">5/25</span></span><span class="k">값 있음</span></div>
     <div class="fld"><span class="lbl">제목</span><span class="inp err"><span class="ph">제목을 입력해 주세요</span><span class="cnt">0/25</span></span><span class="errm">제목을 입력해 주세요.</span></div>
-    <div class="fld"><span class="lbl">금액</span><div class="row" style="flex-wrap:nowrap"><span class="inp num" style="flex:1">8,000<span class="unit">원</span></span><span class="btn sz-m v-pout">계산</span></div><span class="k">값 있음 + 단위 + [계산]</span></div>
-    <div class="fld"><span class="lbl">금액</span><div class="row" style="flex-wrap:nowrap"><span class="inp err num" style="flex:1">0<span class="unit">원</span></span><span class="btn sz-m v-pout">계산</span></div><span class="errm">금액을 입력해 주세요.</span></div>
+    <div class="fld"><span class="lbl">금액</span><div class="row" style="flex-wrap:nowrap"><span class="inp num" style="flex:1">8,000<span class="unit">원</span></span><span class="btn sz-md v-pout">계산</span></div><span class="k">값 있음 + 단위 + [계산]</span></div>
+    <div class="fld"><span class="lbl">금액</span><div class="row" style="flex-wrap:nowrap"><span class="inp err num" style="flex:1">0<span class="unit">원</span></span><span class="btn sz-md v-pout">계산</span></div><span class="errm">금액을 입력해 주세요.</span></div>
     <div class="fld"><span class="lbl">기간</span><div class="row"><span class="inp num" style="width:96px"><span class="ph">2~99</span></span><span>개월</span></div><span class="k">숫자 입력 (빈칸)</span></div>
     <div class="fld"><span class="lbl">회차</span><div class="row"><span class="inp err num" style="width:96px">1</span><span>회</span></div><span class="errm">2부터 입력할 수 있습니다.</span></div>
     <div class="fld"><span class="lbl">내용 (선택)</span><span class="inp ta"><span class="ph">메모</span><span class="cnt">0/200</span></span><span class="k">textarea 기본 (3줄)</span></div>
     <div class="fld"><span class="lbl">내용 (선택)</span><span class="inp ta focus"><span>참치김밥 2줄<br />회사 앞 분식집<br />36,000 ÷ 3 = 12,000<span class="caret"></span></span><span class="cnt">33/200</span></span><span class="k">textarea 포커스 + 여러 줄</span></div>
     <div class="fld"><span class="lbl">날짜</span><span class="inp">2026년 10월 18일 (일)</span><span class="k">날짜 (누르면 시트)</span></div>
     <div class="fld"><span class="lbl">제목</span><span class="inp dis">월세</span><span class="k">비활성</span></div>
-    <div class="fld"><span class="lbl">검색</span><span class="inp focus">쿠팡<span class="caret"></span><span style="margin-left:auto;color:var(--text-sub)">ⓧ</span></span><span class="k">검색 입력 + 지우기</span></div>
-    <div class="fld"><span class="lbl">검색</span><span class="inp focus">쿠팡프<span style="margin-left:auto;color:var(--text-sub)"><i class="spin" style="width:16px;height:16px"></i></span></span><span class="k">자동 검색 중</span></div>
+    <div class="fld"><span class="lbl">검색</span><span class="inp focus">쿠팡<span class="caret"></span><span style="margin-left:auto;color:var(--text02)">ⓧ</span></span><span class="k">검색 입력 + 지우기</span></div>
+    <div class="fld"><span class="lbl">검색</span><span class="inp focus">쿠팡프<span style="margin-left:auto;color:var(--text02)"><i class="spin" style="width:16px;height:16px"></i></span></span><span class="k">자동 검색 중</span></div>
   </div>
 </template>
 
 <template data-id="s-select" data-title="6. 선택 컨트롤" data-lead="세그먼트 · 카테고리 격자 · 필터 칩 · 라디오 · 체크박스 · 드롭다운.">
   <div class="grp"><div class="gl">세그먼트 — 반복 3단 (기본 / 선택 / 비활성)</div>
-    <div class="col"><div class="seg"><span class="on">없음</span><span>정기지출</span><span>할부</span></div><div class="seg"><span>계속</span><span class="on">개월 수</span></div><div class="seg dis"><span>없음</span><span class="on">정기지출</span><span>할부</span></div><span style="font-size:12px;color:var(--text-sub)">반복 종류와 기간은 바꿀 수 없습니다.</span></div></div>
+    <div class="col"><div class="seg"><span class="on">없음</span><span>정기지출</span><span>할부</span></div><div class="seg"><span>계속</span><span class="on">개월 수</span></div><div class="seg dis"><span>없음</span><span class="on">정기지출</span><span>할부</span></div><span style="font-size:12px;color:var(--text02)">반복 종류와 기간은 바꿀 수 없습니다.</span></div></div>
   <div class="grp"><div class="gl">카테고리 격자 (식비 선택)</div>
     <div class="cgrid"><span class="cc on"><i data-cat="식비" style="color:var(--c-식비);background:none;padding:2px"></i>식비</span><span class="cc"><i data-cat="가전" style="color:var(--c-가전);background:none;padding:2px"></i>가전</span><span class="cc"><i data-cat="교통" style="color:var(--c-교통);background:none;padding:2px"></i>교통</span><span class="cc"><i data-cat="의료" style="color:var(--c-의료);background:none;padding:2px"></i>의료</span><span class="cc"><i data-cat="의류" style="color:var(--c-의류);background:none;padding:2px"></i>의류</span><span class="cc"><i data-cat="미용" style="color:var(--c-미용);background:none;padding:2px"></i>미용</span><span class="cc"><i data-cat="문화" style="color:var(--c-문화);background:none;padding:2px"></i>문화</span><span class="cc"><i data-cat="교육" style="color:var(--c-교육);background:none;padding:2px"></i>교육</span><span class="cc"><i data-cat="생활" style="color:var(--c-생활);background:none;padding:2px"></i>생활</span><span class="cc"><i data-cat="기타" style="color:var(--c-기타);background:none;padding:2px"></i>기타</span></div>
     <div class="errm" style="margin-top:6px">카테고리를 선택해 주세요. <span class="k">(오류 시 격자 아래)</span></div></div>
@@ -279,7 +279,7 @@
       <div class="check on"><i></i>계산식을 내용에 기록</div><div class="check"><i></i>위 내용을 확인했습니다</div><div class="check dis"><i></i>비활성</div></div>
   </div>
   <div class="grp" style="padding-bottom:200px"><div class="gl">드롭다운 (트리거 + 열린 메뉴)</div>
-    <div class="row"><span class="dd"><span class="btn sz-s v-line">이번 달 ▾</span><div class="menu"><div class="on">이번 달</div><div>최근 3개월</div><div>최근 6개월</div><div>최근 1년</div></div></span><span class="btn sz-s v-line" style="margin-left:150px">📅</span><span class="btn sz-s v-line">최신순 ▾</span></div></div>
+    <div class="row"><span class="dd"><span class="btn sz-sm v-line">이번 달 ▾</span><div class="menu"><div class="on">이번 달</div><div>최근 3개월</div><div>최근 6개월</div><div>최근 1년</div></div></span><span class="btn sz-sm v-line" style="margin-left:150px">📅</span><span class="btn sz-sm v-line">최신순 ▾</span></div></div>
 </template>
 
 <template data-id="s-list" data-title="7. 목록 · 배지 · 요약" data-lead="아이콘 자리는 비워 둔다(사용자가 넣는다). 제목은 한 줄 말줄임, 배지·금액은 항상 보인다.">
@@ -287,7 +287,7 @@
   <div class="li"><span class="ico"></span><span class="tt"><span class="t1"><span class="x">점심 김밥</span></span></span><span class="m">8,000원</span></div>
   <div class="li"><span class="ico"></span><span class="tt"><span class="t1"><span class="x">넷플릭스 스탠다드 요금제 월 구독료</span><span class="bdg">정기</span></span></span><span class="m">13,300원</span></div>
   <div class="li"><span class="ico"></span><span class="tt"><span class="t1"><span class="x">아이패드</span><span class="bdg">할부 2/3</span></span><span class="t2 num">11.01</span></span><span class="m">100,000원</span></div>
-  <div class="sumrow" style="margin-top:8px"><span><b>전체</b> <span class="s">· 42건 · 1,234,500원</span></span><span class="btn sz-s v-line">최신순 ▾</span></div>
+  <div class="sumrow" style="margin-top:8px"><span><b>전체</b> <span class="s">· 42건 · 1,234,500원</span></span><span class="btn sz-sm v-line">최신순 ▾</span></div>
   <div class="mdiv">2026년 10월</div>
   <div class="li"><span class="ico"></span><span class="tt"><span class="t1"><span class="x"><span class="hl">쿠팡</span> 생필품</span></span><span class="t2 num">10.12</span></span><span class="m">32,400원</span></div>
   <div class="li"><span class="ico"></span><span class="tt"><span class="t1"><span class="x">장보기</span></span><span class="t2">10.03 · <span class="hl">쿠팡</span>프레시 주문</span></span><span class="m">54,000원</span></div>
@@ -321,21 +321,21 @@
 
 <template data-id="s-over" data-title="10. 오버레이" data-lead="바텀시트 · 확인 다이얼로그 · danger 확인 · 알림 다이얼로그. 다크에서는 그림자 대신 테두리.">
   <div class="grid2">
-    <div><div class="gl">바텀시트</div><div class="stage"><div class="scrim"></div><div class="sheet"><div class="grip"></div><div class="sh-t">기간 선택</div><div class="seg" style="margin-bottom:12px"><span class="on">시작 2026년 8월</span><span>끝 2026년 10월</span></div><span class="btn sz-l v-pri">적용</span></div></div></div>
-    <div><div class="gl">확인 다이얼로그 (나가기)</div><div class="stage"><div class="scrim"></div><div class="dlg"><div class="db" style="color:var(--text)">작성 중인 내용이 사라집니다.<br />나가시겠습니까?</div><div class="df"><span class="btn sz-m v-pri">계속 작성</span><span class="btn sz-m v-gray">나가기</span></div></div></div></div>
-    <div><div class="gl">danger 확인</div><div class="stage"><div class="scrim"></div><div class="dlg"><div class="db" style="color:var(--text)">이 기록을 삭제하시겠습니까?</div><div class="df"><span class="btn sz-m v-line">취소</span><span class="btn sz-m v-danger">삭제</span></div></div></div></div>
-    <div><div class="gl">알림 다이얼로그</div><div class="stage"><div class="scrim"></div><div class="dlg"><div class="dt">저장하지 못했습니다</div><div class="db">잠시 후 다시 시도해 주세요.</div><div class="df"><span class="btn sz-m v-pri">확인</span></div></div></div></div>
+    <div><div class="gl">바텀시트</div><div class="stage"><div class="scrim"></div><div class="sheet"><div class="grip"></div><div class="sh-t">기간 선택</div><div class="seg" style="margin-bottom:12px"><span class="on">시작 2026년 8월</span><span>끝 2026년 10월</span></div><span class="btn sz-lg v-pri">적용</span></div></div></div>
+    <div><div class="gl">확인 다이얼로그 (나가기)</div><div class="stage"><div class="scrim"></div><div class="dlg"><div class="db" style="color:var(--text01)">작성 중인 내용이 사라집니다.<br />나가시겠습니까?</div><div class="df"><span class="btn sz-md v-pri">계속 작성</span><span class="btn sz-md v-gray">나가기</span></div></div></div></div>
+    <div><div class="gl">danger 확인</div><div class="stage"><div class="scrim"></div><div class="dlg"><div class="db" style="color:var(--text01)">이 기록을 삭제하시겠습니까?</div><div class="df"><span class="btn sz-md v-line">취소</span><span class="btn sz-md v-danger">삭제</span></div></div></div></div>
+    <div><div class="gl">알림 다이얼로그</div><div class="stage"><div class="scrim"></div><div class="dlg"><div class="dt">저장하지 못했습니다</div><div class="db">잠시 후 다시 시도해 주세요.</div><div class="df"><span class="btn sz-md v-pri">확인</span></div></div></div></div>
   </div>
 </template>
 
 <template data-id="s-state" data-title="11. 상태 표시" data-lead="오프라인 띠 · 다시 불러오기 실패 띠(CM ③) · 스켈레톤 · 빈 상태 · 조회 실패.">
   <div class="col">
     <div class="band notice">오프라인 상태입니다. 연결되면 다시 기록할 수 있습니다.</div>
-    <div class="band retry"><span>최신 내용을 불러오지 못했습니다.</span><span class="btn sz-s v-text">다시 시도</span></div>
+    <div class="band retry"><span>최신 내용을 불러오지 못했습니다.</span><span class="btn sz-sm v-text">다시 시도</span></div>
     <div class="grp"><div class="gl">스켈레톤 (로딩)</div><div class="col" style="gap:8px"><div class="skel" style="height:22px;width:45%"></div><div class="row" style="flex-wrap:nowrap"><div class="skel" style="width:36px;height:36px;border-radius:50%"></div><div class="col" style="flex:1;gap:6px"><div class="skel" style="height:14px;width:70%"></div><div class="skel" style="height:12px;width:30%"></div></div></div></div></div>
     <div class="grid2">
-      <div class="empty">기록이 없습니다.<span class="btn sz-m v-pout">기록 추가하기</span></div>
-      <div class="empty">불러오지 못했습니다.<span class="btn sz-m v-pout">다시 시도</span></div>
+      <div class="empty">기록이 없습니다.<span class="btn sz-md v-pout">기록 추가하기</span></div>
+      <div class="empty">불러오지 못했습니다.<span class="btn sz-md v-pout">다시 시도</span></div>
     </div>
   </div>
 </template>
@@ -347,9 +347,9 @@
   <div class="col" style="align-items:center;margin-top:24px;gap:14px">
     <span class="tagline">나의 지출만 확인하고 싶을 때</span>
     <span class="logo" style="font-size:48px">다씀 <span data-icon="pencil" style="width:32px;height:32px;display:inline-block"></span></span>
-    <span style="font-size:12px;color:var(--text-sub);margin-top:-10px">Money Diary</span>
-    <span class="btn sz-l v-line" style="max-width:320px"><b style="font-family:Arial">G</b>&nbsp; Google로 계속하기</span>
-    <span style="font-size:12px;color:var(--text-sub)">세션이 만료되었습니다. 다시 로그인해 주세요.</span>
+    <span style="font-size:12px;color:var(--text02);margin-top:-10px">Money Diary</span>
+    <span class="btn sz-lg v-line" style="max-width:320px"><b style="font-family:Arial">G</b>&nbsp; Google로 계속하기</span>
+    <span style="font-size:12px;color:var(--text02)">세션이 만료되었습니다. 다시 로그인해 주세요.</span>
     <span class="k">로그인 화면 (48) · Google 버튼은 Google 브랜드 가이드를 따른다</span>
     <span class="logo" style="font-size:24px;margin-top:10px">다씀 <span data-icon="pencil" style="width:18px;height:18px;display:inline-block"></span></span>
     <span class="k">그 밖 화면 (24)</span>
@@ -367,12 +367,12 @@ function paintIcons(root) {
 /* ===== 토큰 (정본: 2026-11-02-02-design-tokens.md) ===== */
 const T = {
   light: { brand: "#1DB954", primary: "#1DB954", "primary-pressed": "#17A14B", "on-primary": "#FFFFFF", accent: "#13823E", tint: "#E3F7EA", "tint-pressed": "#D4EFDE", "on-tint": "#0E5A2C",
-    bg: "#FFFFFF", surface: "#F3F6F4", line: "#E3E8E5", "line-strong": "#C9D1CC", "line-input": "#8A948E", text: "#17201B", "text-sub": "#5E6A63", "text-weak": "#7D8781",
+    bg: "#FFFFFF", surface: "#F3F6F4", line: "#E3E8E5", "line-strong": "#C9D1CC", "line-input": "#8A948E", text01: "#17201B", text02: "#5E6A63", text03: "#7D8781",
     gray: "#EBEFEC", "gray-pressed": "#DDE3DF", "on-gray": "#4A544F", disabled: "#EEF1EF", "on-disabled": "#7D8781", scrim: "rgba(0,0,0,.40)",
     danger: "#D93A2B", "danger-pressed": "#BF3022", "on-danger": "#FFFFFF", "danger-text": "#D93A2B", notice: "#FFF4D6", "on-notice": "#7A5300", highlight: "#CFF2DB",
     "shadow-1": "0 2px 8px rgba(0,0,0,.08)", "shadow-2": "0 8px 24px rgba(0,0,0,.16)", "shadow-sheet": "0 -4px 16px rgba(0,0,0,.10)", "dlg-line": "transparent" },
   dark: { brand: "#1ED760", primary: "#1ED760", "primary-pressed": "#19C257", "on-primary": "#FFFFFF", accent: "#1ED760", tint: "#173323", "tint-pressed": "#1E4029", "on-tint": "#1ED760",
-    bg: "#111513", surface: "#1E2522", line: "#2A322E", "line-strong": "#3B4540", "line-input": "#5C6661", text: "#EEF2EF", "text-sub": "#A3AEA8", "text-weak": "#6E7873",
+    bg: "#111513", surface: "#1E2522", line: "#2A322E", "line-strong": "#3B4540", "line-input": "#5C6661", text01: "#EEF2EF", text02: "#A3AEA8", text03: "#6E7873",
     gray: "#2A322E", "gray-pressed": "#343D39", "on-gray": "#C9D1CC", disabled: "#1E2522", "on-disabled": "#6E7873", scrim: "rgba(0,0,0,.60)",
     danger: "#D93A2B", "danger-pressed": "#BF3022", "on-danger": "#FFFFFF", "danger-text": "#FF7A6E", notice: "#2B2412", "on-notice": "#FFD98A", highlight: "#1F4A30",
     "shadow-1": "none", "shadow-2": "none", "shadow-sheet": "none", "dlg-line": "#2A322E" },
@@ -383,12 +383,12 @@ const CAT = {
 };
 /* 표에서 "이 색은 무엇 위의 글자인가" */
 const PAIR = { primary: ["on-primary", "면 위 흰 글자"], "primary-pressed": ["on-primary", "면 위 흰 글자"], tint: ["on-tint", "면 위 글자"], "tint-pressed": ["on-tint", "면 위 글자"], gray: ["on-gray", "면 위 글자"], "gray-pressed": ["on-gray", "면 위 글자"],
-  danger: ["on-danger", "면 위 흰 글자"], "danger-pressed": ["on-danger", "면 위 흰 글자"], notice: ["on-notice", "면 위 글자"], highlight: ["text", "면 위 글자"],
-  accent: ["bg", "바탕 위 글자"], text: ["bg", "바탕 위 글자"], "text-sub": ["bg", "바탕 위 글자"], "danger-text": ["bg", "바탕 위 글자"],
-  "text-weak": ["bg", "예외(placeholder·비활성)"], "on-disabled": ["disabled", "예외(비활성)"], brand: ["bg", "테두리·아이콘(3:1)"], "line-strong": ["bg", "테두리(3:1)"], "line-input": ["bg", "입력 테두리(3:1)"] };
+  danger: ["on-danger", "면 위 흰 글자"], "danger-pressed": ["on-danger", "면 위 흰 글자"], notice: ["on-notice", "면 위 글자"], highlight: ["text01", "면 위 글자"],
+  accent: ["bg", "바탕 위 글자"], text01: ["bg", "바탕 위 글자"], text02: ["bg", "바탕 위 글자"], "danger-text": ["bg", "바탕 위 글자"],
+  text03: ["bg", "예외(placeholder·비활성)"], "on-disabled": ["disabled", "예외(비활성)"], brand: ["bg", "테두리·아이콘(3:1)"], "line-strong": ["bg", "예외(글자 있는 컨트롤 테두리)"], "line-input": ["bg", "입력·라디오 테두리(3:1)"] };
 const DESC = { brand: "로고, 오늘 테두리, 탭 활성 아이콘", primary: "주 버튼·선택 날짜·＋ 면", "primary-pressed": "주 버튼 누름", "on-primary": "주 버튼 글자", accent: "초록 글자, outline, 포커스",
-  tint: "secondary filled·배지 면", "tint-pressed": "secondary filled 누름", "on-tint": "secondary filled·배지 글자", bg: "바탕", surface: "아이콘 자리·비활성 입력·상자", line: "구분선·비활성 입력 테두리", "line-strong": "line 버튼·컨트롤 테두리", "line-input": "입력 테두리",
-  text: "기본 글자·금액", "text-sub": "보조 글자·토요일", "text-weak": "placeholder·앞뒤 달", gray: "gray 버튼 면", "gray-pressed": "gray 버튼 누름", "on-gray": "gray 버튼 글자", disabled: "비활성 면", "on-disabled": "비활성 글자",
+  tint: "secondary filled·배지 면", "tint-pressed": "secondary filled 누름", "on-tint": "secondary filled·배지 글자", bg: "바탕", surface: "아이콘 자리·비활성 입력·상자", line: "구분선·비활성 입력 테두리", "line-strong": "line 버튼·칩·세그먼트 테두리", "line-input": "입력·라디오 테두리",
+  text01: "기본 글자·금액", text02: "보조 글자·토요일", text03: "placeholder·앞뒤 달", gray: "gray 버튼 면", "gray-pressed": "gray 버튼 누름", "on-gray": "gray 버튼 글자", disabled: "비활성 면", "on-disabled": "비활성 글자",
   scrim: "가림막", danger: "danger 버튼 면", "danger-pressed": "danger 누름", "on-danger": "danger 버튼 글자", "danger-text": "오류 문구·일요일", notice: "오프라인 띠 면", "on-notice": "오프라인 띠 글자", highlight: "검색 일치 면" };
 
 function lum(hex) {
@@ -424,10 +424,10 @@ document.getElementById("tok").textContent = cssVars(".t-light", "light") + cssV
 
 /* 2. 글꼴 */
 (function () {
-  const rows = [["title-l", "20/28 700", "2026년 10월", "body"], ["title-m", "18/26 700", "기간 선택", "body"], ["body-l", "16/24 400", "제목을 입력해 주세요", "body"],
+  const rows = [["title-lg", "20/28 700", "2026년 10월", "body"], ["title-md", "18/26 700", "기간 선택", "body"], ["body-lg", "16/24 400", "제목을 입력해 주세요", "body"],
     ["body", "14/22 400", "넷플릭스 스탠다드 요금제 월 구독료", "body"], ["body-strong", "14/22 700", "10월 18일 (일)", "body"], ["caption", "12/18 400", "2부터 입력할 수 있습니다.", "body"],
-    ["micro", "10/14 500", "정기 · 할부 2/3 · 카테고리", "body"], ["num-xl", "28/34 700", "8,000원", "num"], ["num-l", "22/28 700", "1,234,500원", "num"],
-    ["num-m", "16/24 500", "13,300원", "num"], ["num-date", "14/16 500", "1 2 3 18 31", "num"], ["num-cal", "10/12 400", "21,300 108만", "num"],
+    ["micro", "10/14 500", "정기 · 할부 2/3 · 카테고리", "body"], ["num-xl", "28/34 700", "8,000원", "num"], ["num-lg", "22/28 700", "1,234,500원", "num"],
+    ["num-md", "16/24 500", "13,300원", "num"], ["num-date", "14/16 500", "1 2 3 18 31", "num"], ["num-cal", "10/12 400", "21,300 108만", "num"],
     ["logo", "Tenada", "다씀", "logo"], ["소개 문구", "16/24 700", "나의 지출만 확인하고 싶을 때", "tagline"]];
   let h = `<tr><th>토큰</th><th>크기 / 줄 높이 / 굵기</th><th>보기</th></tr>`;
   rows.forEach(([k, s, ex, f]) => {

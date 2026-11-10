@@ -13,7 +13,6 @@ import {
 import { useHistoryLayer } from "@/hooks/useHistoryLayer";
 import { useKeyboardInset } from "@/hooks/useKeyboardInset";
 import { useModalDialog } from "@/hooks/useModalDialog";
-import { cn } from "@/lib/cn";
 
 // 아래로 이만큼(시트 높이 대비) 끌거나 빠르게 튕기면 닫는다
 const CLOSE_RATIO = 0.25;
@@ -44,7 +43,7 @@ const BottomSheet = ({
   const [dragY, setDragY] = useState(0);
   const keyboardInset = useKeyboardInset(open);
 
-  useModalDialog(ref, open, SHEET_DURATION);
+  useModalDialog(ref, open, { closeDelay: SHEET_DURATION, focusSelf: true });
   useHistoryLayer(open, "close", onClose);
 
   // Esc: 브라우저가 바로 닫지 않게 하고 onClose로 넘긴다 (닫힘 움직임·기록 정리)
@@ -84,20 +83,22 @@ const BottomSheet = ({
   };
 
   return (
+    // 끄는 동안은 transition-none으로 손가락을 바로 따라간다
     <dialog
       ref={ref}
       aria-labelledby={titleId}
+      tabIndex={-1}
       onCancel={handleCancel}
       onClick={handleClick}
       style={{
         marginBottom: keyboardInset || undefined,
         translate: dragY ? `0 ${dragY}px` : undefined,
       }}
-      className={cn(
-        "mx-auto mt-auto mb-0 hidden max-h-9/10 w-full max-w-120 flex-col overflow-visible bg-transparent p-0 text-text backdrop:bg-scrim open:flex",
-        "transition-[translate] duration-(--duration-sheet) ease-out data-closing:translate-y-full motion-reduce:transition-none starting:open:translate-y-full",
-        dragY > 0 && "transition-none",
-      )}
+      className={`mx-auto mt-auto mb-0 hidden max-h-9/10 w-full max-w-120 flex-col overflow-visible bg-transparent p-0 text-text01 outline-none backdrop:bg-scrim open:flex data-closing:translate-y-full data-opening:translate-y-full ${
+        dragY > 0
+          ? "transition-none"
+          : "transition-[translate] duration-(--duration-sheet) ease-out motion-reduce:transition-none"
+      }`}
     >
       <div className="flex min-h-0 flex-1 flex-col rounded-t-sheet bg-bg shadow-sheet dark:border dark:border-b-0 dark:border-line">
         {/* 끌기 영역: 손잡이와 제목 */}
@@ -110,7 +111,7 @@ const BottomSheet = ({
           className="shrink-0 cursor-grab touch-none px-4 pt-2.5 pb-3 select-none"
         >
           <div className="mx-auto h-1 w-9 rounded-full bg-line-strong" />
-          <h2 id={titleId} className="pt-3 text-title-m">
+          <h2 id={titleId} className="pt-3 text-title-md">
             {title}
           </h2>
         </div>

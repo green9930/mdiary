@@ -3,11 +3,10 @@ import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import BottomSheet from "@/components/overlays/BottomSheet";
+import Dialog from "@/components/overlays/Dialog";
+import Dropdown from "@/components/overlays/Dropdown";
 import { resetHistoryLayers } from "@/hooks/useHistoryLayer";
-
-import BottomSheet from "./BottomSheet";
-import Dialog from "./Dialog";
-import Dropdown from "./Dropdown";
 
 // jsdom의 <dialog>는 접근성 트리에서 open 여부를 따르지 않으므로 hidden까지 찾는다
 const dialogByName = (name: string) =>
@@ -67,6 +66,23 @@ describe("Dialog (CG ⑧)", () => {
     );
     expect(onCancel).toHaveBeenCalledOnce();
     expect(onConfirm).toHaveBeenCalledOnce();
+  });
+
+  it("열면 첫 버튼이 아니라 다이얼로그 자체에 포커스가 간다 (버튼 테두리가 보이지 않게)", () => {
+    render(
+      <Dialog
+        open
+        confirmLabel="삭제"
+        onConfirm={() => {}}
+        cancelLabel="취소"
+        onCancel={() => {}}
+      >
+        이 기록을 삭제하시겠습니까?
+      </Dialog>,
+    );
+    expect(document.activeElement).toBe(
+      screen.getByRole("alertdialog", { hidden: true }),
+    );
   });
 
   it("바깥 탭·Esc로 닫히지 않는다", () => {
@@ -149,6 +165,23 @@ describe("BottomSheet (CG ⑦)", () => {
     expect(
       screen.getByRole("dialog", { name: "기간 선택", hidden: true }),
     ).toBeInTheDocument();
+  });
+
+  it("화면 아래에서 한 번 그린 뒤 올라오기 시작한다 (첫 프레임이 늦어도 열림 움직임이 보이게)", async () => {
+    render(<Harness />);
+    const sheet = screen.getByRole("dialog", {
+      name: "기간 선택",
+      hidden: true,
+    });
+    expect(sheet).toHaveAttribute("data-opening");
+    await vi.waitFor(() => expect(sheet).not.toHaveAttribute("data-opening"));
+  });
+
+  it("열면 안쪽 첫 컨트롤이 아니라 시트 자체에 포커스가 간다", () => {
+    render(<Harness />);
+    expect(document.activeElement).toBe(
+      screen.getByRole("dialog", { name: "기간 선택", hidden: true }),
+    );
   });
 
   it("바깥(가림막)을 누르면 닫힌다", () => {

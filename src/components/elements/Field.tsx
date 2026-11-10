@@ -1,14 +1,11 @@
 import type { ReactNode } from "react";
 
-import { cn } from "@/lib/cn";
-
 interface FieldProps {
   /** 입력칸의 id. 라벨·보조 문구를 이 id로 잇는다 */
   id: string;
   label?: ReactNode;
   error?: string;
   hint?: ReactNode;
-  className?: string;
   children: ReactNode;
 }
 
@@ -16,13 +13,13 @@ interface FieldProps {
 export const fieldMessageId = (id: string) => `${id}-message`;
 
 // 라벨 · 입력 · 아래 보조 문구 (토큰 5-2: 라벨과 입력 사이 8, 입력과 보조 문구 사이 4)
-const Field = ({ id, label, error, hint, className, children }: FieldProps) => {
+const Field = ({ id, label, error, hint, children }: FieldProps) => {
   const message = error ?? hint;
 
   return (
-    <div className={cn("flex min-w-0 flex-col gap-2", className)}>
+    <div className="flex min-w-0 flex-col gap-2">
       {label && (
-        <label htmlFor={id} className="text-body text-text">
+        <label htmlFor={id} className="text-body text-text01">
           {label}
         </label>
       )}
@@ -31,10 +28,9 @@ const Field = ({ id, label, error, hint, className, children }: FieldProps) => {
         {message && (
           <p
             id={fieldMessageId(id)}
-            className={cn(
-              "text-caption",
-              error ? "text-danger-text" : "text-text-sub",
-            )}
+            className={`text-caption ${
+              error ? "text-danger-text" : "text-text02"
+            }`}
           >
             {message}
           </p>

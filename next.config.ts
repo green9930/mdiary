@@ -4,6 +4,8 @@ import type { NextConfig } from "next";
 import "./src/env";
 
 const nextConfig: NextConfig = {
+  // 휴대폰(같은 Wi-Fi)에서 개발 서버를 열 때 HMR 연결을 허용한다. 없으면 Safari에서 화면이 동작하지 않는다
+  allowedDevOrigins: ["192.168.*.*"],
   // 개발 모드의 Next.js 표시 버튼(왼쪽 아래)이 탭 바를 가려 E2E 클릭을 막는다
   devIndicators: process.env.E2E_TEST_LOGIN === "1" ? false : undefined,
   // 이미지 파일 import를 쓰지 않는다. 끄면 Next의 *.svg 타입(any)이 빠져

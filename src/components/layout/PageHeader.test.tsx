@@ -2,9 +2,8 @@ import { render, renderHook, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import PageHeader from "@/components/layout/PageHeader";
 import { resetInAppHistory, useTrackInAppHistory } from "@/hooks/useGoBack";
-
-import PageHeader from "./PageHeader";
 
 const router = vi.hoisted(() => ({ back: vi.fn(), replace: vi.fn() }));
 const nav = vi.hoisted(() => ({ pathname: "/" }));

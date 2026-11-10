@@ -4,12 +4,14 @@ import Link from "next/link";
 import type { FC, SVGProps } from "react";
 
 import { useTabNavigation } from "@/hooks/useTabNavigation";
+import { cn } from "@/lib/cn";
 import {
+  ARIA_LABELS,
   PAGE_TITLES,
   PATHS,
   TABS_LIST,
-  type TTab,
 } from "@/shared/sharedConstants";
+import type { TabType } from "@/types/tabTypes";
 import AddIcon from "@/assets/icon_add.svg";
 import CalendarIcon from "@/assets/icon_calendar.svg";
 import GridIcon from "@/assets/icon_grid.svg";
@@ -17,7 +19,7 @@ import SearchIcon from "@/assets/icon_search.svg";
 import SettingsIcon from "@/assets/icon_settings.svg";
 
 // 탭 아이콘 (토큰 2-5)
-const TAB_ICONS: Record<TTab["path"], FC<SVGProps<SVGSVGElement>>> = {
+const TAB_ICONS: Record<TabType["path"], FC<SVGProps<SVGSVGElement>>> = {
   [PATHS.calendar]: CalendarIcon,
   [PATHS.categories]: GridIcon,
   [PATHS.search]: SearchIcon,
@@ -29,7 +31,7 @@ const TabBar = () => {
   const { current, tabHref, newExpenseHref } = useTabNavigation();
 
   const [left, right] = [TABS_LIST.slice(0, 2), TABS_LIST.slice(2)];
-  const renderTab = (tab: TTab) => {
+  const renderTab = (tab: TabType) => {
     const active = tab === current;
     const Icon = TAB_ICONS[tab.path];
     return (
@@ -38,10 +40,10 @@ const TabBar = () => {
         href={tabHref(tab)}
         aria-current={active ? "page" : undefined}
         className={`flex h-full flex-col items-center justify-center gap-0.5 text-micro ${
-          active ? "font-bold text-accent" : "text-text-sub"
+          active ? "font-bold text-accent" : "text-text02"
         }`}
       >
-        <Icon className={`size-6 ${active ? "text-brand" : ""}`} />
+        <Icon className={cn("size-6", active && "text-brand")} />
         {tab.label}
       </Link>
     );
@@ -49,7 +51,7 @@ const TabBar = () => {
 
   return (
     <nav
-      aria-label="주요 화면"
+      aria-label={ARIA_LABELS.mainNav}
       className="fixed inset-x-0 bottom-0 mx-auto max-w-120 border-t border-line bg-bg pb-safe"
     >
       <div className="grid h-14 grid-cols-5">

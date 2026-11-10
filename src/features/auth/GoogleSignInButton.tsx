@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { authClient } from "@/lib/authClient";
+import { BTN_TEXTS } from "@/shared/sharedConstants";
 
 // 임시: F1에서 SC-02 로그인 화면으로 바꾼다
 interface GoogleSignInButtonProps {
@@ -24,9 +25,9 @@ const GoogleSignInButton = ({ next }: GoogleSignInButtonProps) => {
         });
         if (error) setPending(false);
       }}
-      className="h-12 w-full rounded-md bg-primary text-button-l text-on-primary disabled:bg-disabled disabled:text-on-disabled"
+      className="h-12 w-full rounded-md bg-primary text-button-lg text-on-primary disabled:bg-disabled disabled:text-on-disabled"
     >
-      Google로 계속하기
+      {BTN_TEXTS.googleSignIn}
     </button>
   );
 };

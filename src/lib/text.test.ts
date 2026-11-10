@@ -6,7 +6,7 @@ import {
   removeControlChars,
   toDigits,
   toSingleLine,
-} from "./text";
+} from "@/lib/text";
 
 describe("countChars (CG ③ 글자 수 카운터)", () => {
   it("화면에 보이는 글자 1개를 1자로 센다", () => {

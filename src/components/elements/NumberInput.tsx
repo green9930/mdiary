@@ -1,18 +1,16 @@
 "use client";
 
-import { type InputHTMLAttributes, type ReactNode, useId } from "react";
+import { type ReactNode, useId } from "react";
 
+import Field, { fieldMessageId } from "@/components/elements/Field";
+import {
+  inputBoxClass,
+  inputControlClass,
+} from "@/components/elements/inputBoxStyles";
 import { useNormalizedInput } from "@/hooks/useNormalizedInput";
-import { cn } from "@/lib/cn";
 import { toDigits } from "@/lib/text";
 
-import Field, { fieldMessageId } from "./Field";
-import { inputBoxClass, inputControlClass } from "./inputBoxStyles";
-
-interface NumberInputProps extends Omit<
-  InputHTMLAttributes<HTMLInputElement>,
-  "value" | "onChange" | "type" | "inputMode"
-> {
+interface NumberInputProps {
   /** 숫자만 담은 문자열. 비어 있을 수 있다 */
   value: string;
   onValueChange: (value: string) => void;
@@ -23,6 +21,12 @@ interface NumberInputProps extends Omit<
   hint?: ReactNode;
   /** 최대 자릿수 */
   maxDigits?: number;
+  /** 없으면 자동으로 만든다. 라벨·오류 문구 연결에 쓴다 */
+  id?: string;
+  placeholder?: string;
+  disabled?: boolean;
+  /** 칸을 벗어날 때 (벗어날 때마다 검증하는 폼에서 쓴다) */
+  onBlur?: () => void;
 }
 
 // 개월 수·회차 입력 (와이어프레임 CG ⑤): 숫자 키패드, 숫자만, 맨 앞 0 지움, 붙여넣기는 숫자만 골라 자른다
@@ -35,9 +39,9 @@ const NumberInput = ({
   hint,
   maxDigits = 2,
   id,
+  placeholder,
   disabled = false,
-  className,
-  ...props
+  onBlur,
 }: NumberInputProps) => {
   const autoId = useId();
   const inputId = id ?? autoId;
@@ -46,18 +50,9 @@ const NumberInput = ({
   );
 
   return (
-    <Field
-      id={inputId}
-      label={label}
-      error={error}
-      hint={hint}
-      className={className}
-    >
+    <Field id={inputId} label={label} error={error} hint={hint}>
       <div
-        className={cn(
-          "h-12 w-28",
-          inputBoxClass({ invalid: !!error, disabled }),
-        )}
+        className={`h-12 w-28 items-center ${inputBoxClass({ invalid: !!error, disabled })}`}
       >
         <input
           id={inputId}
@@ -66,14 +61,17 @@ const NumberInput = ({
           pattern="[0-9]*"
           autoComplete="off"
           value={value}
+          placeholder={placeholder}
           disabled={disabled}
           aria-invalid={error ? true : undefined}
           aria-describedby={error || hint ? fieldMessageId(inputId) : undefined}
-          className={cn("h-full font-num", inputControlClass)}
-          {...handlers}
-          {...props}
+          className={`h-full font-num ${inputControlClass}`}
+          onBlur={onBlur}
+          onChange={handlers.onChange}
+          onCompositionStart={handlers.onCompositionStart}
+          onCompositionEnd={handlers.onCompositionEnd}
         />
-        <span className="shrink-0 text-text-sub">{unit}</span>
+        <span className="shrink-0 text-text02">{unit}</span>
       </div>
     </Field>
   );

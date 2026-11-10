@@ -3,10 +3,10 @@ import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 
-import Checkbox from "./Checkbox";
-import Chip from "./Chip";
-import Radio from "./Radio";
-import Segment from "./Segment";
+import Checkbox from "@/components/elements/Checkbox";
+import Chip from "@/components/elements/Chip";
+import Radio from "@/components/elements/Radio";
+import Segment from "@/components/elements/Segment";
 
 const REPEAT_OPTIONS = [
   { value: "none", label: "없음" },

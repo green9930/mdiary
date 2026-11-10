@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { parseTheme } from "./theme";
+import { parseTheme } from "@/shared/theme";
 
 describe("parseTheme (SC-10 화면 모드)", () => {
   it.each(["system", "light", "dark"] as const)("%s는 그대로 쓴다", (value) => {

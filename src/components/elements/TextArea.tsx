@@ -1,31 +1,30 @@
 "use client";
 
-import {
-  type ReactNode,
-  type TextareaHTMLAttributes,
-  useId,
-  useLayoutEffect,
-  useRef,
-} from "react";
+import { type ReactNode, useId, useLayoutEffect, useRef } from "react";
 
+import CharCounter from "@/components/elements/CharCounter";
+import Field, { fieldMessageId } from "@/components/elements/Field";
+import {
+  inputBoxClass,
+  inputControlClass,
+} from "@/components/elements/inputBoxStyles";
 import { useNormalizedInput } from "@/hooks/useNormalizedInput";
-import { cn } from "@/lib/cn";
 import { clampChars, countChars } from "@/lib/text";
 
-import CharCounter from "./CharCounter";
-import Field, { fieldMessageId } from "./Field";
-import { inputBoxClass, inputControlClass } from "./inputBoxStyles";
-
-interface TextAreaProps extends Omit<
-  TextareaHTMLAttributes<HTMLTextAreaElement>,
-  "value" | "onChange" | "maxLength" | "rows"
-> {
+interface TextAreaProps {
   value: string;
   onValueChange: (value: string) => void;
   label?: ReactNode;
   error?: string;
   hint?: ReactNode;
+  /** 글자 수 한도. 있으면 카운터를 보여 주고 한도에서 입력을 막는다 */
   maxLength?: number;
+  /** 없으면 자동으로 만든다. 라벨·오류 문구 연결에 쓴다 */
+  id?: string;
+  placeholder?: string;
+  disabled?: boolean;
+  /** 칸을 벗어날 때 (벗어날 때마다 검증하는 폼에서 쓴다) */
+  onBlur?: () => void;
 }
 
 // 여러 줄 입력 (토큰 5-2): 3줄(본문 높이 72)에서 6줄까지 늘어나고, 그 뒤로는 안에서 스크롤한다
@@ -37,9 +36,9 @@ const TextArea = ({
   hint,
   maxLength,
   id,
+  placeholder,
   disabled = false,
-  className,
-  ...props
+  onBlur,
 }: TextAreaProps) => {
   const autoId = useId();
   const inputId = id ?? autoId;
@@ -58,38 +57,31 @@ const TextArea = ({
   }, [value]);
 
   return (
-    <Field
-      id={inputId}
-      label={label}
-      error={error}
-      hint={hint}
-      className={className}
-    >
+    <Field id={inputId} label={label} error={error} hint={hint}>
       <div
-        className={cn(
-          "relative items-start pt-3",
-          maxLength === undefined ? "pb-3" : "pb-6.5",
-          inputBoxClass({ invalid: !!error, disabled }),
-        )}
+        className={`relative items-start pt-3 ${
+          maxLength === undefined ? "pb-3" : "pb-6.5"
+        } ${inputBoxClass({ invalid: !!error, disabled })}`}
       >
         <textarea
           ref={ref}
           id={inputId}
           value={value}
           rows={3}
+          placeholder={placeholder}
           disabled={disabled}
           aria-invalid={error ? true : undefined}
           aria-describedby={error || hint ? fieldMessageId(inputId) : undefined}
-          className={cn("max-h-36 min-h-18 resize-none", inputControlClass)}
-          {...handlers}
-          {...props}
+          className={`max-h-36 min-h-18 resize-none ${inputControlClass}`}
+          onBlur={onBlur}
+          onChange={handlers.onChange}
+          onCompositionStart={handlers.onCompositionStart}
+          onCompositionEnd={handlers.onCompositionEnd}
         />
         {maxLength !== undefined && (
-          <CharCounter
-            count={countChars(value)}
-            max={maxLength}
-            className="absolute right-3 bottom-1.5"
-          />
+          <span className="absolute right-3 bottom-1.5">
+            <CharCounter count={countChars(value)} max={maxLength} />
+          </span>
         )}
       </div>
     </Field>

@@ -2,6 +2,7 @@
 
 import IconButton from "@/components/elements/IconButton";
 import { useGoBack } from "@/hooks/useGoBack";
+import { ARIA_LABELS } from "@/shared/sharedConstants";
 import ArrowLeftIcon from "@/assets/icon_arrow_left.svg";
 
 interface PageHeaderProps {
@@ -16,10 +17,14 @@ const PageHeader = ({ title, backDisabled = false }: PageHeaderProps) => {
 
   return (
     <header className="flex h-13 items-center gap-1 pr-4">
-      <IconButton aria-label="뒤로" onClick={goBack} disabled={backDisabled}>
+      <IconButton
+        aria-label={ARIA_LABELS.back}
+        onClick={goBack}
+        disabled={backDisabled}
+      >
         <ArrowLeftIcon />
       </IconButton>
-      <h1 className="text-title-m">{title}</h1>
+      <h1 className="text-title-md">{title}</h1>
     </header>
   );
 };

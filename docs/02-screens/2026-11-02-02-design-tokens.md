@@ -48,11 +48,11 @@
 | `bg`           | `#FFFFFF`         | `#111513`         | 화면 바탕, 시트·다이얼로그 바탕                         |
 | `surface`      | `#F3F6F4`         | `#1E2522`         | 아이콘 자리, 입력 비활성, 미리보기 상자                 |
 | `line`         | `#E3E8E5`         | `#2A322E`         | 구분선, 비활성 입력 테두리                              |
-| `line-strong`  | `#C9D1CC`         | `#3B4540`         | secondary line 테두리, 선택 컨트롤 테두리               |
-| `line-input`   | `#8A948E`         | `#5C6661`         | 입력 테두리 (바탕 대비 3:1)                             |
-| `text`         | `#17201B`         | `#EEF2EF`         | 기본 글자, 금액                                         |
-| `text-sub`     | `#5E6A63`         | `#A3AEA8`         | 보조 글자, 토요일, 요일 표시줄                          |
-| `text-weak`    | `#7D8781`         | `#6E7873`         | placeholder, 앞뒤 달 날짜, 비활성 글자 (대비 기준 예외) |
+| `line-strong`  | `#C9D1CC`         | `#3B4540`         | secondary line·칩·세그먼트 테두리, 시트 손잡이          |
+| `line-input`   | `#8A948E`         | `#5C6661`         | 입력 테두리, 라디오 원 (바탕 대비 3:1)                  |
+| `text01`       | `#17201B`         | `#EEF2EF`         | 기본 글자, 금액                                         |
+| `text02`       | `#5E6A63`         | `#A3AEA8`         | 보조 글자, 토요일, 요일 표시줄                          |
+| `text03`       | `#7D8781`         | `#6E7873`         | placeholder, 앞뒤 달 날짜, 비활성 글자 (대비 기준 예외) |
 | `gray`         | `#EBEFEC`         | `#2A322E`         | gray 버튼 면                                            |
 | `gray-pressed` | `#DDE3DF`         | `#343D39`         | gray 버튼 누름                                          |
 | `on-gray`      | `#4A544F`         | `#C9D1CC`         | gray 버튼 글자                                          |
@@ -130,21 +130,21 @@
 
 ### 3-2. 크기 단계
 
-| 토큰          | 크기 / 줄 높이 / 굵기 | 쓰임                                                            |
-| ------------- | --------------------- | --------------------------------------------------------------- |
-| `title-l`     | 20 / 28 / 700         | 화면 제목, 달력 헤더 `2026년 10월`                              |
-| `title-m`     | 18 / 26 / 700         | 시트 제목, 다이얼로그 제목, 상세 제목                           |
-| `body-l`      | 16 / 24 / 400         | 입력값·placeholder (iOS 확대 방지를 위해 16 미만 금지)          |
-| `body`        | 14 / 22 / 400         | 목록 제목, 본문, 입력 라벨, 버튼 M, 칩                          |
-| `body-strong` | 14 / 22 / 700         | 하루 목록 요약 날짜, 월 구분 줄                                 |
-| `caption`     | 12 / 18 / 400         | 보조 글자, 오류 문구, 날짜 보조 줄, 카운터, 요일 표시줄, 버튼 S |
-| `micro`       | 10 / 14 / 500         | 배지, 탭 라벨                                                   |
-| `num-xl`      | 28 / 34 / 700 (Rubik) | 상세 금액                                                       |
-| `num-l`       | 22 / 28 / 700 (Rubik) | 월 합계, 카테고리 총지출                                        |
-| `num-m`       | 16 / 24 / 500 (Rubik) | 목록 금액                                                       |
-| `num-cal`     | 10 / 12 / 400 (Rubik) | 달력 칸 금액                                                    |
-| `num-date`    | 14 / 16 / 500 (Rubik) | 달력 날짜 숫자                                                  |
-| 버튼 L        | 16 / 24 / 700         | 하단 고정 버튼                                                  |
+| 토큰          | 크기 / 줄 높이 / 굵기 | 쓰임                                                             |
+| ------------- | --------------------- | ---------------------------------------------------------------- |
+| `title-lg`    | 20 / 28 / 700         | 화면 제목, 달력 헤더 `2026년 10월`                               |
+| `title-md`    | 18 / 26 / 700         | 시트 제목, 다이얼로그 제목, 상세 제목                            |
+| `body-lg`     | 16 / 24 / 400         | 입력값·placeholder (iOS 확대 방지를 위해 16 미만 금지)           |
+| `body`        | 14 / 22 / 400         | 목록 제목, 본문, 입력 라벨, 버튼 md, 칩                          |
+| `body-strong` | 14 / 22 / 700         | 하루 목록 요약 날짜, 월 구분 줄                                  |
+| `caption`     | 12 / 18 / 400         | 보조 글자, 오류 문구, 날짜 보조 줄, 카운터, 요일 표시줄, 버튼 sm |
+| `micro`       | 10 / 14 / 500         | 배지, 탭 라벨                                                    |
+| `num-xl`      | 28 / 34 / 700 (Rubik) | 상세 금액                                                        |
+| `num-lg`      | 22 / 28 / 700 (Rubik) | 월 합계, 카테고리 총지출                                         |
+| `num-md`      | 16 / 24 / 500 (Rubik) | 목록 금액                                                        |
+| `num-cal`     | 10 / 12 / 400 (Rubik) | 달력 칸 금액                                                     |
+| `num-date`    | 14 / 16 / 500 (Rubik) | 달력 날짜 숫자                                                   |
+| 버튼 lg       | 16 / 24 / 700         | 하단 고정 버튼                                                   |
 
 ## 4. 간격 · 모서리 · 그림자 · 움직임
 
@@ -152,9 +152,9 @@
 | -------------- | ------------------------------------------------------------------------------------------------------------ |
 | 간격           | 4 단위: `space-1` 4 · `space-2` 8 · `space-3` 12 · `space-4` 16 · `space-5` 20 · `space-6` 24 · `space-8` 32 |
 | 화면 좌우 여백 | 16                                                                                                           |
-| `radius-s`     | 6 (배지, 버튼 S)                                                                                             |
-| `radius-m`     | 8 (버튼 L·M, 입력, 세그먼트, 카테고리 칸, 띠)                                                                |
-| `radius-l`     | 14 (다이얼로그, 드롭다운 메뉴)                                                                               |
+| `radius-sm`    | 6 (배지, 버튼 sm)                                                                                            |
+| `radius-md`    | 8 (버튼 lg·md, 입력, 세그먼트, 카테고리 칸, 띠)                                                              |
+| `radius-lg`    | 14 (다이얼로그, 드롭다운 메뉴)                                                                               |
 | `radius-sheet` | 20 (바텀시트 위쪽 두 모서리)                                                                                 |
 | `radius-full`  | 999 (칩, ＋ 버튼, 날짜 원, 아이콘 자리)                                                                      |
 | `shadow-1`     | `0 2px 8px rgba(0,0,0,.08)` (드롭다운 메뉴)                                                                  |
@@ -169,17 +169,17 @@
 
 ### 4-1. 코드 이름
 
-토큰은 `src/app/globals.css`의 Tailwind `@theme`에 있다. 대부분 문서 이름 그대로 클래스가 된다 (`bg-primary`, `text-text-sub`, `text-title-l`, `shadow-2`). 다른 것만 적는다.
+토큰은 `src/app/globals.css`의 Tailwind `@theme`에 있다. 대부분 문서 이름 그대로 클래스가 된다 (`bg-primary`, `text-text02`, `text-title-lg`, `shadow-2`). 다른 것만 적는다.
 
-| 문서                                | 코드                                                                      |
-| ----------------------------------- | ------------------------------------------------------------------------- |
-| 카테고리 색                         | `cat-` + Category enum 소문자 (`bg-cat-food`, `bg-cat-appliance` …)       |
-| 버튼 L 글자                         | `text-button-l`                                                           |
-| `radius-s` · `-m` · `-l` · `-sheet` | `rounded-sm` · `rounded-md` · `rounded-lg` · `rounded-sheet`              |
-| `radius-full`                       | `rounded-full`                                                            |
-| 간격 `space-N`                      | Tailwind 기본 간격 N (`p-4` = 16)                                         |
-| 움직임                              | CSS 변수 `--duration-sheet` · `--duration-dialog` · `--duration-dropdown` |
-| 숫자 단계(`num-*`)                  | 글꼴은 따로 붙인다: `font-num text-num-m`                                 |
+| 문서                                   | 코드                                                                      |
+| -------------------------------------- | ------------------------------------------------------------------------- |
+| 카테고리 색                            | `cat-` + Category enum 소문자 (`bg-cat-food`, `bg-cat-appliance` …)       |
+| 버튼 lg 글자                           | `text-button-lg`                                                          |
+| `radius-sm` · `-md` · `-lg` · `-sheet` | `rounded-sm` · `rounded-md` · `rounded-lg` · `rounded-sheet`              |
+| `radius-full`                          | `rounded-full`                                                            |
+| 간격 `space-N`                         | Tailwind 기본 간격 N (`p-4` = 16)                                         |
+| 움직임                                 | CSS 변수 `--duration-sheet` · `--duration-dialog` · `--duration-dropdown` |
+| 숫자 단계(`num-*`)                     | 글꼴은 따로 붙인다: `font-num text-num-md`                                |
 
 Tailwind 기본 색·글자 크기·모서리·그림자는 꺼 두었다. 이 문서에 없는 값은 클래스로 쓸 수 없다.
 
@@ -192,78 +192,78 @@ Tailwind 기본 색·글자 크기·모서리·그림자는 꺼 두었다. 이 �
 | primary filled   | `primary`  | `on-primary`  | 없음            | 저장, 적용, 선택, 수정, 계속 작성, 확인, 로그인 |
 | secondary filled | `tint`     | `on-tint`     | 없음            | 시트 안 보조 동작 (지금은 없음)                 |
 | primary outline  | `bg`       | `accent`      | `accent` 2      | 계산, 오늘, 기록 추가하기, 다시 시도            |
-| secondary line   | `bg`       | `text`        | `line-strong` 2 | 취소, 정렬·기간 드롭다운, 기간 선택             |
-| text             | 없음       | `text` 밑줄   | 없음            | 개인정보처리방침, 서비스 안내 링크              |
+| secondary line   | `bg`       | `text01`      | `line-strong` 2 | 취소, 정렬·기간 드롭다운, 기간 선택             |
+| text             | 없음       | `text01` 밑줄 | 없음            | 개인정보처리방침, 서비스 안내 링크              |
 | danger           | `danger`   | `on-danger`   | 없음            | 삭제, 탈퇴하기                                  |
 | disabled         | `disabled` | `on-disabled` | 없음            | 모든 버튼의 비활성                              |
 | gray             | `gray`     | `on-gray`     | 없음            | 나가기                                          |
 
-- 크기: L 높이 52 (하단 고정, 폭 전체) · M 44 · S 32 (헤더 안 [오늘], ‹ ›). 누를 수 있는 영역은 최소 44×44.
+- 크기: `lg` 높이 48 (하단 고정, 폭 전체) · `md` 40 · `sm` 32 (헤더 안 [오늘], ‹ ›). 누를 수 있는 영역은 최소 44×44 (`md`·`sm`은 `touch-44`로 넓힌다).
 - 상태: 기본 · 누름(`*-pressed`, outline·line은 면을 `surface`로) · 로딩(글자 대신 스피너, 같은 색) · 비활성(`disabled` 종류로 바뀜).
 
 ### 5-2. 입력
 
-| 상태        | 테두리          | 면        | 글자                                          |
-| ----------- | --------------- | --------- | --------------------------------------------- |
-| 기본 (빈칸) | `line-input` 1  | `bg`      | placeholder `text-weak`                       |
-| 포커스      | `accent` 2      | `bg`      | `text`                                        |
-| 값 있음     | `line-input` 1  | `bg`      | `text`                                        |
-| 오류        | `danger-text` 2 | `bg`      | `text` + 아래 오류 문구 `danger-text` caption |
-| 비활성      | `line` 1        | `surface` | `on-disabled`                                 |
+| 상태        | 테두리          | 면        | 글자                                            |
+| ----------- | --------------- | --------- | ----------------------------------------------- |
+| 기본 (빈칸) | `line-input` 1  | `bg`      | placeholder `text03`                            |
+| 포커스      | `accent` 2      | `bg`      | `text01`                                        |
+| 값 있음     | `line-input` 1  | `bg`      | `text01`                                        |
+| 오류        | `danger-text` 2 | `bg`      | `text01` + 아래 오류 문구 `danger-text` caption |
+| 비활성      | `line` 1        | `surface` | `on-disabled`                                   |
 
 - 높이 48, 좌우 안쪽 여백 14. textarea는 3줄(본문 높이 72)에서 6줄까지 늘어난다.
 - 라벨과 입력 사이 8, **입력과 아래 보조 문구(오류·안내) 사이 4**.
-- 카운터 `0/25`는 오른쪽 안쪽에 `caption` `text-weak`, 한도에 닿으면 `text-sub`.
-- 단위(원·개월·회)는 입력 오른쪽 안쪽에 `text-sub`.
+- 카운터 `0/25`는 오른쪽 안쪽에 `caption` `text03`, 한도에 닿으면 `text02`.
+- 단위(원·개월·회)는 입력 오른쪽 안쪽에 `text02`.
 
 ### 5-3. 선택 컨트롤
 
-| 컴포넌트                 | 기본                                    | 선택                                                 | 비활성                                                                   |
-| ------------------------ | --------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------ |
-| 세그먼트 (반복 3단, 2단) | 테두리 `line-strong`, 글자 `text-sub`   | 면 `primary`, 글자 `on-primary`                      | 면 `surface`, 선택 칸 `line-strong` 면 + `on-disabled` 글자              |
-| 카테고리 격자 칸         | 테두리 `line`, 이름 `text-sub`          | 테두리 `accent` 2 + 면 `tint`, 이름 `on-tint` 700    | – (오류 시 격자 아래 문구만)                                             |
-| 필터 칩                  | 테두리 `line-strong`, 글자 `text`       | 면 `primary`, 글자 `on-primary`                      | –                                                                        |
-| 라디오 (SC-09)           | 원 테두리 `line-strong`                 | 원 테두리 `primary` + 안쪽 점 `primary`              | 원 테두리·라벨 `on-disabled`, 안내 문구는 라벨 아래 `caption` `text-sub` |
-| 체크박스                 | `icon_checkbox_blank` 24, 색 `text-sub` | `icon_checkbox_filled`, 색 `primary`                 | 색 `on-disabled`                                                         |
-| 드롭다운 메뉴            | 면 `bg`, `shadow-1`, 항목 높이 44       | 선택 항목 `tint` 면 + `on-tint` 700 (체크 표시 없음) | –                                                                        |
+| 컴포넌트                 | 기본                                  | 선택                                                 | 비활성                                                                         |
+| ------------------------ | ------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------------ |
+| 세그먼트 (반복 3단, 2단) | 테두리 `line-strong`, 글자 `text02`   | 면 `primary`, 글자 `on-primary`                      | 면 `surface`, 선택 칸 `line-strong` 면 + `on-disabled` 글자                    |
+| 카테고리 격자 칸         | 테두리 `line`, 이름 `text02`          | 테두리 `accent` 2 + 면 `tint`, 이름 `on-tint` 700    | – (오류 시 격자 아래 문구만)                                                   |
+| 필터 칩                  | 테두리 `line-strong`, 글자 `text01`   | 면 `primary`, 글자 `on-primary`                      | –                                                                              |
+| 라디오 (SC-09)           | 원 테두리 `line-input`                | 원 테두리 `primary` + 안쪽 점 `primary`              | 원 테두리 `line`, 라벨 `on-disabled`, 안내 문구는 라벨 아래 `caption` `text02` |
+| 체크박스                 | `icon_checkbox_blank` 24, 색 `text02` | `icon_checkbox_filled`, 색 `primary`                 | 색 `on-disabled`                                                               |
+| 드롭다운 메뉴            | 면 `bg`, `shadow-1`, 항목 높이 44     | 선택 항목 `tint` 면 + `on-tint` 700 (체크 표시 없음) | –                                                                              |
 
 ### 5-4. 목록 · 배지 · 그래프
 
-- 목록 항목: 높이 56, 아이콘 자리 36 원(`surface`, 카테고리 색 적용 시 그 색 15% 면), 제목 `body` 한 줄 말줄임, 날짜 줄 `caption` `text-sub`, 금액 `num-m` `text`.
-- 배지(정기·할부 n/m): 면 `tint`, 글자 `on-tint` `micro`, `radius-s`.
+- 목록 항목: 높이 56, 아이콘 자리 36 원(카테고리 색 15% 면, 아이콘은 카테고리 색), 제목 `body` 한 줄 말줄임, 날짜 줄 `caption` `text02`, 금액 `num-md` `text01`.
+- 배지(정기·할부 n/m): 면 `tint`, 글자 `on-tint` `micro`, `radius-sm`.
 - 검색 강조: 일치 부분 면 `highlight`, 글자 굵기 700.
 - 월 구분 줄: `body-strong`, 아래 `line`.
 - 비중 막대: 높이 8, `radius-full`, 바탕 `surface`, 막대 = 카테고리 색. 강조 줄은 그대로, 흐린 줄은 투명도 0.35.
 
 ### 5-5. 달력 칸
 
-| 상태        | 날짜 숫자        | 날짜 원          | 금액             |
-| ----------- | ---------------- | ---------------- | ---------------- |
-| 평일        | `text`           | 없음             | `text` `num-cal` |
-| 일요일      | `danger-text`    | 없음             | `text`           |
-| 토요일      | `text-sub`       | 없음             | `text`           |
-| 앞뒤 달     | `text-weak`      | 없음             | 표시 안 함       |
-| 오늘        | 요일 색 그대로   | 테두리 `brand` 2 | `text`           |
-| 선택        | `on-primary` 700 | 면 `primary`     | `text`           |
-| 오늘 + 선택 | `on-primary` 700 | 면 `primary`     | `text`           |
+| 상태        | 날짜 숫자        | 날짜 원          | 금액               |
+| ----------- | ---------------- | ---------------- | ------------------ |
+| 평일        | `text01`         | 없음             | `text01` `num-cal` |
+| 일요일      | `danger-text`    | 없음             | `text01`           |
+| 토요일      | `text02`         | 없음             | `text01`           |
+| 앞뒤 달     | `text03`         | 없음             | 표시 안 함         |
+| 오늘        | 요일 색 그대로   | 테두리 `brand` 2 | `text01`           |
+| 선택        | `on-primary` 700 | 면 `primary`     | `text01`           |
+| 오늘 + 선택 | `on-primary` 700 | 면 `primary`     | `text01`           |
 
 날짜 원 지름 26. 칸 높이 48 (6줄 고정).
 
 ### 5-6. 오버레이 · 상태 표시
 
-- 바텀시트: 면 `bg`, 위쪽 `radius-sheet`, 손잡이 36×4 `line-strong`, 제목 `title-m`, 뒤 `scrim`.
-- 다이얼로그: 폭 화면 − 48 (최대 320), 면 `bg`, `radius-l`, `shadow-2`. 버튼 M 두 개 나란히(확인형) 또는 하나(알림형).
+- 바텀시트: 면 `bg`, 위쪽 `radius-sheet`, 손잡이 36×4 `line-strong`, 제목 `title-md`, 뒤 `scrim`.
+- 다이얼로그: 폭 화면 − 48 (최대 320), 면 `bg`, `radius-lg`, `shadow-2`. 버튼 md 두 개 나란히(확인형) 또는 하나(알림형).
 - 오프라인 띠: 화면 위 고정, 면 `notice`, 글자 `on-notice` `caption`.
-- 같은 조건 다시 불러오기 실패 띠(CM ③): 면 `surface`, 글자 `text-sub`, [다시 시도] text 버튼.
+- 같은 조건 다시 불러오기 실패 띠(CM ③): 면 `surface`, 글자 `text02`, [다시 시도] text 버튼.
 - 스켈레톤: 면 `surface`, 1.2초 깜박임(투명도 1 → 0.5). 움직임 줄이기 설정이면 깜박이지 않는다.
-- 스피너: 지름 18, 선 2, 색은 놓인 글자색.
-- 빈 상태: 문구 `body` `text-sub` 가운데 정렬, 버튼은 primary outline M.
+- 스피너: 지름 16, 선 2, 색은 놓인 글자색.
+- 빈 상태: 문구 `body` `text02` 가운데 정렬, 버튼은 primary outline M.
 
 ### 5-7. 탭 바 · 헤더 · 로고
 
-- 탭 바: 높이 56 + 안전 여백, 면 `bg`, 위 `line`. 아이콘 24, 라벨 `micro`. 기본 `text-sub`, 활성 아이콘 `brand` · 라벨 `accent` 700.
+- 탭 바: 높이 56 + 안전 여백, 면 `bg`, 위 `line`. 아이콘 24, 라벨 `micro`. 기본 `text02`, 활성 아이콘 `brand` · 라벨 `accent` 700.
 - ＋ 버튼: 지름 52, 면 `primary`, ＋ `on-primary`, `shadow-2`, 탭 바 위로 12 솟는다.
-- 헤더: 높이 52, [‹] 44×44, 제목 `title-m`.
+- 헤더: 높이 52, [‹] 44×44, 제목 `title-md`.
 - 로고: "다씀" `font-logo` + `icon_pencil`, 색 `brand`. 로그인 화면 48, 그 밖 24.
-- 로그인 소개 문구: `font-body` 16 / 24 / 700, 색 `accent`. 로고 아래 `Money Diary`는 `caption` `text-sub`.
+- 로그인 소개 문구: `font-body` 16 / 24 / 700, 색 `accent`. 로고 아래 `Money Diary`는 `caption` `text02`.
 - [Google로 계속하기]: secondary line L 모양. 아이콘·문구는 Google 로그인 브랜드 가이드를 따른다.

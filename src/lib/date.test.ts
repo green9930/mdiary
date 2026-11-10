@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { todayInSeoul } from "./date";
+import { todayInSeoul } from "@/lib/date";
 
 describe("todayInSeoul", () => {
   it("서울 기준 오늘을 YYYY-MM-DD로 돌려준다", () => {

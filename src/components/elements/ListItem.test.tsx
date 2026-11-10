@@ -2,8 +2,8 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import Badge from "./Badge";
-import ListItem from "./ListItem";
+import Badge from "@/components/elements/Badge";
+import ListItem from "@/components/elements/ListItem";
 
 describe("ListItem (CG ⑨)", () => {
   it("제목·배지·보조 줄·금액을 보여 주고, 항목 전체가 누르는 영역이다", async () => {
@@ -11,6 +11,7 @@ describe("ListItem (CG ⑨)", () => {
     render(
       <ListItem
         icon={<svg />}
+        iconClassName="bg-cat-etc/15 text-cat-etc"
         title="아이패드"
         badge={<Badge>할부 2/3</Badge>}
         subtitle="11.01"
@@ -30,6 +31,7 @@ describe("ListItem (CG ⑨)", () => {
     render(
       <ListItem
         icon={<svg />}
+        iconClassName="bg-cat-etc/15 text-cat-etc"
         title="넷플릭스 스탠다드 요금제 월 구독료"
         badge={<Badge>정기</Badge>}
         amount="13,300원"

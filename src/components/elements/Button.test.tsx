@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import Button from "./Button";
+import Button from "@/components/elements/Button";
 
 describe("Button (CG ①, 토큰 5-1)", () => {
   it("종류마다 면·글자 토큰을 쓴다", () => {
@@ -47,6 +47,40 @@ describe("Button (CG ①, 토큰 5-1)", () => {
     expect(onClick).not.toHaveBeenCalled();
   });
 
+  it("text 버튼은 비활성이어도 면 없이 밑줄 글자이고, 글자색만 바뀐다", () => {
+    render(
+      <Button variant="text" disabled>
+        개인정보처리방침
+      </Button>,
+    );
+    const button = screen.getByRole("button", { name: "개인정보처리방침" });
+    expect(button).toHaveClass("underline", "text-on-disabled");
+    expect(button).not.toHaveClass("bg-disabled", "text-text01");
+  });
+
+  it("variant로 비활성 모양만 입히면 모양은 비활성이지만 눌린다", async () => {
+    const onClick = vi.fn();
+    render(
+      <>
+        <Button variant="disabled" onClick={onClick}>
+          저장
+        </Button>
+        <Button variant="textDisabled" disabled>
+          서비스 안내
+        </Button>
+      </>,
+    );
+    const save = screen.getByRole("button", { name: "저장" });
+    expect(save).toHaveClass("bg-disabled", "text-on-disabled");
+    expect(save).toBeEnabled();
+    await userEvent.click(save);
+    expect(onClick).toHaveBeenCalledOnce();
+
+    const link = screen.getByRole("button", { name: "서비스 안내" });
+    expect(link).toHaveClass("underline", "text-on-disabled");
+    expect(link).not.toHaveClass("bg-disabled");
+  });
+
   it("요청 중이면 스피너를 보여 주고 누를 수 없다. 색은 그대로다", async () => {
     const onClick = vi.fn();
     render(
@@ -63,16 +97,21 @@ describe("Button (CG ①, 토큰 5-1)", () => {
     expect(onClick).not.toHaveBeenCalled();
   });
 
-  it("크기 L은 높이 52에 폭 전체, S는 누르는 영역을 44로 넓힌다", () => {
+  it("크기 lg는 높이 48에 폭 전체, md·sm은 누르는 영역을 44로 넓힌다", () => {
     render(
       <>
-        <Button size="l">저장</Button>
-        <Button size="s">오늘</Button>
+        <Button size="lg">저장</Button>
+        <Button size="md">취소</Button>
+        <Button size="sm">오늘</Button>
       </>,
     );
     expect(screen.getByRole("button", { name: "저장" })).toHaveClass(
-      "h-13",
+      "h-12",
       "w-full",
+    );
+    expect(screen.getByRole("button", { name: "취소" })).toHaveClass(
+      "h-10",
+      "touch-44",
     );
     expect(screen.getByRole("button", { name: "오늘" })).toHaveClass(
       "h-8",

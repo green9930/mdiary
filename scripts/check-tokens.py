@@ -18,8 +18,8 @@ CSS_PATH = "src/app/globals.css"
 DATA_DOC_GLOB = "docs/03-data/*-data-architecture.md"
 COLOR_SECTIONS = ("### 2-1.", "### 2-2.", "### 2-3.")
 # 문서 이름 → globals.css 이름 (4-1 코드 이름)
-RADIUS_NAMES = {"radius-s": "sm", "radius-m": "md", "radius-l": "lg", "radius-sheet": "sheet"}
-TEXT_NAMES = {"버튼 L": "button-l"}
+RADIUS_NAMES = {"radius-sm": "sm", "radius-md": "md", "radius-lg": "lg", "radius-sheet": "sheet"}
+TEXT_NAMES = {"버튼 lg": "button-lg"}
 DURATION_NAMES = {"시트 열림·닫힘": "sheet", "다이얼로그": "dialog", "드롭다운": "dropdown"}
 
 
