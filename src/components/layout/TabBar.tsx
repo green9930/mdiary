@@ -43,7 +43,7 @@ const TabBar = () => {
           active ? "font-bold text-accent" : "text-text02"
         }`}
       >
-        <Icon className={cn("size-6", active && "text-brand")} />
+        <Icon className={cn("size-6", active && "text-primary")} />
         {tab.label}
       </Link>
     );
@@ -59,7 +59,7 @@ const TabBar = () => {
         <Link
           href={newExpenseHref}
           aria-label={PAGE_TITLES.newExpense}
-          className="mx-auto -mt-3 grid size-13 place-items-center self-start rounded-full bg-primary text-on-primary shadow-2 active:bg-primary-pressed dark:border dark:border-line"
+          className="mx-auto -mt-3 grid size-13 place-items-center self-start rounded-full bg-primary text-white shadow-2 active:bg-primary-pressed dark:border dark:border-line"
         >
           <AddIcon className="size-7" />
         </Link>

@@ -1,7 +1,10 @@
 // 여러 화면·모듈이 두루 쓰는 상수
 
-/** 서비스 이름. 로고와 브라우저 탭 제목에 쓴다 */
-export const APP_NAME = "다씀";
+/** 서비스 이름. ko: 로고와 브라우저 탭 제목, en: 로그인 화면 로고 아래 (화면 명세 SC-02) */
+export const APP_NAME = {
+  ko: "다씀",
+  en: "Money Diary",
+} as const;
 
 /** 화면 경로 (화면 명세) */
 export const PATHS = {
@@ -27,6 +30,7 @@ export const PAGE_TITLES = {
 /** 버튼 글자 */
 export const BTN_TEXTS = {
   googleSignIn: "Google로 계속하기",
+  signOut: "로그아웃",
   retry: "다시 시도",
   confirm: "확인",
 } as const;
@@ -38,12 +42,22 @@ export const STATE_TEXTS = {
   loadMoreFailed: "더 불러오지 못했습니다.",
 } as const;
 
-/** 알림 다이얼로그 문구 (와이어프레임 CM ⑤⑥) */
+/** 로그인 화면 문구 (화면 명세 SC-02) */
+export const LOGIN_TEXTS = {
+  tagline: "나의 지출만 확인하고 싶을 때",
+  expired: "세션이 만료되었습니다. 다시 로그인해 주세요.",
+  withdrawn: "탈퇴가 완료되었습니다.",
+  failed: "로그인에 실패했습니다. 잠시 후 다시 시도해 주세요.",
+} as const;
+
+/** 알림 다이얼로그 문구 (와이어프레임 CM ⑤⑥, SC-10 ⑤) */
 export const DIALOG_TEXTS = {
   saveTitle: "저장하기",
   saveFailed: "저장하지 못했습니다. 잠시 후 다시 시도해 주세요.",
   deleteTitle: "삭제하기",
   deleteFailed: "삭제하지 못했습니다. 잠시 후 다시 시도해 주세요.",
+  signOutTitle: "로그아웃하기",
+  signOutFailed: "로그아웃하지 못했습니다. 잠시 후 다시 시도해 주세요.",
 } as const;
 
 /** 화면에는 보이지 않고 스크린 리더가 읽는 이름 */

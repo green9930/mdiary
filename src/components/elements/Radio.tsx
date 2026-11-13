@@ -12,7 +12,7 @@ interface RadioProps {
 }
 
 // 라디오 (와이어프레임 CG ④, 토큰 5-3): 라벨을 눌러도 반응한다.
-// 비활성은 원 테두리 line, 라벨 on-disabled, 안내 문구는 라벨 아래 caption text02
+// 비활성은 원 테두리 line, 라벨 text03, 안내 문구는 라벨 아래 caption text02
 const Radio = ({
   name,
   value,
@@ -25,7 +25,7 @@ const Radio = ({
   return (
     <label
       className={`flex min-h-11 items-center gap-2 text-body ${
-        disabled ? "text-on-disabled" : "text-text01"
+        disabled ? "text-text03" : "text-text01"
       }`}
     >
       <input

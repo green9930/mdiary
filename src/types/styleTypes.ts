@@ -11,3 +11,6 @@ export type ButtonVariantType =
   | "textDisabled";
 
 export type ButtonSizeType = "lg" | "md" | "sm";
+
+/** 로고 크기: 로그인 화면 lg, 그 밖 md (토큰 5-7) */
+export type LogoSizeType = "lg" | "md";

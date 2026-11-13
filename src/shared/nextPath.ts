@@ -14,7 +14,7 @@ export const safeNextPath = (value: string | null | undefined): string => {
   return value;
 };
 
-export type LoginReasonType = "expired" | "withdrawn";
+export type LoginReasonType = "expired" | "withdrawn" | "failed";
 
 export const loginPath = (next: string, reason?: LoginReasonType): string => {
   const params = new URLSearchParams({ next });

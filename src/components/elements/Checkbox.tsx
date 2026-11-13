@@ -23,7 +23,7 @@ const Checkbox = ({
     <label
       className={`flex min-h-11 items-center gap-2 text-body ${
         disabled
-          ? "text-on-disabled hover:cursor-not-allowed"
+          ? "text-text03 hover:cursor-not-allowed"
           : "text-text01 hover:cursor-pointer"
       }`}
     >
@@ -37,11 +37,7 @@ const Checkbox = ({
       <Icon
         aria-hidden
         className={`size-6 shrink-0 rounded-sm peer-focus-visible:outline-2 peer-focus-visible:outline-accent ${
-          disabled
-            ? "text-on-disabled"
-            : checked
-              ? "text-primary"
-              : "text-text02"
+          disabled ? "text-text03" : checked ? "text-primary" : "text-text02"
         }`}
       />
       {children}

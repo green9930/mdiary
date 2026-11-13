@@ -9,8 +9,8 @@ import { act, renderHook, waitFor } from "@testing-library/react";
 import { createElement, type ReactNode } from "react";
 import { describe, expect, it } from "vitest";
 
-import { createQueryClient } from "@/lib/queryClient";
 import { getQueryView } from "@/lib/queryView";
+import { createQueryClient } from "@/states/tanstackQuery/queryClient";
 
 // 앱과 같은 기본값에 재시도만 끈다
 const makeWrapper = () => {

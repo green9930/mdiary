@@ -11,17 +11,15 @@ const TEXT_BASE_CLASS =
 // 종류별 면·글자·테두리와 누름 (토큰 5-1).
 // 비활성은 종류와 상관없이 disabled 모양, text만 면 없이 글자색만 바뀐다 (textDisabled)
 const VARIANT_CLASSES: Record<ButtonVariantType, string> = {
-  primary:
-    "border-transparent bg-primary text-on-primary active:bg-primary-pressed",
+  primary: "border-transparent bg-primary text-white active:bg-primary-pressed",
   secondary: "border-transparent bg-tint text-on-tint active:bg-tint-pressed",
   outline: "border-accent bg-bg text-accent active:bg-surface",
   line: "border-line-strong bg-bg text-text01 active:bg-surface",
   text: `${TEXT_BASE_CLASS} text-text01 active:text-text02`,
-  danger:
-    "border-transparent bg-danger text-on-danger active:bg-danger-pressed",
+  danger: "border-transparent bg-danger text-white active:bg-danger-pressed",
   gray: "border-transparent bg-gray text-on-gray active:bg-gray-pressed",
-  disabled: "border-transparent bg-disabled text-on-disabled",
-  textDisabled: `${TEXT_BASE_CLASS} text-on-disabled`,
+  disabled: "border-transparent bg-disabled text-text03",
+  textDisabled: `${TEXT_BASE_CLASS} text-text03`,
 };
 
 // lg 48 (하단 고정, 폭 전체) · md 40 · sm 32. md·sm도 누르는 영역은 44×44

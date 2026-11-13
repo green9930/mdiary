@@ -15,11 +15,11 @@ describe("Button (CG ①, 토큰 5-1)", () => {
     );
     expect(screen.getByRole("button", { name: "저장" })).toHaveClass(
       "bg-primary",
-      "text-on-primary",
+      "text-white",
     );
     expect(screen.getByRole("button", { name: "삭제" })).toHaveClass(
       "bg-danger",
-      "text-on-danger",
+      "text-white",
     );
     expect(screen.getByRole("button", { name: "취소" })).toHaveClass(
       "border-line-strong",
@@ -41,7 +41,7 @@ describe("Button (CG ①, 토큰 5-1)", () => {
     );
     const button = screen.getByRole("button", { name: "삭제" });
     expect(button).toBeDisabled();
-    expect(button).toHaveClass("bg-disabled", "text-on-disabled");
+    expect(button).toHaveClass("bg-disabled", "text-text03");
     expect(button).not.toHaveClass("bg-danger");
     await userEvent.click(button);
     expect(onClick).not.toHaveBeenCalled();
@@ -54,7 +54,7 @@ describe("Button (CG ①, 토큰 5-1)", () => {
       </Button>,
     );
     const button = screen.getByRole("button", { name: "개인정보처리방침" });
-    expect(button).toHaveClass("underline", "text-on-disabled");
+    expect(button).toHaveClass("underline", "text-text03");
     expect(button).not.toHaveClass("bg-disabled", "text-text01");
   });
 
@@ -71,13 +71,13 @@ describe("Button (CG ①, 토큰 5-1)", () => {
       </>,
     );
     const save = screen.getByRole("button", { name: "저장" });
-    expect(save).toHaveClass("bg-disabled", "text-on-disabled");
+    expect(save).toHaveClass("bg-disabled", "text-text03");
     expect(save).toBeEnabled();
     await userEvent.click(save);
     expect(onClick).toHaveBeenCalledOnce();
 
     const link = screen.getByRole("button", { name: "서비스 안내" });
-    expect(link).toHaveClass("underline", "text-on-disabled");
+    expect(link).toHaveClass("underline", "text-text03");
     expect(link).not.toHaveClass("bg-disabled");
   });
 

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import ComponentsPreview from "@/app/dev/components/ComponentsPreview";
+import ComponentsPreview from "@/components/dev/ComponentsPreview";
 
 export const metadata = { title: "공통 컴포넌트 견본" };
 

@@ -4,8 +4,8 @@ import { cn } from "@/lib/cn";
 
 describe("cn (클래스 이어 붙이기)", () => {
   it("넘긴 순서대로 이어 붙인다", () => {
-    expect(cn("bg-primary px-4", "text-on-primary")).toBe(
-      "bg-primary px-4 text-on-primary",
+    expect(cn("bg-primary px-4", "text-white")).toBe(
+      "bg-primary px-4 text-white",
     );
   });
 

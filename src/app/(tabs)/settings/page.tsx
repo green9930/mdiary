@@ -1,13 +1,15 @@
+import SignOutButton from "@/components/auth/SignOutButton";
 import { requireSessionUser } from "@/server/session";
 import { PAGE_TITLES, PATHS } from "@/shared/sharedConstants";
 
-// 임시: F9에서 설정 화면으로 바꾼다
+// 임시: F9에서 설정 화면으로 바꾼다. [로그아웃]만 F1에서 먼저 넣는다
 const SettingsPage = async () => {
   await requireSessionUser(PATHS.settings);
 
   return (
-    <main className="p-4">
+    <main className="space-y-6 p-4">
       <h1 className="text-title-lg">{PAGE_TITLES.settings}</h1>
+      <SignOutButton />
     </main>
   );
 };

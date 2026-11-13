@@ -16,9 +16,9 @@ interface SegmentProps<T extends string> {
 // 칸의 상태별 면·글자 (토큰 5-3)
 const OPTION_CLASSES = {
   default: "text-text02",
-  selected: "bg-primary font-bold text-on-primary",
-  disabled: "text-on-disabled",
-  disabledSelected: "bg-line-strong text-on-disabled",
+  selected: "bg-primary font-bold text-white",
+  disabled: "text-text03",
+  disabledSelected: "bg-line-strong text-text03",
 };
 
 // 세그먼트 2단·3단 (와이어프레임 CG ④, 토큰 5-3): 항상 하나가 선택돼 있다

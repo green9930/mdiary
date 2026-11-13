@@ -50,13 +50,13 @@
   /* 버튼 */
   .btn { font-family: var(--font-body); font-weight: 700; border: 1px solid transparent; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0 16px; white-space: nowrap; }
   .sz-lg { height: 48px; font-size: 16px; width: 100%; } .sz-md { height: 40px; font-size: 14px; } .sz-sm { height: 32px; font-size: 12px; padding: 0 10px; border-radius: 6px; }
-  .v-pri { background: var(--primary); color: var(--on-primary); } .v-pri.pressed { background: var(--primary-pressed); }
+  .v-pri { background: var(--primary); color: var(--white); } .v-pri.pressed { background: var(--primary-pressed); }
   .v-sec { background: var(--tint); color: var(--on-tint); } .v-sec.pressed { background: var(--tint-pressed); }
   .v-pout { background: var(--bg); color: var(--accent); border-color: var(--accent); } .v-pout.pressed { background: var(--surface); }
   .v-line { background: var(--bg); color: var(--text01); border-color: var(--line-strong); } .v-line.pressed { background: var(--surface); }
   .v-text { background: none; color: var(--text01); text-decoration: underline; text-underline-offset: 3px; font-weight: 500; padding: 0 4px; } .v-text.pressed { color: var(--text02); }
-  .v-danger { background: var(--danger); color: var(--on-danger); } .v-danger.pressed { background: var(--danger-pressed); }
-  .v-dis { background: var(--disabled); color: var(--on-disabled); }
+  .v-danger { background: var(--danger); color: var(--white); } .v-danger.pressed { background: var(--danger-pressed); }
+  .v-dis { background: var(--disabled); color: var(--text03); }
   .v-gray { background: var(--gray); color: var(--on-gray); } .v-gray.pressed { background: var(--gray-pressed); }
   .spin { width: 16px; height: 16px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; display: inline-block; animation: sp 0.8s linear infinite; }
   @keyframes sp { to { transform: rotate(360deg); } }
@@ -70,7 +70,7 @@
   .lbl { font-size: 14px; font-weight: 500; color: var(--text01); }
   .inp { height: 48px; border: 1px solid var(--line-input); border-radius: 8px; background: var(--bg); padding: 0 14px; display: flex; align-items: center; gap: 8px; font-size: 16px; color: var(--text01); }
   .inp .ph { color: var(--text03); } .inp .cnt { margin-left: auto; font-size: 12px; color: var(--text03); font-family: var(--font-num); } .inp .unit { margin-left: auto; color: var(--text02); }
-  .inp.focus { border: 2px solid var(--accent); } .inp.err { border: 2px solid var(--danger-text); } .inp.dis { border-color: var(--line); background: var(--surface); color: var(--on-disabled); }
+  .inp.focus { border: 2px solid var(--accent); } .inp.err { border: 2px solid var(--danger-text); } .inp.dis { border-color: var(--line); background: var(--surface); color: var(--text03); }
   .inp.ta { height: auto; min-height: 96px; align-items: flex-start; padding: 12px 14px 26px; position: relative; line-height: 24px; }
   .inp.ta .cnt { position: absolute; right: 12px; bottom: 6px; }
   .caret { width: 1.5px; height: 20px; background: var(--accent); display: inline-block; vertical-align: middle; animation: bl 1s steps(1) infinite; }
@@ -82,24 +82,24 @@
   .seg { display: flex; border: 1px solid var(--line-strong); border-radius: 8px; overflow: hidden; height: 40px; }
   .seg span { flex: 1; display: grid; place-items: center; font-size: 14px; color: var(--text02); }
   .seg span + span { border-left: 1px solid var(--line-strong); }
-  .seg span.on { background: var(--primary); color: var(--on-primary); font-weight: 700; }
-  .seg.dis { background: var(--surface); } .seg.dis span { color: var(--on-disabled); } .seg.dis span.on { background: var(--line-strong); color: var(--on-disabled); }
+  .seg span.on { background: var(--primary); color: var(--white); font-weight: 700; }
+  .seg.dis { background: var(--surface); } .seg.dis span { color: var(--text03); } .seg.dis span.on { background: var(--line-strong); color: var(--text03); }
   .cgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
   .cc { height: 64px; border: 1px solid var(--line); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 12px; color: var(--text02); }
   .cc i { width: 26px; height: 26px; border-radius: 50%; background: var(--surface); display: block; }
   .cc.on { border: 2px solid var(--accent); background: var(--tint); color: var(--on-tint); font-weight: 700; }
   .chips { display: flex; gap: 6px; overflow: hidden; }
   .chip { flex: none; height: 32px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line-strong); display: grid; place-items: center; font-size: 14px; color: var(--text01); }
-  .chip.on { background: var(--primary); border-color: var(--primary); color: var(--on-primary); font-weight: 700; }
+  .chip.on { background: var(--primary); border-color: var(--primary); color: var(--white); font-weight: 700; }
   .radio, .check { display: flex; align-items: center; gap: 10px; font-size: 14px; min-height: 44px; }
   .radio i { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--line-input); display: grid; place-items: center; flex: none; }
   .radio.on i { border-color: var(--primary); } .radio.on i::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--primary); }
-  .radio.dis { color: var(--on-disabled); } .radio.dis i { border-color: var(--line); }
+  .radio.dis { color: var(--text03); } .radio.dis i { border-color: var(--line); }
   .radio-hint { display: block; font-size: 12px; line-height: 18px; color: var(--text02); }
   .check i { width: 24px; height: 24px; flex: none; color: var(--text02); display: block; }
   .check.on i { color: var(--primary); }
-  .check.dis i { color: var(--on-disabled); }
-  .check.dis { color: var(--on-disabled); }
+  .check.dis i { color: var(--text03); }
+  .check.dis { color: var(--text03); }
   .inline-n { width: 56px; height: 36px; border: 1px solid var(--line-input); border-radius: 8px; display: inline-grid; place-items: center; font-family: var(--font-num); }
   .dd { position: relative; display: inline-block; }
   .menu { position: absolute; top: 40px; left: 0; min-width: 150px; background: var(--bg); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow-1); padding: 6px 0; z-index: 2; }
@@ -129,8 +129,8 @@
   .cal .n { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font: 500 14px/1 var(--font-num); color: var(--text01); }
   .cal .a { font: 400 10px/12px var(--font-num); color: var(--text01); letter-spacing: -.2px; }
   .cal .sun .n { color: var(--danger-text); } .cal .sat .n { color: var(--text02); } .cal .out .n { color: var(--text03); }
-  .cal .today .n { box-shadow: inset 0 0 0 2px var(--brand); }
-  .cal .sel .n { background: var(--primary); color: var(--on-primary); font-weight: 700; box-shadow: none; }
+  .cal .today .n { box-shadow: inset 0 0 0 2px var(--primary); }
+  .cal .sel .n { background: var(--primary); color: var(--white); font-weight: 700; box-shadow: none; }
   .cstates { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
   .cstates > div { border: 1px dashed var(--line); border-radius: 8px; padding-bottom: 4px; }
   .cstates .cap { font-size: 10px; color: var(--text02); text-align: center; line-height: 1.3; padding: 2px; }
@@ -169,10 +169,10 @@
   .hdr .tt { font-size: 18px; font-weight: 700; }
   .tabbar { display: grid; grid-template-columns: repeat(5, 1fr); height: 64px; border-top: 1px solid var(--line); align-items: center; text-align: center; font-size: 10px; font-weight: 500; color: var(--text02); background: var(--bg); padding-bottom: 6px; }
   .tabbar i { display: block; width: 24px; height: 24px; margin: 0 auto 2px; }
-  .tabbar .on { color: var(--accent); font-weight: 700; } .tabbar .on i { color: var(--brand); }
+  .tabbar .on { color: var(--accent); font-weight: 700; } .tabbar .on i { color: var(--primary); }
   .tabbar .plus svg { width: 28px; height: 28px; }
-  .tabbar .plus { width: 52px; height: 52px; border-radius: 50%; background: var(--primary); color: var(--on-primary); display: grid; place-items: center; font-size: 26px; margin: -24px auto 0; box-shadow: var(--shadow-2); }
-  .logo { font-family: var(--font-logo); color: var(--brand); display: inline-flex; align-items: center; gap: 6px; }
+  .tabbar .plus { width: 52px; height: 52px; border-radius: 50%; background: var(--primary); color: var(--white); display: grid; place-items: center; font-size: 26px; margin: -24px auto 0; box-shadow: var(--shadow-2); }
+  .logo { font-family: var(--font-logo); color: var(--primary); display: inline-flex; align-items: center; gap: 6px; }
   .tagline { font-family: var(--font-body); color: var(--accent); font-size: 16px; line-height: 24px; font-weight: 700; }
 
   /* 토큰 표·글꼴 */
@@ -366,15 +366,15 @@ function paintIcons(root) {
 }
 /* ===== 토큰 (정본: 2026-11-02-02-design-tokens.md) ===== */
 const T = {
-  light: { brand: "#1DB954", primary: "#1DB954", "primary-pressed": "#17A14B", "on-primary": "#FFFFFF", accent: "#13823E", tint: "#E3F7EA", "tint-pressed": "#D4EFDE", "on-tint": "#0E5A2C",
+  light: { primary: "#1DB954", "primary-pressed": "#17A14B", white: "#FFFFFF", accent: "#13823E", tint: "#E3F7EA", "tint-pressed": "#D4EFDE", "on-tint": "#0E5A2C",
     bg: "#FFFFFF", surface: "#F3F6F4", line: "#E3E8E5", "line-strong": "#C9D1CC", "line-input": "#8A948E", text01: "#17201B", text02: "#5E6A63", text03: "#7D8781",
-    gray: "#EBEFEC", "gray-pressed": "#DDE3DF", "on-gray": "#4A544F", disabled: "#EEF1EF", "on-disabled": "#7D8781", scrim: "rgba(0,0,0,.55)",
-    danger: "#D93A2B", "danger-pressed": "#BF3022", "on-danger": "#FFFFFF", "danger-text": "#D93A2B", notice: "#FFF4D6", "on-notice": "#7A5300", highlight: "#CFF2DB",
+    gray: "#EBEFEC", "gray-pressed": "#DDE3DF", "on-gray": "#4A544F", disabled: "#EEF1EF", scrim: "rgba(0,0,0,.55)",
+    danger: "#D93A2B", "danger-pressed": "#BF3022", "danger-text": "#D93A2B", notice: "#FFF4D6", "on-notice": "#7A5300", highlight: "#CFF2DB",
     "shadow-1": "0 2px 8px rgba(0,0,0,.08)", "shadow-2": "0 8px 24px rgba(0,0,0,.16)", "shadow-sheet": "0 -4px 16px rgba(0,0,0,.10)", "dlg-line": "transparent" },
-  dark: { brand: "#1ED760", primary: "#1ED760", "primary-pressed": "#19C257", "on-primary": "#FFFFFF", accent: "#1ED760", tint: "#173323", "tint-pressed": "#1E4029", "on-tint": "#1ED760",
+  dark: { primary: "#1ED760", "primary-pressed": "#19C257", white: "#FFFFFF", accent: "#1ED760", tint: "#173323", "tint-pressed": "#1E4029", "on-tint": "#1ED760",
     bg: "#111513", surface: "#1E2522", line: "#2A322E", "line-strong": "#3B4540", "line-input": "#5C6661", text01: "#EEF2EF", text02: "#A3AEA8", text03: "#6E7873",
-    gray: "#2A322E", "gray-pressed": "#343D39", "on-gray": "#C9D1CC", disabled: "#1E2522", "on-disabled": "#6E7873", scrim: "rgba(0,0,0,.70)",
-    danger: "#D93A2B", "danger-pressed": "#BF3022", "on-danger": "#FFFFFF", "danger-text": "#FF7A6E", notice: "#2B2412", "on-notice": "#FFD98A", highlight: "#1F4A30",
+    gray: "#2A322E", "gray-pressed": "#343D39", "on-gray": "#C9D1CC", disabled: "#1E2522", scrim: "rgba(0,0,0,.70)",
+    danger: "#D93A2B", "danger-pressed": "#BF3022", "danger-text": "#FF7A6E", notice: "#2B2412", "on-notice": "#FFD98A", highlight: "#1F4A30",
     "shadow-1": "none", "shadow-2": "none", "shadow-sheet": "none", "dlg-line": "#2A322E" },
 };
 const CAT = {
@@ -382,14 +382,14 @@ const CAT = {
   dark: { 식비: "#FBBF24", 가전: "#818CF8", 교통: "#38BDF8", 의료: "#FB7185", 의류: "#C084FC", 미용: "#F472B6", 문화: "#2DD4BF", 교육: "#60A5FA", 생활: "#FB923C", 기타: "#94A3B8" },
 };
 /* 표에서 "이 색은 무엇 위의 글자인가" */
-const PAIR = { primary: ["on-primary", "면 위 흰 글자"], "primary-pressed": ["on-primary", "면 위 흰 글자"], tint: ["on-tint", "면 위 글자"], "tint-pressed": ["on-tint", "면 위 글자"], gray: ["on-gray", "면 위 글자"], "gray-pressed": ["on-gray", "면 위 글자"],
-  danger: ["on-danger", "면 위 흰 글자"], "danger-pressed": ["on-danger", "면 위 흰 글자"], notice: ["on-notice", "면 위 글자"], highlight: ["text01", "면 위 글자"],
+const PAIR = { primary: ["white", "면 위 흰 글자"], "primary-pressed": ["white", "면 위 흰 글자"], tint: ["on-tint", "면 위 글자"], "tint-pressed": ["on-tint", "면 위 글자"], gray: ["on-gray", "면 위 글자"], "gray-pressed": ["on-gray", "면 위 글자"],
+  danger: ["white", "면 위 흰 글자"], "danger-pressed": ["white", "면 위 흰 글자"], notice: ["on-notice", "면 위 글자"], highlight: ["text01", "면 위 글자"],
   accent: ["bg", "바탕 위 글자"], text01: ["bg", "바탕 위 글자"], text02: ["bg", "바탕 위 글자"], "danger-text": ["bg", "바탕 위 글자"],
-  text03: ["bg", "예외(placeholder·비활성)"], "on-disabled": ["disabled", "예외(비활성)"], brand: ["bg", "테두리·아이콘(3:1)"], "line-strong": ["bg", "예외(글자 있는 컨트롤 테두리)"], "line-input": ["bg", "입력·라디오 테두리(3:1)"] };
-const DESC = { brand: "로고, 오늘 테두리, 탭 활성 아이콘", primary: "주 버튼·선택 날짜·＋ 면", "primary-pressed": "주 버튼 누름", "on-primary": "주 버튼 글자", accent: "초록 글자, outline, 포커스",
+  text03: ["bg", "예외(placeholder·비활성)"], "line-strong": ["bg", "예외(글자 있는 컨트롤 테두리)"], "line-input": ["bg", "입력·라디오 테두리(3:1)"] };
+const DESC = { primary: "주 버튼·선택 날짜·＋ 면, 로고·오늘 테두리·탭 활성 아이콘", "primary-pressed": "주 버튼 누름", white: "주 버튼·danger 버튼 글자", accent: "초록 글자, outline, 포커스",
   tint: "secondary filled·배지 면", "tint-pressed": "secondary filled 누름", "on-tint": "secondary filled·배지 글자", bg: "바탕", surface: "아이콘 자리·비활성 입력·상자", line: "구분선·비활성 입력 테두리", "line-strong": "line 버튼·칩·세그먼트 테두리", "line-input": "입력·라디오 테두리",
-  text01: "기본 글자·금액", text02: "보조 글자·토요일", text03: "placeholder·앞뒤 달", gray: "gray 버튼 면", "gray-pressed": "gray 버튼 누름", "on-gray": "gray 버튼 글자", disabled: "비활성 면", "on-disabled": "비활성 글자",
-  scrim: "가림막", danger: "danger 버튼 면", "danger-pressed": "danger 누름", "on-danger": "danger 버튼 글자", "danger-text": "오류 문구·일요일", notice: "오프라인 띠 면", "on-notice": "오프라인 띠 글자", highlight: "검색 일치 면" };
+  text01: "기본 글자·금액", text02: "보조 글자·토요일", text03: "placeholder·앞뒤 달·비활성 글자", gray: "gray 버튼 면", "gray-pressed": "gray 버튼 누름", "on-gray": "gray 버튼 글자", disabled: "비활성 면",
+  scrim: "가림막", danger: "danger 버튼 면", "danger-pressed": "danger 누름", "danger-text": "오류 문구·일요일", notice: "오프라인 띠 면", "on-notice": "오프라인 띠 글자", highlight: "검색 일치 면" };
 
 function lum(hex) {
   const h = hex.replace("#", ""); if (h.length !== 6) return null;

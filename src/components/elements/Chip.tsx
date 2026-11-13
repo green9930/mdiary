@@ -15,7 +15,7 @@ const Chip = ({ children, selected, onClick }: ChipProps) => {
       onClick={onClick}
       className={`touch-44 h-8 shrink-0 rounded-full border px-3 text-body whitespace-nowrap ${
         selected
-          ? "border-primary bg-primary font-bold text-on-primary"
+          ? "border-primary bg-primary font-bold text-white"
           : "border-line-strong text-text01"
       }`}
     >

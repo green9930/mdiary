@@ -41,21 +41,20 @@
 - [x] F0-2 공통 컴포넌트
   - [x] F0-2a 기본 조각 (`Button`·`IconButton`·`Spinner`, `TextInput`·`TextArea`·`NumberInput`, `Segment`·`Chip`·`Checkbox`·`Radio`, `lib/text.ts`·`lib/cn.ts`, 견본 화면 `/dev/components`)
   - [x] F0-2b 겹쳐 뜨는 것·목록 (`BottomSheet`·`Dialog`·`Dropdown`, `ListItem`·`Badge`, 뒤로 가기 공통 처리 `useHistoryLayer`)
-- [x] F0-3 공통 상태 (`components/states/`의 스켈레톤·`LoadError`·`RefreshErrorBar`·`LoadMoreStatus`·`EmptyState`, `AlertDialog`, TanStack Query 연결 `QueryProvider`·`lib/queryClient.ts`, 영역 상태 판단 `lib/queryView.ts`의 `getQueryView`)
-- [ ] F1 ← 다음
-- [ ] F2 ~ F12
+- [x] F0-3 공통 상태 (`components/states/`의 스켈레톤·`LoadError`·`RefreshErrorBar`·`LoadMoreStatus`·`EmptyState`, `AlertDialog`, TanStack Query 연결 `states/tanstackQuery/`의 `QueryProvider`·`queryClient.ts`, 영역 상태 판단 `lib/queryView.ts`의 `getQueryView`)
+- [x] F1 로그인·세션 (SC-02 로그인 화면 `LoginForm`·`Logo`, 안내 문구 `lib/authUtils.ts`의 `handleLoginNotice`, 공통 요청 `api/apiClient.ts`의 `apiFetch`·`ApiError`, 401이면 QueryClient가 `/login?reason=expired`로, 임시 [로그아웃] `SignOutButton`)
+- [ ] F2 ← 다음
+- [ ] F3 ~ F12
 
 미뤄 둔 작업:
 
-| 시점              | 작업                                                                                                                                                                                                                                         |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| F1                | 임시 `GoogleSignInButton`을 SC-02 로그인 화면의 `Button`(`variant="line"`, `size="lg"`)으로 바꾸고, Google 공식 로고와 로그인 브랜드 가이드를 적용한다 (토큰 5-7). Google 창을 닫았을 때 버튼이 다시 활성화되는지 확인한다 (화면 명세 SC-02) |
-| F1                | 로고 크기 토큰 `logo-lg`(48)·`logo`(24)를 크기 단계에 추가한다 (토큰 5-7). 지금 임시 로그인 화면은 `text-title-lg`                                                                                                                           |
-| F2                | 카테고리 목록(이름·아이콘·색)을 상수로 뺀다. `ListItem`의 `icon`·`iconClassName`을 필수 `category` 하나로 바꾸고, 아이콘(토큰 2-5)과 색(2-4)은 이 목록에서 고른다. 색 클래스는 전체 문자열로 적는다 (`"bg-cat-food/15 text-cat-food"`)       |
-| F1·F2             | `src/api/`에 첫 요청 함수(`{이름}APIs.ts`)를 만든다                                                                                                                                                                                          |
-| F3                | ＋ 버튼의 날짜: 달력에서 고른 날짜가 있으면 그 날짜 (`useTabNavigation`)                                                                                                                                                                     |
-| F10               | 오프라인 띠를 `(tabs)` 레이아웃의 자리 표시 주석 위치에 넣는다                                                                                                                                                                               |
-| F12               | pnpm 12로 올릴지 정한다 (Vercel·GitHub Actions 지원 확인 후. pnpm 10 지원은 2027년 4월까지)                                                                                                                                                  |
-| F1                | Tenada(192KB)를 "다씀" 글자만 남기도록 줄일지 정한다 (라이선스 확인 필요)                                                                                                                                                                    |
-| 견본 화면 삭제 시 | `/dev/components`를 없앨 때 로그인 없이 여는 처리도 지운다: `PATHS.devComponents`, `proxy.ts`의 통과 조건, `proxy.test.ts`의 해당 테스트                                                                                                     |
-| 사용자            | `.env`의 Neon 주소 두 개를 `sslmode=verify-full`로 바꾸면 `pg`의 SSL 경고가 없어진다                                                                                                                                                         |
+| 시점              | 작업                                                                                                                                                                                                                                   |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| F2                | 카테고리 목록(이름·아이콘·색)을 상수로 뺀다. `ListItem`의 `icon`·`iconClassName`을 필수 `category` 하나로 바꾸고, 아이콘(토큰 2-5)과 색(2-4)은 이 목록에서 고른다. 색 클래스는 전체 문자열로 적는다 (`"bg-cat-food/15 text-cat-food"`) |
+| F2                | `src/api/`에 첫 요청 함수(`{이름}APIs.ts`)를 만든다. 공통 처리는 `apiClient.ts`의 `apiFetch`를 쓴다                                                                                                                                    |
+| F9                | 설정 화면의 임시 [로그아웃](`SignOutButton`)을 SC-10 배치로 옮긴다                                                                                                                                                                     |
+| F3                | ＋ 버튼의 날짜: 달력에서 고른 날짜가 있으면 그 날짜 (`useTabNavigation`)                                                                                                                                                               |
+| F10               | 오프라인 띠를 `(tabs)` 레이아웃의 자리 표시 주석 위치에 넣는다                                                                                                                                                                         |
+| F12               | pnpm 12로 올릴지 정한다 (Vercel·GitHub Actions 지원 확인 후. pnpm 10 지원은 2027년 4월까지)                                                                                                                                            |
+| 견본 화면 삭제 시 | `/dev/components`를 없앨 때 로그인 없이 여는 처리도 지운다: `PATHS.devComponents`, `proxy.ts`의 통과 조건, `proxy.test.ts`의 해당 테스트                                                                                               |
+| 사용자            | `.env`의 Neon 주소 두 개를 `sslmode=verify-full`로 바꾸면 `pg`의 SSL 경고가 없어진다                                                                                                                                                   |

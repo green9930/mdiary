@@ -3,10 +3,10 @@ import { Noto_Sans_KR, Rubik } from "next/font/google";
 import localFont from "next/font/local";
 import { cookies } from "next/headers";
 
-import InAppHistoryTracker from "@/app/InAppHistoryTracker";
-import QueryProvider from "@/app/QueryProvider";
+import InAppHistoryTracker from "@/components/layout/InAppHistoryTracker";
 import { APP_NAME, COOKIES } from "@/shared/sharedConstants";
 import { parseTheme } from "@/shared/theme";
+import QueryProvider from "@/states/tanstackQuery/QueryProvider";
 
 import "@/app/globals.css";
 
@@ -28,7 +28,7 @@ const tenada = localFont({
 });
 
 export const metadata: Metadata = {
-  title: APP_NAME,
+  title: APP_NAME.ko,
 };
 
 // 안전 여백(env(safe-area-inset-*))을 쓰려면 화면 끝까지 그려야 한다

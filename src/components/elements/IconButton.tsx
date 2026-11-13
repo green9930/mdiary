@@ -22,7 +22,7 @@ const IconButton = ({
       aria-label={ariaLabel}
       disabled={disabled}
       onClick={onClick}
-      className="grid size-11 shrink-0 place-items-center text-text01 disabled:text-on-disabled [&>svg]:size-6"
+      className="grid size-11 shrink-0 place-items-center text-text01 disabled:text-text03 [&>svg]:size-6"
     >
       {children}
     </button>
