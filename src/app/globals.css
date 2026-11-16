@@ -157,6 +157,16 @@ body {
   @apply bg-bg font-body text-body text-text01;
 }
 
+/* 버튼에 마우스를 올렸을 때 커서: 누를 수 있으면 손가락, 비활성이면 금지 (Tailwind 4는 버튼 기본 커서를 바꾸지 않는다) */
+@layer base {
+  button {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
+
 /* 바텀시트·다이얼로그가 열려 있으면 뒤 화면이 스크롤되지 않게 한다 (iOS는 모달 <dialog>만으로 막히지 않는다) */
 html:has(dialog[open]) {
   overflow: hidden;

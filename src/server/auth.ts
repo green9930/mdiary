@@ -4,10 +4,7 @@ import { nextCookies } from "better-auth/next-js";
 
 import { env } from "@/env";
 import { prisma } from "@/server/db";
-import {
-  SESSION_EXPIRES_IN,
-  SESSION_UPDATE_AGE,
-} from "@/server/sessionConstants";
+import { SESSION_RULES } from "@/server/sessionConstants";
 import { testLogin } from "@/server/tests/testLogin";
 
 const enableTestLogin =
@@ -16,7 +13,10 @@ const enableTestLogin =
 // BETTER_AUTH_SECRET·BETTER_AUTH_URL은 Better Auth가 환경 변수에서 직접 읽는다
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
-  session: { expiresIn: SESSION_EXPIRES_IN, updateAge: SESSION_UPDATE_AGE },
+  session: {
+    expiresIn: SESSION_RULES.expiresIn,
+    updateAge: SESSION_RULES.updateAge,
+  },
   socialProviders: {
     google: {
       clientId: env.GOOGLE_CLIENT_ID,

@@ -20,6 +20,14 @@ let nextId = 1;
 // 스스로 부른 history.back()의 popstate는 무시한다
 let ignoredPops = 0;
 let listening = false;
+// 되돌리는 기록이 모두 되돌려진 뒤 실행할 일 (runAfterLayerPops)
+let afterPops: (() => void)[] = [];
+
+const flushAfterPops = () => {
+  const callbacks = afterPops;
+  afterPops = [];
+  for (const callback of callbacks) callback();
+};
 
 const pushEntry = (id: number) => {
   window.history.pushState({ ...window.history.state, [STATE_KEY]: id }, "");
@@ -28,6 +36,7 @@ const pushEntry = (id: number) => {
 const onPopState = () => {
   if (ignoredPops > 0) {
     ignoredPops -= 1;
+    if (ignoredPops === 0) flushAfterPops();
     return;
   }
   const top = layers.at(-1);
@@ -51,6 +60,16 @@ const listen = () => {
 export const resetHistoryLayers = () => {
   layers.length = 0;
   ignoredPops = 0;
+  afterPops = [];
+};
+
+/**
+ * 닫힌 층이 쌓았던 기록을 모두 되돌린 뒤 callback을 실행한다. 되돌릴 기록이 없으면 바로 실행한다.
+ * 층을 닫자마자 화면을 옮기면(router.replace) 되돌리기 전의 기록이 바뀌므로 이 함수를 거친다
+ */
+export const runAfterLayerPops = (callback: () => void) => {
+  if (ignoredPops === 0) callback();
+  else afterPops.push(callback);
 };
 
 /**

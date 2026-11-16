@@ -30,10 +30,7 @@ import {
 import { DIALOG_TEXTS } from "@/shared/sharedConstants";
 import type { ButtonSizeType, ButtonVariantType } from "@/types/styleTypes";
 import ArrowLeftIcon from "@/assets/icon_arrow_left.svg";
-import CardIcon from "@/assets/icon_card.svg";
 import CloseIcon from "@/assets/icon_close.svg";
-import ElectricalIcon from "@/assets/icon_electrical.svg";
-import FoodIcon from "@/assets/icon_food.svg";
 
 const VARIANTS: { variant: ButtonVariantType; label: string }[] = [
   { variant: "primary", label: "저장" },
@@ -348,22 +345,15 @@ const ComponentsPreview = () => {
 
       <Section id="list" title="목록 항목 · 배지">
         <div>
+          <ListItem category="FOOD" title="점심 김밥" amount="8,000원" />
           <ListItem
-            icon={<FoodIcon />}
-            iconClassName="bg-cat-food/15 text-cat-food"
-            title="점심 김밥"
-            amount="8,000원"
-          />
-          <ListItem
-            icon={<CardIcon />}
-            iconClassName="bg-cat-etc/15 text-cat-etc"
+            category="ETC"
             title="넷플릭스 스탠다드 요금제 월 구독료"
             badge={<Badge>정기</Badge>}
             amount="13,300원"
           />
           <ListItem
-            icon={<ElectricalIcon />}
-            iconClassName="bg-cat-appliance/15 text-cat-appliance"
+            category="APPLIANCE"
             title="아이패드"
             badge={<Badge>할부 2/3</Badge>}
             subtitle="11.01"
@@ -388,8 +378,7 @@ const ComponentsPreview = () => {
         <div>
           <RefreshErrorBar onRetry={retry} retrying={retrying} />
           <ListItem
-            icon={<FoodIcon />}
-            iconClassName="bg-cat-food/15 text-cat-food"
+            category="FOOD"
             title="이전에 불러온 목록"
             amount="8,000원"
           />

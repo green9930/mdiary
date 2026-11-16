@@ -33,6 +33,10 @@ export const BTN_TEXTS = {
   signOut: "로그아웃",
   retry: "다시 시도",
   confirm: "확인",
+  save: "저장",
+  select: "선택",
+  keepWriting: "계속 작성",
+  leave: "나가기",
 } as const;
 
 /** 불러오기 상태 문구 (와이어프레임 CM ②~④) */
@@ -58,13 +62,83 @@ export const DIALOG_TEXTS = {
   deleteFailed: "삭제하지 못했습니다. 잠시 후 다시 시도해 주세요.",
   signOutTitle: "로그아웃하기",
   signOutFailed: "로그아웃하지 못했습니다. 잠시 후 다시 시도해 주세요.",
+  leaveTitle: "작성 취소",
+  leaveBody: "작성 중인 내용이 사라집니다. 나가시겠습니까?",
 } as const;
+
+/** 바텀시트 제목 */
+export const SHEET_TITLES = {
+  datePicker: "날짜 선택",
+} as const;
+
+/** 입력 라벨 (화면 명세 SC-06) */
+export const FIELD_LABELS = {
+  date: "날짜",
+  title: "제목",
+  category: "카테고리",
+  amount: "금액",
+  content: "내용 (선택)",
+} as const;
+
+/** 입력칸 placeholder (와이어프레임 SC-06 ①) */
+export const PLACEHOLDERS = {
+  title: "제목을 입력해 주세요",
+  amount: "0",
+  content: "메모",
+} as const;
+
+/** 필드 오류 문구 (화면 명세 SC-06) */
+export const FIELD_ERRORS = {
+  titleRequired: "제목을 입력해 주세요.",
+  categoryRequired: "카테고리를 선택해 주세요.",
+  amountRequired: "금액을 입력해 주세요.",
+} as const;
+
+/** 입력칸 단위 */
+export const UNITS = {
+  won: "원",
+} as const;
+
+/** 날짜 규칙 (화면 명세 공통 정책값, 데이터 아키텍처 3-1·3-2) */
+export const DATE_RULES = {
+  /** 날짜 문자열 형식 YYYY-MM-DD */
+  pattern: /^\d{4}-\d{2}-\d{2}$/,
+  /** 입력 검증용 기술 상한 (선택 가능 연도) */
+  maxDate: "2099-12-31",
+  /** 달력은 항상 6줄로 그린다 (SC-03) */
+  calendarWeeks: 6,
+} as const;
+
+/** 입력 글자 규칙 (화면 명세 공통 규약 · 입력) */
+export const TEXT_RULES = {
+  /**
+   * 저장할 때 지우는 보이지 않는 글자: 줄바꿈(\n)을 뺀 제어문자, 폭 없는 공백·방향 표시·BOM.
+   * 이모지를 잇는 ZWJ(U+200D)는 남긴다
+   */
+  invisibleChars: new RegExp(
+    String.raw`[\u0000-\u0009\u000B-\u001F\u007F-\u009F\u200B\u200E\u200F\u202A-\u202E\u2060\u2066-\u2069\uFEFF]`,
+    "g",
+  ),
+} as const;
+
+/** 요일 (일요일부터) */
+export const WEEKDAY_LABELS = [
+  "일",
+  "월",
+  "화",
+  "수",
+  "목",
+  "금",
+  "토",
+] as const;
 
 /** 화면에는 보이지 않고 스크린 리더가 읽는 이름 */
 export const ARIA_LABELS = {
   back: "뒤로",
   mainNav: "주요 화면",
   loading: "불러오는 중",
+  prevMonth: "이전 달",
+  nextMonth: "다음 달",
 } as const;
 
 /** 쿠키 이름 */

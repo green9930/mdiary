@@ -10,8 +10,7 @@ describe("ListItem (CG ⑨)", () => {
     const onClick = vi.fn();
     render(
       <ListItem
-        icon={<svg />}
-        iconClassName="bg-cat-etc/15 text-cat-etc"
+        category="ETC"
         title="아이패드"
         badge={<Badge>할부 2/3</Badge>}
         subtitle="11.01"
@@ -27,11 +26,17 @@ describe("ListItem (CG ⑨)", () => {
     expect(onClick).toHaveBeenCalledOnce();
   });
 
+  it("카테고리 아이콘을 그린다", () => {
+    render(<ListItem category="ETC" title="아이패드" amount="100,000원" />);
+    expect(
+      screen.getByRole("button").querySelector("svg[data-icon]"),
+    ).toHaveAttribute("data-icon", "icon_card");
+  });
+
   it("제목만 말줄임하고 배지·금액은 줄이지 않는다", () => {
     render(
       <ListItem
-        icon={<svg />}
-        iconClassName="bg-cat-etc/15 text-cat-etc"
+        category="ETC"
         title="넷플릭스 스탠다드 요금제 월 구독료"
         badge={<Badge>정기</Badge>}
         amount="13,300원"

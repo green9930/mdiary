@@ -1,3 +1,5 @@
+import { TEXT_RULES } from "@/shared/sharedConstants";
+
 // 입력 글자 다루기 (화면 명세 공통 규약 · 입력, 와이어프레임 CG ②③⑤)
 
 const segmenter = new Intl.Segmenter("ko", { granularity: "grapheme" });
@@ -20,15 +22,9 @@ export const toDigits = (value: string, maxDigits?: number) => {
   return maxDigits === undefined ? digits : digits.slice(0, maxDigits);
 };
 
-// 줄바꿈(\n)을 뺀 제어문자, 폭 없는 공백·방향 표시·BOM. 이모지를 잇는 ZWJ(U+200D)는 남긴다
-const INVISIBLE = new RegExp(
-  String.raw`[\u0000-\u0009\u000B-\u001F\u007F-\u009F\u200B\u200E\u200F\u202A-\u202E\u2060\u2066-\u2069\uFEFF]`,
-  "g",
-);
-
 /** 저장할 때 보이지 않는 제어문자를 지운다 */
 export const removeControlChars = (value: string) =>
-  value.replace(INVISIBLE, "");
+  value.replace(TEXT_RULES.invisibleChars, "");
 
 /** 한 줄 입력(제목): 줄바꿈·탭을 공백으로 바꾼다 */
 export const toSingleLine = (value: string) =>

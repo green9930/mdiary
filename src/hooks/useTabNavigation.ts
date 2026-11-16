@@ -1,7 +1,7 @@
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-import { todayInSeoul } from "@/lib/date";
+import { convertToKSTStr } from "@/lib/date";
 import { PATHS, TABS_LIST } from "@/shared/sharedConstants";
 import type { TabType } from "@/types/tabTypes";
 
@@ -38,7 +38,7 @@ export const useTabNavigation = () => {
     tab === current ? tab.path : (lastUrls.get(tab.path) ?? tab.path);
 
   // F3: 달력에서 날짜를 골라둔 상태면 그 날짜를 쓴다
-  const newExpenseHref = `${PATHS.newExpense}?date=${todayInSeoul()}`;
+  const newExpenseHref = `${PATHS.newExpense}?date=${convertToKSTStr()}`;
 
   return { current, tabHref, newExpenseHref };
 };

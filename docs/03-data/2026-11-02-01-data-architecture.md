@@ -388,18 +388,18 @@ ALTER TABLE "Series"  ADD CONSTRAINT series_billing_day CHECK ("billingDay" BETW
 
 ### 8-4. 클라이언트 캐시 (TanStack Query)
 
-| 쿼리 키                              | API                           |
-| ------------------------------------ | ----------------------------- |
-| `["me"]`                             | `/api/me`                     |
-| `["calendar", month]`                | `/api/calendar`               |
-| `["day", date]`                      | `/api/expenses?date=`         |
-| `["stats", from, to]`                | `/api/stats`                  |
-| `["list", from, to, category, sort]` | `/api/expenses?from=…` (무한) |
-| `["search", q, period]`              | `/api/search` (무한)          |
-| `["titles"]`                         | `/api/titles`                 |
-| `["expense", id]`                    | `/api/expenses/:id`           |
+| 쿼리 키                                          | API                           |
+| ------------------------------------------------ | ----------------------------- |
+| `["accountSummary"]`                             | `/api/me`                     |
+| `["monthTotals", month]`                         | `/api/calendar`               |
+| `["dayExpenses", date]`                          | `/api/expenses?date=`         |
+| `["categoryStats", from, to]`                    | `/api/stats`                  |
+| `["categoryExpenses", from, to, category, sort]` | `/api/expenses?from=…` (무한) |
+| `["searchResults", q, period]`                   | `/api/search` (무한)          |
+| `["titleSuggestions"]`                           | `/api/titles`                 |
+| `["expenseDetail", id]`                          | `/api/expenses/:id`           |
 
-- 등록·수정·삭제가 성공하면 `me`, `calendar`, `day`, `stats`, `list`, `search`, `titles`, `expense`를 모두 무효화한다. 범위 수정은 여러 달에 걸치므로 키를 골라 지우지 않는다.
+- 등록·수정·삭제가 성공하면 `accountSummary`, `monthTotals`, `dayExpenses`, `categoryStats`, `categoryExpenses`, `searchResults`, `titleSuggestions`, `expenseDetail`을 모두 무효화한다. 범위 수정은 여러 달에 걸치므로 키를 골라 지우지 않는다.
 
 ## 9. 탈퇴
 

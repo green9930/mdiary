@@ -82,7 +82,7 @@ const Button = ({
       aria-controls={ariaControls}
       aria-busy={loading || undefined}
       className={cn(
-        "relative inline-flex cursor-pointer items-center justify-center gap-1.5 border whitespace-nowrap select-none disabled:cursor-not-allowed",
+        "relative inline-flex items-center justify-center gap-1.5 border whitespace-nowrap select-none",
         SIZE_CLASSES[size],
         !isText && PADDING_CLASSES[size],
         VARIANT_CLASSES[style],

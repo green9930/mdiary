@@ -1,8 +1,10 @@
 import type { ReactNode } from "react";
 
+import CategoryIcon from "@/components/category/CategoryIcon";
+import type { CategoryType } from "@/types/expenseTypes";
+
 interface ListItemProps {
-  icon: ReactNode; // 카테고리 아이콘 (24)
-  iconClassName: string; // 아이콘 자리 색: 카테고리 색 15% 면 + 아이콘 색 (예: "bg-cat-food/15 text-cat-food")
+  category: CategoryType;
   title: ReactNode;
   badge?: ReactNode; // 제목 옆 배지 (정기·할부). 말줄임 대상이 아니다
   subtitle?: ReactNode;
@@ -12,8 +14,7 @@ interface ListItemProps {
 
 // 목록 항목 (와이어프레임 CG ⑨, 토큰 5-4): 높이 56, 항목 전체가 누르는 영역
 const ListItem = ({
-  icon,
-  iconClassName,
+  category,
   title,
   badge,
   subtitle,
@@ -26,12 +27,7 @@ const ListItem = ({
       onClick={onClick}
       className="flex h-14 w-full items-center gap-3 border-b border-line text-left active:bg-surface"
     >
-      <span
-        aria-hidden
-        className={`grid size-9 shrink-0 place-items-center rounded-full [&>svg]:size-6 ${iconClassName}`}
-      >
-        {icon}
-      </span>
+      <CategoryIcon category={category} />
       <span className="flex min-w-0 flex-1 flex-col">
         <span className="flex min-w-0 items-center gap-1.5 text-body text-text01">
           <span className="truncate">{title}</span>

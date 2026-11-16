@@ -2,6 +2,10 @@
 
 const DAY = 60 * 60 * 24;
 
-/** 세션: 30일 동안 쓰지 않으면 만료, 쓰는 동안은 하루에 한 번 만료일을 늘린다 (데이터 아키텍처 4-5). 초 단위 */
-export const SESSION_EXPIRES_IN = 30 * DAY;
-export const SESSION_UPDATE_AGE = DAY;
+/** 세션 규칙 (데이터 아키텍처 4-5). 초 단위 */
+export const SESSION_RULES = {
+  /** 30일 동안 쓰지 않으면 만료 */
+  expiresIn: 30 * DAY,
+  /** 쓰는 동안은 하루에 한 번 만료일을 늘린다 */
+  updateAge: DAY,
+} as const;

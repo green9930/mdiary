@@ -62,3 +62,16 @@ describe("PageHeader (토큰 5-7 헤더)", () => {
     expect(router.back).not.toHaveBeenCalled();
   });
 });
+
+describe("PageHeader onBack", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("onBack이 있으면 [‹]는 이전 화면으로 가지 않고 onBack을 부른다 (작성 중 나가기 확인)", async () => {
+    const onBack = vi.fn();
+    render(<PageHeader title="기록하기" onBack={onBack} />);
+    await userEvent.click(screen.getByRole("button", { name: "뒤로" }));
+    expect(onBack).toHaveBeenCalled();
+    expect(router.back).not.toHaveBeenCalled();
+    expect(router.replace).not.toHaveBeenCalled();
+  });
+});

@@ -43,18 +43,22 @@
   - [x] F0-2b 겹쳐 뜨는 것·목록 (`BottomSheet`·`Dialog`·`Dropdown`, `ListItem`·`Badge`, 뒤로 가기 공통 처리 `useHistoryLayer`)
 - [x] F0-3 공통 상태 (`components/states/`의 스켈레톤·`LoadError`·`RefreshErrorBar`·`LoadMoreStatus`·`EmptyState`, `AlertDialog`, TanStack Query 연결 `states/tanstackQuery/`의 `QueryProvider`·`queryClient.ts`, 영역 상태 판단 `lib/queryView.ts`의 `getQueryView`)
 - [x] F1 로그인·세션 (SC-02 로그인 화면 `LoginForm`·`Logo`, 안내 문구 `lib/authUtils.ts`의 `handleLoginNotice`, 공통 요청 `api/apiClient.ts`의 `apiFetch`·`ApiError`, 401이면 QueryClient가 `/login?reason=expired`로, 임시 [로그아웃] `SignOutButton`)
-- [ ] F2 ← 다음
-- [ ] F3 ~ F12
+- [x] F2 지출 등록 (SC-06 등록 폼 `ExpenseForm`·`CategoryGrid`·`DatePickerSheet`·`TitleSuggestions`, 6줄 달력 격자 `MonthGrid`, 카테고리 아이콘 `CategoryIcon`, 폼 상태 `useExpenseForm`·작성 중 나가기 `useLeaveGuard`, 제목 추천 비교 `lib/hangul.ts`, `POST /api/expenses`(반복 없음)·`GET /api/titles`, 검증 `shared/expenseSchema.ts`)
+- [ ] F3 ← 다음
+- [ ] F4 ~ F12
 
 미뤄 둔 작업:
 
-| 시점              | 작업                                                                                                                                                                                                                                   |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| F2                | 카테고리 목록(이름·아이콘·색)을 상수로 뺀다. `ListItem`의 `icon`·`iconClassName`을 필수 `category` 하나로 바꾸고, 아이콘(토큰 2-5)과 색(2-4)은 이 목록에서 고른다. 색 클래스는 전체 문자열로 적는다 (`"bg-cat-food/15 text-cat-food"`) |
-| F2                | `src/api/`에 첫 요청 함수(`{이름}APIs.ts`)를 만든다. 공통 처리는 `apiClient.ts`의 `apiFetch`를 쓴다                                                                                                                                    |
-| F9                | 설정 화면의 임시 [로그아웃](`SignOutButton`)을 SC-10 배치로 옮긴다                                                                                                                                                                     |
-| F3                | ＋ 버튼의 날짜: 달력에서 고른 날짜가 있으면 그 날짜 (`useTabNavigation`)                                                                                                                                                               |
-| F10               | 오프라인 띠를 `(tabs)` 레이아웃의 자리 표시 주석 위치에 넣는다                                                                                                                                                                         |
-| F12               | pnpm 12로 올릴지 정한다 (Vercel·GitHub Actions 지원 확인 후. pnpm 10 지원은 2027년 4월까지)                                                                                                                                            |
-| 견본 화면 삭제 시 | `/dev/components`를 없앨 때 로그인 없이 여는 처리도 지운다: `PATHS.devComponents`, `proxy.ts`의 통과 조건, `proxy.test.ts`의 해당 테스트                                                                                               |
-| 사용자            | `.env`의 Neon 주소 두 개를 `sslmode=verify-full`로 바꾸면 `pg`의 SSL 경고가 없어진다                                                                                                                                                   |
+| 시점              | 작업                                                                                                                                                                                         |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| F3                | 날짜 선택 시트(`DatePickerSheet`)의 연·월을 누르면 연·월 선택으로 바꾼다 (SC-03 연·월 선택과 같은 격자, 바텀시트 위 바텀시트 금지라 시트 안에서 전환). 화면 명세·와이어프레임 SC-06 ⑧에 반영 |
+| F3                | 날짜 선택 시트(`DatePickerSheet`)의 이전 달 이동을 선택 가능 연도(가장 오래된 기록이 있는 해)에서 막는다. `GET /api/me`의 `oldestYear`를 쓴다                                                |
+| F5                | 등록 폼 금액 칸 오른쪽에 [계산] 버튼을 붙인다                                                                                                                                                |
+| F6                | 등록 폼에 반복 3단 선택과 반복 입력을 붙이고, 등록 스키마(`createExpenseSchema`)의 `repeat`를 넓힌다                                                                                         |
+| F10               | 오프라인이면 등록 폼 [저장]을 막는다                                                                                                                                                         |
+| F9                | 설정 화면의 임시 [로그아웃](`SignOutButton`)을 SC-10 배치로 옮긴다                                                                                                                           |
+| F3                | ＋ 버튼의 날짜: 달력에서 고른 날짜가 있으면 그 날짜 (`useTabNavigation`)                                                                                                                     |
+| F10               | 오프라인 띠를 `(tabs)` 레이아웃의 자리 표시 주석 위치에 넣는다                                                                                                                               |
+| F12               | pnpm 12로 올릴지 정한다 (Vercel·GitHub Actions 지원 확인 후. pnpm 10 지원은 2027년 4월까지)                                                                                                  |
+| 견본 화면 삭제 시 | `/dev/components`를 없앨 때 로그인 없이 여는 처리도 지운다: `PATHS.devComponents`, `proxy.ts`의 통과 조건, `proxy.test.ts`의 해당 테스트                                                     |
+| 사용자            | `.env`의 Neon 주소 두 개를 `sslmode=verify-full`로 바꾸면 `pg`의 SSL 경고가 없어진다                                                                                                         |

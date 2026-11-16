@@ -1,16 +1,23 @@
-import PageHeader from "@/components/layout/PageHeader";
+import ExpenseForm from "@/components/expense/ExpenseForm";
+import { convertToKSTStr, dateOrToday } from "@/lib/date";
 import { requireSessionUser } from "@/server/session";
-import { PAGE_TITLES, PATHS } from "@/shared/sharedConstants";
+import { PATHS } from "@/shared/sharedConstants";
 
-// 임시: F2에서 SC-06 등록 화면으로 바꾼다. 탭 바 없음 (화면 명세 SC-01)
-const NewExpensePage = async () => {
-  await requireSessionUser(PATHS.newExpense);
+interface NewExpensePageProps {
+  searchParams: Promise<{ date?: string }>;
+}
 
-  return (
-    <div className="mx-auto min-h-dvh max-w-120 min-w-80">
-      <PageHeader title={PAGE_TITLES.newExpense} />
-    </div>
+// 지출 등록 (화면 명세 SC-06). 탭 바 없음 (SC-01)
+const NewExpensePage = async ({ searchParams }: NewExpensePageProps) => {
+  const { date } = await searchParams;
+  await requireSessionUser(
+    date
+      ? `${PATHS.newExpense}?${new URLSearchParams({ date })}`
+      : PATHS.newExpense,
   );
+  const today = convertToKSTStr();
+
+  return <ExpenseForm initialDate={dateOrToday(date, today)} today={today} />;
 };
 
 export default NewExpensePage;

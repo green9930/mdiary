@@ -226,7 +226,7 @@
   .sug { border: 1.5px solid var(--wire-line); border-radius: 6px; overflow: hidden; background: #fff; }
   .sug div { display: flex; align-items: center; gap: 6px; padding: 5px 9px; font-size: 11.5px; border-bottom: 1px solid var(--wire-fill); }
   .sug div:last-child { border-bottom: 0; }
-  .sug .ico { width: 16px; height: 16px; }
+  .sug .ico { width: 20px; height: 20px; font-size: 7px; }
 
   /* 빗금: 생략했거나 실제로는 보이지 않는 영역 (UI 아님) */
   .omit {
@@ -432,7 +432,7 @@
         <tr><td><i class="c">2</i></td><td>텍스트 입력</td><td>
           <ul class="b">
             <li>오류 문구는 입력창 바로 아래. 오류 테두리와 문구가 함께 나온다.</li>
-            <li>오류 표시 시점: [저장]을 누를 때 모든 필드를 검증해 표시하고 첫 오류 칸으로 스크롤·포커스. 한 번 벗어난 칸은 그때부터 벗어날 때마다 검증. 입력 중에는 오류를 지우기만 하고 새로 띄우지 않는다.</li>
+            <li>오류 표시 시점: [저장]을 누를 때 모든 필드를 검증해 표시하고 첫 오류 칸으로 스크롤·포커스. 칸을 벗어날 때마다(처음 벗어날 때 포함) 그 칸을 검증. 입력 중에는 오류를 지우기만 하고 새로 띄우지 않는다.</li>
             <li>앞뒤 공백은 저장할 때 제거한다. 이모지 허용, 보이지 않는 제어문자는 저장할 때 제거. 제목(한 줄)은 줄바꿈·탭을 공백으로 바꾼다.</li>
           </ul>
         </td></tr>
@@ -758,7 +758,7 @@
         <tr><td><i class="c">6</i></td><td>날짜 칸</td><td>
           <ul class="b">
             <li>날짜 숫자 + 그날 합계(0원이면 비움). 오늘 = 테두리 원, 선택 = 채운 원. 둘이 겹치면 채운 원.</li>
-            <li>누르면 그 날짜 선택 (<code>date</code> 교체). 앞뒤 달 날짜는 흐리게, 누를 수 없음.</li><li>달마다 줄 수가 달라도 항상 6줄로 그린다(남는 줄은 다음 달 날짜). 달을 넘겨도 높이가 바뀌지 않는다.</li>
+            <li>누르면 그 날짜 선택 (<code>date</code> 교체). 앞뒤 달 날짜는 흐리게, 누르면 그 달로 옮겨 그 날짜 선택.</li><li>달마다 줄 수가 달라도 항상 6줄로 그린다(남는 줄은 다음 달 날짜). 달을 넘겨도 높이가 바뀌지 않는다.</li>
           </ul></td></tr>
         <tr><td><i class="c">7</i></td><td>금액 축약</td><td>칸에 다 들어가면 전체 금액, 넘치면 <code>12.3만</code> · <code>1.2억</code> (소수 첫째 자리 버림, <code>.0</code>은 생략: 1,080,000 → <code>108만</code>). 넘침은 자릿수 기준으로 판단하고, 기준 자릿수는 디자인 토큰(글자 크기) 확정 후 정한다.</td></tr>
         <tr><td><i class="c">8</i></td><td>하루 목록 요약</td><td>선택한 날짜 <code>10월 18일 (일)</code> · 그날 건수 · 그날 합계. 다른 해면 연도 포함.</td></tr>
@@ -1082,7 +1082,7 @@
             <div class="ph-bd" style="gap:6px">
               <div class="wf-field"><span class="wf-label">날짜</span><span class="wf-input val">2026년 10월 18일 (일)</span></div>
               <div class="wf-field"><span class="wf-label">제목</span><span class="wf-input foc">쿺<span class="cnt">1/25</span></span></div>
-              <div class="sug"><div><span class="ico"></span>쿠팡 <span class="wf-sub" style="margin-left:auto">생활</span></div><div><span class="ico"></span>쿠팡이츠 <span class="wf-sub" style="margin-left:auto">식비</span></div><div><span class="ico"></span>쿠키런 <span class="wf-sub" style="margin-left:auto">문화</span></div></div><i class="c">4</i>
+              <div class="sug"><div>쿠팡 <span class="ico" style="margin-left:auto">생활</span></div><div>쿠팡이츠 <span class="ico" style="margin-left:auto">식비</span></div><div>쿠키런 <span class="ico" style="margin-left:auto">문화</span></div></div><i class="c">4</i>
               <div class="omit" style="flex:1">기기 키보드</div>
             </div>
           </div></div>
@@ -1131,6 +1131,7 @@
 
         <div class="fr"><div class="fr-l"><span class="kind ok">SHEET</span>⑧ 날짜 선택</div>
           <div class="ph"><div class="ph-scrim"><div class="sh"><div class="sh-grip"></div>
+            <div class="sh-t">날짜 선택</div>
             <div class="wf-row sp"><span class="wf-btn sm">‹</span><b>2026년 10월</b><span class="wf-btn sm">›</span></div>
             <div class="cal">
               <span class="w sun">일</span><span class="w">월</span><span class="w">화</span><span class="w">수</span><span class="w">목</span><span class="w">금</span><span class="w sat">토</span>
@@ -1180,7 +1181,7 @@
           <ul class="b">
             <li>포커스 + 1자 이상 + 일치 결과가 있을 때 입력창 바로 아래. 최대 5개, 사용 횟수 → 최근 사용 순.</li>
             <li>앞부분 + 초성 일치, 자모 분해 비교(치는 도중 <code>쿺</code>도 유지). 영문 대소문자 무시.</li>
-            <li>항목: 제목 + 마지막 카테고리. 고르면 제목을 채우고, 카테고리를 아직 안 골랐으면 그 카테고리도 채운다.</li>
+            <li>항목: 제목 + 마지막으로 쓴 카테고리 아이콘. 고르면 제목을 채우고, 카테고리를 아직 안 골랐으면 그 카테고리도 채운다.</li>
             <li>입력값과 완전히 같은 제목 하나만 남으면 닫는다. 그 밖에 일치 0건 · 바깥 탭 · 입력칸 벗어남에 닫는다. 키보드 다음·완료 키는 추천을 고르지 않고 다음 칸으로.</li>
           </ul></td></tr>
         <tr><td><i class="c">5</i></td><td>카테고리</td><td>필수. 4열 격자(4·4·2, 마지막 줄 왼쪽 정렬). 하나만 선택. 선택한 칸을 다시 눌러도 해제되지 않는다.</td></tr>
@@ -1203,7 +1204,7 @@
             <li>제목 빈칸 <span class="cp">"제목을 입력해 주세요."</span> · 카테고리 미선택 <span class="cp">"카테고리를 선택해 주세요."</span> · 금액 빈칸·0 <span class="cp">"금액을 입력해 주세요."</span></li>
             <li>할부 총액 &lt; 회차 수 <span class="cp">"총액은 회차 수 이상이어야 합니다."</span></li>
             <li>개월 수·회차 빈칸·1 → CG ⑤ 문구 (⑬)</li>
-            <li>표시 시점: [저장]을 누를 때 전부, 이후 칸을 벗어날 때마다 (CG ②).</li>
+            <li>표시 시점: [저장]을 누를 때 전부, 그리고 칸을 벗어날 때마다(처음 벗어날 때 포함) (CG ②).</li>
           </ul></td></tr>
         <tr><td><i class="c">15</i></td><td>반복 종류 잠금</td><td>
           <ul class="b">
@@ -1214,7 +1215,7 @@
             <li><b>바꾸고 싶을 때</b>: 삭제한 뒤 다시 등록한다. "계속" 정기지출을 끝내려면 상세(SC-08)에서 삭제 → "이후 전체"를 고른다(그 건부터 반복 종료).</li>
             <li>안내 문구 <span class="cp">"반복 종류와 기간은 바꿀 수 없습니다."</span>를 잠긴 칸 아래에 둔다 (⑦). 반복 없는 기록은 3단 선택만 비활성이고 안내 문구는 같다.</li>
           </ul></td></tr>
-        <tr><td><i class="c">16</i></td><td>날짜 선택 시트</td><td>달력에서 하루를 고르고 [선택]. 오늘 = 테두리, 고른 날 = 채움. 선택 가능 연도 밖으로 이동 불가. 직접 만든 시트이고 SC-03 달력 컴포넌트를 같이 쓴다.</td></tr>
+        <tr><td><i class="c">16</i></td><td>날짜 선택 시트</td><td>시트 제목 <span class="cp">"날짜 선택"</span>. 달력에서 하루를 고르고 [선택]. 앞뒤 달 날짜를 누르면 그 달로 옮겨 고른다. 고르기만 하고 닫으면 날짜를 바꾸지 않는다. 오늘 = 테두리, 고른 날 = 채움. 선택 가능 연도 밖으로 이동 불가. 직접 만든 시트이고 SC-03 달력 컴포넌트를 같이 쓴다.</td></tr>
         <tr><td><i class="c">17</i></td><td>나가기 확인</td><td>[계속 작성] = 닫기, 주 버튼. [나가기] = 이전 화면, 회색 보조 버튼(위계가 낮다). 세부 스타일은 디자인 토큰에서 정한다. 문구 초안 <span class="cp">"작성 취소" / "작성 중인 내용이 사라집니다. 나가시겠습니까?"</span></td></tr>
         <tr><td><i class="c">18</i></td><td>저장 실패</td><td>CM ⑤. 입력값 유지.</td></tr>
         <tr><td><i class="c">19</i></td><td>이미 삭제됨</td><td>수정 화면 진입 또는 저장 시 404. [확인] → <code>/</code>. 문구 초안 <span class="cp">"기록 없음" / "이미 삭제된 기록입니다."</span></td></tr>
@@ -1546,6 +1547,7 @@
       <tr><td>v0.4</td><td>2026-11-02</td><td>디자인 방향 결정 반영: 토요일 색을 회색으로 낮춤(일요일만 빨강), danger 버튼을 모두 채움으로 통일(SC-08 [삭제] 등), 드롭다운 메뉴의 선택 표시를 ✓ 없이 면 강조만으로.</td></tr>
       <tr><td>v0.5</td><td>2026-11-02</td><td>데이터 아키텍처 반영: SC-09 날짜의 달을 바꾼 범위 수정 규칙 추가(뒤 달 = 이후 전체만 밀기, 앞 달 = 이번 건만), ⑧·⑨ 프레임과 안내 문구 추가.</td></tr>
       <tr><td>v0.6</td><td>2026-11-11</td><td>다이얼로그 제목 필수: 모든 다이얼로그에 제목을 달고 문구를 "제목" / "본문"으로 정리. 로그인 실패를 <code>reason=failed</code>로 알림, 로그인 진행 중 버튼을 스피너로, 로그아웃 실패를 알림 다이얼로그(SC-10 ⑤)로 변경. SC-02 로고 설명을 디자인 토큰에 맞춤.</td></tr>
+      <tr><td>v0.7</td><td>2026-11-16</td><td>F2 구현 반영: 앞뒤 달 날짜를 누르면 그 달로 옮겨 고르도록 변경(SC-03, SC-06 ⑧). 칸을 벗어날 때 검증은 처음 벗어날 때부터로 명확히 함(CG ②, SC-06 ⑭). SC-06 ④ 추천 항목을 제목 + 카테고리 아이콘으로, ⑧ 날짜 선택 시트에 제목 추가. page-spec 동기화.</td></tr>
       <tr><td>v0.2</td><td>2026-10-21</td><td>결정 필요 항목 38건 반영(입력 규칙, 폼 검증을 [저장] 상시 활성 방식으로, 정렬은 펼침 메뉴, 기간 선택·검색·계산기·반복 범위 세부, 상태·오류 처리). page-spec 동기화, 로그인 소개 문구 반영.</td></tr>
     </table>
   </div>

@@ -9,17 +9,23 @@ interface PageHeaderProps {
   title: string;
   /** 요청 중에는 [뒤로]도 막는다 (와이어프레임 CG ①) */
   backDisabled?: boolean;
+  /** 있으면 [‹]가 이전 화면으로 가지 않고 이 함수를 부른다 (작성 중 나가기 확인) */
+  onBack?: () => void;
 }
 
 // 하위 화면 헤더 (토큰 5-7): [‹] + 제목
-const PageHeader = ({ title, backDisabled = false }: PageHeaderProps) => {
+const PageHeader = ({
+  title,
+  backDisabled = false,
+  onBack,
+}: PageHeaderProps) => {
   const goBack = useGoBack();
 
   return (
     <header className="flex h-13 items-center gap-1 pr-4">
       <IconButton
         aria-label={ARIA_LABELS.back}
-        onClick={goBack}
+        onClick={onBack ?? goBack}
         disabled={backDisabled}
       >
         <ArrowLeftIcon />

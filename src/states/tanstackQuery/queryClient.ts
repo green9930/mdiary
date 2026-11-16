@@ -8,8 +8,7 @@ import {
 import { isUnauthorized } from "@/api/apiClient";
 import { hardNavigate } from "@/lib/navigation";
 import { loginPath } from "@/shared/nextPath";
-
-const MAX_RETRIES = 3;
+import { QUERY_RULES } from "@/states/tanstackQuery/queryConstants";
 
 interface QueryClientOptions {
   /** 요청이 401일 때. 기본은 지금 경로를 담아 로그인 화면으로 보낸다 */
@@ -43,7 +42,7 @@ export const createQueryClient = ({
         placeholderData: keepPreviousData,
         // 401은 다시 시도해도 같으므로 바로 로그인으로 보낸다
         retry: (failureCount, error) =>
-          !isUnauthorized(error) && failureCount < MAX_RETRIES,
+          !isUnauthorized(error) && failureCount < QUERY_RULES.maxRetries,
       },
     },
   });

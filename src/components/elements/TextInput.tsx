@@ -33,6 +33,8 @@ interface TextInputProps {
   disabled?: boolean;
   /** 칸을 벗어날 때 (벗어날 때마다 검증하는 폼에서 쓴다) */
   onBlur?: () => void;
+  /** 칸에 들어올 때 (자주 쓴 제목 추천을 여는 데 쓴다) */
+  onFocus?: () => void;
 }
 
 // 한 줄 텍스트 입력 (와이어프레임 CG ②③, 토큰 5-2)
@@ -50,6 +52,7 @@ const TextInput = ({
   placeholder,
   disabled = false,
   onBlur,
+  onFocus,
 }: TextInputProps) => {
   const autoId = useId();
   const inputId = id ?? autoId;
@@ -72,6 +75,7 @@ const TextInput = ({
           aria-describedby={error || hint ? fieldMessageId(inputId) : undefined}
           className={cn("h-full", numeric && "font-num", inputControlClass)}
           onBlur={onBlur}
+          onFocus={onFocus}
           onChange={handlers.onChange}
           onCompositionStart={handlers.onCompositionStart}
           onCompositionEnd={handlers.onCompositionEnd}
