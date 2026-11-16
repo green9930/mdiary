@@ -21,3 +21,8 @@ if (typeof HTMLDialogElement !== "undefined") {
     this.dispatchEvent(new Event("close"));
   };
 }
+
+// jsdom에는 scrollIntoView가 없다. 스크롤은 검증하지 않으므로 아무것도 하지 않는다
+if (typeof Element !== "undefined") {
+  Element.prototype.scrollIntoView ??= function scrollIntoView() {};
+}
