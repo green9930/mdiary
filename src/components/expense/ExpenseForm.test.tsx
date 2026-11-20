@@ -45,6 +45,8 @@ const mockServer = ({ save }: Server = {}) =>
   vi.spyOn(globalThis, "fetch").mockImplementation(async (input, init) => {
     const url = String(input);
     if (url === "/api/titles") return Response.json({ titles: TITLES });
+    if (url === "/api/me")
+      return Response.json({ email: "a@b.c", oldestYear: 2023, totalCount: 0 });
     if (url === "/api/expenses" && init?.method === "POST") {
       if (save) return save();
       const body = JSON.parse(String(init.body)) as { date: string };
@@ -212,7 +214,7 @@ describe("ExpenseForm (화면 명세 SC-06 등록)", () => {
   });
 
   describe("저장", () => {
-    it("검증을 통과하면 등록하고, 그 날짜가 선택된 달력으로 히스토리를 교체해 간다", async () => {
+    it("검증을 통과하면 등록하고, 화면을 옮기지 않고 저장 완료 알림을 띄운다", async () => {
       const fetch = mockServer();
       renderForm();
       await fillValid();
@@ -220,11 +222,9 @@ describe("ExpenseForm (화면 명세 SC-06 등록)", () => {
 
       await userEvent.click(saveButton());
 
-      await waitFor(() =>
-        expect(router.replace).toHaveBeenCalledWith(
-          "/?month=2026-10&date=2026-10-18",
-        ),
-      );
+      const alert = await waitFor(() => dialog("저장 완료"));
+      expect(alert).toHaveAccessibleDescription("기록을 저장했습니다.");
+      expect(router.replace).not.toHaveBeenCalled();
       expect(postBodies(fetch)).toEqual([
         {
           date: "2026-10-18",
@@ -244,8 +244,86 @@ describe("ExpenseForm (화면 명세 SC-06 등록)", () => {
 
       await userEvent.click(saveButton());
 
-      await waitFor(() => expect(router.replace).toHaveBeenCalled());
+      await waitFor(() => dialog("저장 완료"));
       expect(postBodies(fetch)[0]).toMatchObject({ content: null });
+    });
+
+    it("저장 완료 알림의 [확인]은 모든 입력을 처음 값으로 되돌리고 제목 칸에 포커스한다", async () => {
+      mockServer();
+      renderForm();
+      await userEvent.click(dateButton("2026년 10월 18일 (일)"));
+      await userEvent.click(
+        screen.getByRole("button", {
+          name: "2026년 10월 25일 (일)",
+          hidden: true,
+        }),
+      );
+      await userEvent.click(
+        screen.getByRole("button", { name: "선택", hidden: true }),
+      );
+      await fillValid();
+      await userEvent.type(contentInput(), "참치김밥");
+      await userEvent.click(saveButton());
+
+      await userEvent.click(
+        within(await waitFor(() => dialog("저장 완료"))).getByRole("button", {
+          name: "확인",
+          hidden: true,
+        }),
+      );
+
+      expect(
+        document.querySelector("dialog[role=alertdialog][open]"),
+      ).toBeNull();
+      expect(dateButton("2026년 10월 18일 (일)")).toBeInTheDocument();
+      expect(titleInput()).toHaveValue("");
+      expect(screen.getByRole("button", { name: "식비" })).toHaveAttribute(
+        "aria-pressed",
+        "false",
+      );
+      expect(amountInput()).toHaveValue("");
+      expect(contentInput()).toHaveValue("");
+      expect(titleInput()).toHaveFocus();
+      expect(saveButton()).toBeEnabled();
+      expect(router.replace).not.toHaveBeenCalled();
+    });
+
+    it("저장 완료 알림의 [확인] 뒤에는 알림·작성 중 가로채기가 쌓은 기록을 모두 되돌린다", async () => {
+      mockServer();
+      renderForm();
+      const startState: unknown = window.history.state;
+      await fillValid();
+      await waitFor(() =>
+        expect(window.history.state).toHaveProperty("mdiaryLayer"),
+      );
+      await userEvent.click(saveButton());
+
+      await userEvent.click(
+        within(await waitFor(() => dialog("저장 완료"))).getByRole("button", {
+          name: "확인",
+          hidden: true,
+        }),
+      );
+
+      await waitFor(() => expect(window.history.state).toEqual(startState));
+      await waitFor(() => expect(titleInput()).toHaveValue(""));
+    });
+
+    it("저장한 뒤 처음 값으로 돌아오면 [뒤로]는 바로 이전 화면으로 간다", async () => {
+      mockServer();
+      renderForm();
+      await fillValid();
+      await userEvent.click(saveButton());
+      await userEvent.click(
+        within(await waitFor(() => dialog("저장 완료"))).getByRole("button", {
+          name: "확인",
+          hidden: true,
+        }),
+      );
+
+      await userEvent.click(screen.getByRole("button", { name: "뒤로" }));
+
+      expect(router.replace).toHaveBeenCalledWith("/");
     });
 
     it("요청 중에는 [저장]과 [뒤로]를 막는다", async () => {
@@ -265,7 +343,7 @@ describe("ExpenseForm (화면 명세 SC-06 등록)", () => {
       expect(saveButton()).toHaveAttribute("aria-busy", "true");
       expect(screen.getByRole("button", { name: "뒤로" })).toBeDisabled();
       respond(Response.json({ id: "e1", date: "2026-10-18" }, { status: 201 }));
-      await waitFor(() => expect(router.replace).toHaveBeenCalled());
+      await waitFor(() => dialog("저장 완료"));
     });
 
     it("저장에 실패하면 알림 다이얼로그를 띄우고 입력값을 그대로 둔다", async () => {

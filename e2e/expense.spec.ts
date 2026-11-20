@@ -7,11 +7,12 @@ test.describe("지출 등록 (화면 명세 SC-06, 반복 없음)", () => {
     await loginAsTestUser(page);
   });
 
-  test("입력해 저장하면 그 날짜가 선택된 달력으로 가고, 뒤로 가기로 폼에 돌아오지 않는다", async ({
+  test("입력해 저장하면 저장 완료 알림 뒤 폼을 비우고, 뒤로 가기로 들어오기 전 화면에 간다", async ({
     page,
   }) => {
     await page.goto("/");
-    await page.goto("/expenses/new?date=2026-10-18");
+    await page.getByRole("link", { name: "기록하기" }).click();
+    await expect(page).toHaveURL(/\/expenses\/new/);
 
     await page.getByRole("textbox", { name: "제목" }).fill("점심 김밥");
     await page.getByRole("button", { name: "식비" }).click();
@@ -21,9 +22,16 @@ test.describe("지출 등록 (화면 명세 SC-06, 반복 없음)", () => {
     );
     await page.getByRole("button", { name: "저장" }).click();
 
-    await expect(page).toHaveURL("/?month=2026-10&date=2026-10-18");
+    const alert = page.getByRole("alertdialog", { name: "저장 완료" });
+    await expect(alert).toHaveAccessibleDescription("기록을 저장했습니다.");
+    await alert.getByRole("button", { name: "확인" }).click();
+    await expect(alert).toBeHidden();
+    await expect(page).toHaveURL(/\/expenses\/new/);
+    await expect(page.getByRole("textbox", { name: "제목" })).toHaveValue("");
+    await expect(page.getByRole("textbox", { name: "제목" })).toBeFocused();
+
     await page.goBack();
-    await expect(page).not.toHaveURL(/\/expenses\/new/);
+    await expect(page).toHaveURL("/");
   });
 
   test("빈 폼에서 저장하면 필드 오류를 보여 주고 저장하지 않는다", async ({

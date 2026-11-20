@@ -104,5 +104,10 @@ export const useExpenseForm = (initialDate: string) => {
     setContent: (content: string) => change("content", content),
     blur,
     submit,
+    /** 모든 칸을 처음 값으로 되돌리고 오류를 지운다 (등록 저장 완료 뒤) */
+    reset: () => {
+      setValues(initial);
+      setErrors({});
+    },
   };
 };

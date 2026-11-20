@@ -21,7 +21,7 @@ export const useLeaveGuard = (dirty: boolean) => {
     if (exit) runAfterLayerPops(exit);
   }, [exit]);
 
-  /** 쌓은 기록을 정리한 뒤 navigate로 화면을 옮긴다 (저장 성공, [나가기]) */
+  /** 쌓은 기록을 정리한 뒤 navigate로 화면을 옮긴다 ([나가기]) */
   const leaveWith = (navigate: () => void) => {
     setExit(() => navigate);
   };

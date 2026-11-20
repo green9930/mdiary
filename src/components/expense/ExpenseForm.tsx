@@ -1,7 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 import { isUnauthorized } from "@/api/apiClient";
 import Button from "@/components/elements/Button";
@@ -14,13 +13,14 @@ import TitleSuggestions from "@/components/expense/TitleSuggestions";
 import PageHeader from "@/components/layout/PageHeader";
 import AlertDialog from "@/components/overlays/AlertDialog";
 import Dialog from "@/components/overlays/Dialog";
+import { useAccountSummary } from "@/hooks/useAccountSummary";
 import { useCreateExpense } from "@/hooks/useCreateExpense";
 import { useExpenseForm } from "@/hooks/useExpenseForm";
+import { runAfterLayerPops } from "@/hooks/useHistoryLayer";
 import { useLeaveGuard } from "@/hooks/useLeaveGuard";
 import { useTitleSuggestions } from "@/hooks/useTitleSuggestions";
 import { formatAmountInput } from "@/lib/amount";
 import { formatFullDate } from "@/lib/date";
-import { calendarPath } from "@/lib/navigation";
 import { filterTitleSuggestions } from "@/lib/titleSuggestions";
 import { EXPENSE_RULES } from "@/shared/expenseConstants";
 import {
@@ -42,15 +42,19 @@ interface ExpenseFormProps {
 
 // 지출 등록 (화면 명세 SC-06). 반복·[계산]은 F5·F6에서 붙인다
 const ExpenseForm = ({ initialDate, today }: ExpenseFormProps) => {
-  const router = useRouter();
   const form = useExpenseForm(initialDate);
   const { values, errors } = form;
   const guard = useLeaveGuard(form.dirty);
   const createExpense = useCreateExpense();
   const titles = useTitleSuggestions();
+  // 날짜 선택 시트의 선택 가능 연도. 받기 전에는 올해부터
+  const oldestYear = useAccountSummary().data?.oldestYear;
   const [dateOpen, setDateOpen] = useState(false);
   const [suggestOpen, setSuggestOpen] = useState(false);
   const [saveFailed, setSaveFailed] = useState(false);
+  const [saveDone, setSaveDone] = useState(false);
+  // 저장 완료 알림을 닫은 뒤 폼을 비울지
+  const resetAfterDone = useRef(false);
 
   const id = useId();
   const ids = {
@@ -65,7 +69,7 @@ const ExpenseForm = ({ initialDate, today }: ExpenseFormProps) => {
   const suggestions = suggestOpen
     ? filterTitleSuggestions(titles.data ?? [], values.title)
     : [];
-  const saving = createExpense.isPending || createExpense.isSuccess;
+  const saving = createExpense.isPending;
 
   const changeTitle = (title: string) => {
     form.setTitle(title);
@@ -87,12 +91,28 @@ const ExpenseForm = ({ initialDate, today }: ExpenseFormProps) => {
       return;
     }
     createExpense.mutate(result.request, {
-      onSuccess: ({ date }) =>
-        guard.leaveWith(() => router.replace(calendarPath(date))),
+      onSuccess: () => setSaveDone(true),
       // 401은 QueryClient가 로그인으로 보낸다
       onError: (error) => setSaveFailed(!isUnauthorized(error)),
     });
   };
+
+  /** 저장 완료 알림 [확인]: 알림을 닫고, 그 뒤 폼을 비운다 */
+  const confirmSaveDone = () => {
+    setSaveDone(false);
+    resetAfterDone.current = true;
+  };
+
+  // 알림이 쌓은 기록이 되돌려진 뒤에 비운다. 같이 비우면 작성 중 가로채기도 함께 닫혀 그 기록이 남는다.
+  // 알림이 닫히며 [저장]으로 돌려준 포커스는 그 뒤 제목 칸으로 옮겨 다음 기록을 바로 입력하게 한다
+  useEffect(() => {
+    if (saveDone || !resetAfterDone.current) return;
+    resetAfterDone.current = false;
+    runAfterLayerPops(() => {
+      form.reset();
+      document.getElementById(ids.title)?.focus();
+    });
+  }, [saveDone, form, ids.title]);
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-120 min-w-80 flex-col">
@@ -175,6 +195,7 @@ const ExpenseForm = ({ initialDate, today }: ExpenseFormProps) => {
         open={dateOpen}
         value={values.date}
         today={today}
+        minYear={oldestYear ?? Number(today.slice(0, 4))}
         onSelect={form.setDate}
         onClose={() => setDateOpen(false)}
       />
@@ -195,6 +216,13 @@ const ExpenseForm = ({ initialDate, today }: ExpenseFormProps) => {
         onClose={() => setSaveFailed(false)}
       >
         {DIALOG_TEXTS.saveFailed}
+      </AlertDialog>
+      <AlertDialog
+        open={saveDone}
+        title={DIALOG_TEXTS.saveDoneTitle}
+        onClose={confirmSaveDone}
+      >
+        {DIALOG_TEXTS.saveDoneBody}
       </AlertDialog>
     </div>
   );

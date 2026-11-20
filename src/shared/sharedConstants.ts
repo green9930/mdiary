@@ -37,6 +37,8 @@ export const BTN_TEXTS = {
   select: "선택",
   keepWriting: "계속 작성",
   leave: "나가기",
+  today: "오늘",
+  addRecord: "기록 추가하기",
 } as const;
 
 /** 불러오기 상태 문구 (와이어프레임 CM ②~④) */
@@ -44,6 +46,22 @@ export const STATE_TEXTS = {
   loadFailed: "불러오지 못했습니다.",
   refreshFailed: "최신 내용을 불러오지 못했습니다.",
   loadMoreFailed: "더 불러오지 못했습니다.",
+  noRecords: "기록이 없습니다.",
+} as const;
+
+/** 월간 달력 문구 (화면 명세 SC-03) */
+export const CALENDAR_TEXTS = {
+  /** 월 합계 라벨: `10월 지출` */
+  monthTotal: (month: string) => `${Number(month.slice(5, 7))}월 지출`,
+  /** 하루 목록 건수: `2건` */
+  dayCount: (count: number) => `${count}건`,
+} as const;
+
+/** 반복 배지 (화면 명세 SC-03 하루 목록) */
+export const BADGE_TEXTS = {
+  recurring: "정기",
+  /** `할부 3/12` */
+  installment: (seq: number, total: number) => `할부 ${seq}/${total}`,
 } as const;
 
 /** 로그인 화면 문구 (화면 명세 SC-02) */
@@ -54,10 +72,12 @@ export const LOGIN_TEXTS = {
   failed: "로그인에 실패했습니다. 잠시 후 다시 시도해 주세요.",
 } as const;
 
-/** 알림 다이얼로그 문구 (와이어프레임 CM ⑤⑥, SC-10 ⑤) */
+/** 알림 다이얼로그 문구 (와이어프레임 CM ⑤⑥, SC-06 ⑭, SC-10 ⑤) */
 export const DIALOG_TEXTS = {
   saveTitle: "저장하기",
   saveFailed: "저장하지 못했습니다. 잠시 후 다시 시도해 주세요.",
+  saveDoneTitle: "저장 완료",
+  saveDoneBody: "기록을 저장했습니다.",
   deleteTitle: "삭제하기",
   deleteFailed: "삭제하지 못했습니다. 잠시 후 다시 시도해 주세요.",
   signOutTitle: "로그아웃하기",
@@ -69,6 +89,7 @@ export const DIALOG_TEXTS = {
 /** 바텀시트 제목 */
 export const SHEET_TITLES = {
   datePicker: "날짜 선택",
+  monthPicker: "연·월 선택",
 } as const;
 
 /** 입력 라벨 (화면 명세 SC-06) */
@@ -97,12 +118,16 @@ export const FIELD_ERRORS = {
 /** 입력칸 단위 */
 export const UNITS = {
   won: "원",
+  man: "만",
+  eok: "억",
 } as const;
 
 /** 날짜 규칙 (화면 명세 공통 정책값, 데이터 아키텍처 3-1·3-2) */
 export const DATE_RULES = {
   /** 날짜 문자열 형식 YYYY-MM-DD */
   pattern: /^\d{4}-\d{2}-\d{2}$/,
+  /** 월 문자열 형식 YYYY-MM */
+  monthPattern: /^\d{4}-\d{2}$/,
   /** 입력 검증용 기술 상한 (선택 가능 연도) */
   maxDate: "2099-12-31",
   /** 달력은 항상 6줄로 그린다 (SC-03) */
@@ -139,6 +164,9 @@ export const ARIA_LABELS = {
   loading: "불러오는 중",
   prevMonth: "이전 달",
   nextMonth: "다음 달",
+  prevYear: "이전 해",
+  nextYear: "다음 해",
+  openMonthPicker: "연·월 선택",
 } as const;
 
 /** 쿠키 이름 */
