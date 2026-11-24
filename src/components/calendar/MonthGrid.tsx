@@ -1,4 +1,10 @@
-import { formatFullDate, monthGridDates, monthOf } from "@/lib/date";
+import { formatAmount, formatCalendarAmount } from "@/lib/amount";
+import {
+  formatFullDate,
+  isValidDate,
+  monthGridDates,
+  monthOf,
+} from "@/lib/date";
 import { WEEKDAY_LABELS } from "@/shared/sharedConstants";
 
 interface MonthGridProps {
@@ -6,6 +12,8 @@ interface MonthGridProps {
   month: string;
   selected: string | null;
   today: string;
+  /** 날짜별 합계. 그 달 날짜에만 보여준다. 없으면 금액 없이 날짜만 그린다 */
+  totals?: Record<string, number>;
   onSelect: (date: string) => void;
 }
 
@@ -36,8 +44,14 @@ const dayClass = ({
   return isToday ? `border-2 border-primary ${color}` : color;
 };
 
-// 6줄 고정 달력 (화면 명세 SC-03, 토큰 5-5). 앞뒤 달 날짜도 누를 수 있다
-const MonthGrid = ({ month, selected, today, onSelect }: MonthGridProps) => {
+// 6줄 고정 달력 (화면 명세 SC-03, 토큰 5-5). 앞뒤 달 날짜도 누를 수 있다. 선택 가능 연도 밖 날짜는 누를 수 없다
+const MonthGrid = ({
+  month,
+  selected,
+  today,
+  totals,
+  onSelect,
+}: MonthGridProps) => {
   const dates = monthGridDates(month);
   const weeks = Array.from({ length: dates.length / WEEK }, (_, i) =>
     dates.slice(i * WEEK, (i + 1) * WEEK),
@@ -61,31 +75,45 @@ const MonthGrid = ({ month, selected, today, onSelect }: MonthGridProps) => {
       <tbody>
         {weeks.map((week) => (
           <tr key={week[0]}>
-            {week.map((date, weekday) => (
-              <td key={date} className="p-0">
-                <button
-                  type="button"
-                  aria-label={formatFullDate(date)}
-                  aria-pressed={date === selected}
-                  aria-current={date === today ? "date" : undefined}
-                  onClick={() => onSelect(date)}
-                  className="grid h-12 w-full place-items-center"
-                >
-                  <span
-                    className={`grid size-6.5 place-items-center rounded-full font-num text-num-date ${dayClass(
-                      {
-                        isSelected: date === selected,
-                        isToday: date === today,
-                        inMonth: monthOf(date) === month,
-                        weekday,
-                      },
-                    )}`}
+            {week.map((date, weekday) => {
+              const inMonth = monthOf(date) === month;
+              const total = inMonth ? (totals?.[date] ?? 0) : 0;
+              return (
+                <td key={date} className="p-0">
+                  <button
+                    type="button"
+                    aria-label={
+                      total > 0
+                        ? `${formatFullDate(date)} ${formatAmount(total)}`
+                        : formatFullDate(date)
+                    }
+                    aria-pressed={date === selected}
+                    aria-current={date === today ? "date" : undefined}
+                    disabled={!isValidDate(date)}
+                    onClick={() => onSelect(date)}
+                    className="flex h-12 w-full flex-col items-center justify-start gap-0.5 pt-1"
                   >
-                    {Number(date.slice(8))}
-                  </span>
-                </button>
-              </td>
-            ))}
+                    <span
+                      className={`grid size-6.5 place-items-center rounded-full font-num text-num-date ${dayClass(
+                        {
+                          isSelected: date === selected,
+                          isToday: date === today,
+                          inMonth,
+                          weekday,
+                        },
+                      )}`}
+                    >
+                      {Number(date.slice(8))}
+                    </span>
+                    {total > 0 && (
+                      <span className="font-num text-num-cal whitespace-nowrap text-text01">
+                        {formatCalendarAmount(total)}
+                      </span>
+                    )}
+                  </button>
+                </td>
+              );
+            })}
           </tr>
         ))}
       </tbody>

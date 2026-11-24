@@ -60,6 +60,31 @@ describe("TabBar (SC-01)", () => {
     );
   });
 
+  it("달력에서 날짜를 골라둔 상태면 ＋ 버튼은 그 날짜로 등록 화면을 연다", () => {
+    goTo("/?month=2026-08&date=2026-08-12");
+    render(<TabBar />);
+    expect(tab("기록하기")).toHaveAttribute(
+      "href",
+      "/expenses/new?date=2026-08-12",
+    );
+  });
+
+  it("달력이 아니거나 고른 날짜가 잘못됐으면 ＋ 버튼은 오늘로 연다", () => {
+    vi.useFakeTimers({ now: new Date("2026-10-17T15:30:00Z") });
+    goTo("/search?date=2026-08-12");
+    const { rerender } = render(<TabBar />);
+    expect(tab("기록하기")).toHaveAttribute(
+      "href",
+      "/expenses/new?date=2026-10-18",
+    );
+    goTo("/?month=2026-08&date=2026-08-40");
+    rerender(<TabBar />);
+    expect(tab("기록하기")).toHaveAttribute(
+      "href",
+      "/expenses/new?date=2026-10-18",
+    );
+  });
+
   it("다른 탭에 갔다 돌아오면 그 탭의 마지막 상태로 간다", () => {
     goTo("/categories?period=6m&category=FOOD");
     const { rerender } = render(<TabBar />);

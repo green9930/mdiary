@@ -27,3 +27,45 @@ export interface TitleSuggestion {
   lastUsedAt: string;
   lastCategory: CategoryType;
 }
+
+/** 반복 종류 (데이터 아키텍처 4-3 SeriesType) */
+export type SeriesKindType = "RECURRING" | "INSTALLMENT";
+
+/** 목록 항목의 반복 정보. seq는 묶음에서 몇 번째인지, totalCount는 묶음 전체 건수 */
+export type ExpenseListSeriesType =
+  | {
+      type: Extract<SeriesKindType, "RECURRING">;
+      seq: number;
+      /** 기간을 정했으면 개월 수, 계속 반복이면 null */
+      totalCount: number | null;
+    }
+  | {
+      type: Extract<SeriesKindType, "INSTALLMENT">;
+      seq: number;
+      /** 총 회차 */
+      totalCount: number;
+    };
+
+/** 목록 항목 (데이터 아키텍처 8-1). 반복 기록이면 series가 있다 */
+export interface ExpenseListItem {
+  id: string;
+  date: string;
+  title: string;
+  category: CategoryType;
+  amount: number;
+  series?: ExpenseListSeriesType;
+}
+
+/** 한 달의 날짜별 합계·월 합계 (`GET /api/calendar`) */
+export interface MonthTotals {
+  total: number;
+  /** 기록이 있는 날만, 날짜 오름차순 */
+  days: { date: string; total: number }[];
+}
+
+/** 계정 요약 (`GET /api/me`) */
+export interface AccountSummary {
+  email: string;
+  /** 저장된 모든 기록 건수 */
+  totalCount: number;
+}

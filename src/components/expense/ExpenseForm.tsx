@@ -13,7 +13,6 @@ import TitleSuggestions from "@/components/expense/TitleSuggestions";
 import PageHeader from "@/components/layout/PageHeader";
 import AlertDialog from "@/components/overlays/AlertDialog";
 import Dialog from "@/components/overlays/Dialog";
-import { useAccountSummary } from "@/hooks/useAccountSummary";
 import { useCreateExpense } from "@/hooks/useCreateExpense";
 import { useExpenseForm } from "@/hooks/useExpenseForm";
 import { runAfterLayerPops } from "@/hooks/useHistoryLayer";
@@ -47,8 +46,6 @@ const ExpenseForm = ({ initialDate, today }: ExpenseFormProps) => {
   const guard = useLeaveGuard(form.dirty);
   const createExpense = useCreateExpense();
   const titles = useTitleSuggestions();
-  // 날짜 선택 시트의 선택 가능 연도. 받기 전에는 올해부터
-  const oldestYear = useAccountSummary().data?.oldestYear;
   const [dateOpen, setDateOpen] = useState(false);
   const [suggestOpen, setSuggestOpen] = useState(false);
   const [saveFailed, setSaveFailed] = useState(false);
@@ -195,7 +192,6 @@ const ExpenseForm = ({ initialDate, today }: ExpenseFormProps) => {
         open={dateOpen}
         value={values.date}
         today={today}
-        minYear={oldestYear ?? Number(today.slice(0, 4))}
         onSelect={form.setDate}
         onClose={() => setDateOpen(false)}
       />

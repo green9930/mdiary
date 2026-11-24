@@ -83,8 +83,9 @@ describe("createExpenseSchema (데이터 아키텍처 3-2, 8-2)", () => {
   });
 
   describe("날짜·카테고리·반복", () => {
-    it("없는 날짜나 2099년 뒤면 INVALID", () => {
+    it("없는 날짜나 2020년 앞·2099년 뒤면 INVALID", () => {
       expect(errorsOf({ date: "2026-02-30" })).toEqual({ date: "INVALID" });
+      expect(errorsOf({ date: "2019-12-31" })).toEqual({ date: "INVALID" });
       expect(errorsOf({ date: "2100-01-01" })).toEqual({ date: "INVALID" });
     });
 

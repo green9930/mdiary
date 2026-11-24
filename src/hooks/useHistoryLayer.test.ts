@@ -37,4 +37,35 @@ describe("runAfterLayerPops", () => {
     expect(window.history.state?.mdiaryLayer).toBeUndefined();
     expect(window.history.length).toBe(length);
   });
+
+  it("되돌리는 중에 새 층이 열리면, 되돌린 뒤에 쌓는다", async () => {
+    // 날짜 시트 [선택]: 시트가 닫히며(되돌리기) 같은 렌더에서 작성 중 가로채기가 열린다
+    const { rerender } = renderHook(
+      ({ first }) => {
+        useHistoryLayer(first, "close");
+        useHistoryLayer(!first, "close");
+      },
+      { initialProps: { first: true } },
+    );
+    await pushed();
+
+    // 부하가 있으면 새 층의 쌓기(setTimeout)가 되돌리기(jsdom은 setImmediate)보다 먼저 실행된다
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    try {
+      rerender({ first: false });
+      vi.advanceTimersByTime(0);
+    } finally {
+      vi.useRealTimers();
+    }
+    const callback = vi.fn();
+    runAfterLayerPops(callback);
+
+    await waitFor(() => expect(callback).toHaveBeenCalledOnce());
+    expect(window.history.state?.mdiaryLayer).toBeDefined();
+    // 남은 기록은 새 층 하나뿐이다: 한 번 되돌리면 층이 없는 기록이다
+    window.history.back();
+    await waitFor(() =>
+      expect(window.history.state?.mdiaryLayer).toBeUndefined(),
+    );
+  });
 });

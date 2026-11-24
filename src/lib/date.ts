@@ -11,11 +11,12 @@ const fromUtc = (value: Date) => value.toISOString().slice(0, 10);
 export const convertToKSTStr = (now: Date = new Date()): string =>
   now.toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" });
 
-/** 실제 있는 날짜(YYYY-MM-DD)이고 2099-12-31 이하인지 */
+/** 실제 있는 날짜(YYYY-MM-DD)이고 선택 가능 연도(2020-01-01 ~ 2099-12-31) 안인지 */
 export const isValidDate = (value: string) =>
   DATE_RULES.pattern.test(value) &&
   !Number.isNaN(toUtc(value).getTime()) &&
   fromUtc(toUtc(value)) === value &&
+  value >= DATE_RULES.minDate &&
   value <= DATE_RULES.maxDate;
 
 /** 올바른 날짜면 그 날짜, 없거나 잘못됐으면 today */
@@ -28,9 +29,29 @@ export const formatFullDate = (date: string) => {
   return `${value.getUTCFullYear()}년 ${value.getUTCMonth() + 1}월 ${value.getUTCDate()}일 (${WEEKDAY_LABELS[value.getUTCDay()]})`;
 };
 
+/** 날짜 목록 헤더: `10월 18일 (일)`, 오늘과 다른 해면 `2025년 10월 18일 (토)` */
+export const formatDayHeading = (date: string, today: string) =>
+  date.slice(0, 4) === today.slice(0, 4)
+    ? formatFullDate(date).slice(6)
+    : formatFullDate(date);
+
+/** `2026년` */
+export const formatYear = (year: number) => `${year}년`;
+
+/** `10월` */
+export const formatMonthNumber = (month: number) => `${month}월`;
+
 /** `2026년 10월` */
 export const formatMonth = (month: string) =>
-  `${Number(month.slice(0, 4))}년 ${Number(month.slice(5, 7))}월`;
+  `${formatYear(Number(month.slice(0, 4)))} ${formatMonthNumber(Number(month.slice(5, 7)))}`;
+
+/** 실제 있는 월(YYYY-MM)이고 2020-01 ~ 2099-12인지 */
+export const isValidMonth = (value: string) =>
+  DATE_RULES.monthPattern.test(value) && isValidDate(`${value}-01`);
+
+/** 그 달로 옮길 때 고르는 날짜: 이번 달이면 오늘, 아니면 1일 (화면 명세 SC-03) */
+export const defaultDateOf = (month: string, today: string) =>
+  month === monthOf(today) ? today : `${month}-01`;
 
 /** 날짜의 월 (YYYY-MM) */
 export const monthOf = (date: string) => date.slice(0, 7);
@@ -41,6 +62,10 @@ export const addMonths = (month: string, n: number) => {
   value.setUTCMonth(value.getUTCMonth() + n);
   return fromUtc(value).slice(0, 7);
 };
+
+/** 선택 가능 연도의 첫 달(2020년 1월)인지. 그 전 달로는 옮기지 않는다 */
+export const isMinMonth = (month: string) =>
+  month <= DATE_RULES.minDate.slice(0, 7);
 
 /** 입력 검증용 기술 상한(2099년 12월)의 달인지. 그 다음 달로는 옮기지 않는다 */
 export const isMaxMonth = (month: string) =>

@@ -27,10 +27,13 @@ describe("ListItem (CG ⑨)", () => {
   });
 
   it("카테고리 아이콘을 그린다", () => {
-    render(<ListItem category="ETC" title="아이패드" amount="100,000원" />);
-    expect(
-      screen.getByRole("button").querySelector("svg[data-icon]"),
-    ).toHaveAttribute("data-icon", "icon_card");
+    const { container } = render(
+      <ListItem category="ETC" title="아이패드" amount="100,000원" />,
+    );
+    expect(container.querySelector("svg[data-icon]")).toHaveAttribute(
+      "data-icon",
+      "icon_card",
+    );
   });
 
   it("제목만 말줄임하고 배지·금액은 줄이지 않는다", () => {
@@ -47,5 +50,11 @@ describe("ListItem (CG ⑨)", () => {
     );
     expect(screen.getByText("정기")).toHaveClass("shrink-0");
     expect(screen.getByText("13,300원")).toHaveClass("shrink-0");
+  });
+
+  it("누를 동작이 없으면 버튼으로 그리지 않는다", () => {
+    render(<ListItem category="FOOD" title="점심" amount="8,000원" />);
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+    expect(screen.getByText("점심")).toBeInTheDocument();
   });
 });

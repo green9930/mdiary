@@ -6,10 +6,16 @@ import {
   convertToDbDate,
   convertToKSTStr,
   dateOrToday,
+  defaultDateOf,
+  formatDayHeading,
   formatFullDate,
   formatMonth,
+  formatMonthNumber,
+  formatYear,
   isMaxMonth,
+  isMinMonth,
   isValidDate,
+  isValidMonth,
   monthGridDates,
   monthOf,
 } from "@/lib/date";
@@ -31,7 +37,7 @@ describe("convertToKSTStr", () => {
   });
 });
 
-describe("isValidDate (데이터 아키텍처 3-2: 실제 있는 날짜, 2099-12-31 이하)", () => {
+describe("isValidDate (데이터 아키텍처 3-2: 실제 있는 날짜, 2020-01-01 ~ 2099-12-31)", () => {
   it("실제 있는 날짜면 true", () => {
     expect(isValidDate("2026-10-18")).toBe(true);
     expect(isValidDate("2028-02-29")).toBe(true);
@@ -52,6 +58,11 @@ describe("isValidDate (데이터 아키텍처 3-2: 실제 있는 날짜, 2099-12
   it("2099-12-31보다 뒤면 false", () => {
     expect(isValidDate("2099-12-31")).toBe(true);
     expect(isValidDate("2100-01-01")).toBe(false);
+  });
+
+  it("2020-01-01보다 앞이면 false", () => {
+    expect(isValidDate("2020-01-01")).toBe(true);
+    expect(isValidDate("2019-12-31")).toBe(false);
   });
 });
 
@@ -111,6 +122,13 @@ describe("isMaxMonth", () => {
   });
 });
 
+describe("isMinMonth", () => {
+  it("2020년 1월까지 참이다", () => {
+    expect(isMinMonth("2020-01")).toBe(true);
+    expect(isMinMonth("2020-02")).toBe(false);
+  });
+});
+
 describe("dateOrToday (화면 명세 SC-06 날짜 기본값)", () => {
   it("올바른 날짜면 그대로 쓴다", () => {
     expect(dateOrToday("2026-10-18", "2026-10-21")).toBe("2026-10-18");
@@ -120,5 +138,55 @@ describe("dateOrToday (화면 명세 SC-06 날짜 기본값)", () => {
     expect(dateOrToday(undefined, "2026-10-21")).toBe("2026-10-21");
     expect(dateOrToday("2026-02-30", "2026-10-21")).toBe("2026-10-21");
     expect(dateOrToday("tomorrow", "2026-10-21")).toBe("2026-10-21");
+  });
+});
+
+describe("formatDayHeading (화면 명세 날짜 표시 · 날짜 목록 헤더)", () => {
+  it("올해 날짜는 연도를 빼고 보여준다", () => {
+    expect(formatDayHeading("2026-10-18", "2026-11-17")).toBe("10월 18일 (일)");
+  });
+
+  it("다른 해면 연도를 붙인다", () => {
+    expect(formatDayHeading("2025-10-18", "2026-11-17")).toBe(
+      "2025년 10월 18일 (토)",
+    );
+  });
+});
+
+describe("defaultDateOf (화면 명세 SC-03: 다른 달로 옮길 때 선택 날짜)", () => {
+  it("이번 달이면 오늘", () => {
+    expect(defaultDateOf("2026-11", "2026-11-17")).toBe("2026-11-17");
+  });
+
+  it("다른 달이면 1일", () => {
+    expect(defaultDateOf("2026-08", "2026-11-17")).toBe("2026-08-01");
+  });
+});
+
+describe("isValidMonth", () => {
+  it("YYYY-MM이고 1~12월이며 2020-01 ~ 2099-12면 참", () => {
+    expect(isValidMonth("2026-10")).toBe(true);
+    expect(isValidMonth("2020-01")).toBe(true);
+    expect(isValidMonth("2099-12")).toBe(true);
+  });
+
+  it("형식이 틀리거나 범위 밖이면 거짓", () => {
+    for (const value of [
+      "2026-13",
+      "2026-00",
+      "2026-1",
+      "2019-12",
+      "2100-01",
+      "abc",
+    ]) {
+      expect(isValidMonth(value)).toBe(false);
+    }
+  });
+});
+
+describe("formatYear · formatMonthNumber (연·월 선택 격자)", () => {
+  it("`2026년`, `3월`", () => {
+    expect(formatYear(2026)).toBe("2026년");
+    expect(formatMonthNumber(3)).toBe("3월");
   });
 });

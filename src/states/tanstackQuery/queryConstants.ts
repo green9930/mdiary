@@ -3,7 +3,7 @@
  * (예: `[QUERY_KEYS.monthTotals, "2026-10"]`)
  */
 export const QUERY_KEYS = {
-  /** 계정 요약: 이메일·가장 오래된 연도·전체 건수 (`/api/me`) */
+  /** 계정 요약: 이메일·전체 건수 (`/api/me`) */
   accountSummary: "accountSummary",
   /** 한 달의 날짜별 합계·월 합계 (`/api/calendar`) */
   monthTotals: "monthTotals",
@@ -37,4 +37,6 @@ export const EXPENSE_QUERY_KEYS = [
 export const QUERY_RULES = {
   /** 실패한 조회를 다시 시도하는 최대 횟수 (401은 다시 시도하지 않는다) */
   maxRetries: 3,
+  /** 월 합계를 다시 요청하지 않고 쓰는 시간 (ms) */
+  monthTotalsStaleTime: 5 * 60 * 1000,
 } as const;

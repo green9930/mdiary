@@ -45,6 +45,24 @@ export const SkeletonLine = ({ width }: SkeletonLineProps) => {
   );
 };
 
+const BLOCK_HEIGHT_CLASSES = {
+  calendar: "h-80", // 달력 격자: 요일 줄 32 + 6줄 × 48
+};
+
+interface SkeletonBlockProps {
+  height: keyof typeof BLOCK_HEIGHT_CLASSES;
+}
+
+// 큰 덩어리 자리 (달력 격자 등)
+export const SkeletonBlock = ({ height }: SkeletonBlockProps) => {
+  return (
+    <div
+      aria-hidden
+      className={`rounded-md ${BLOCK_HEIGHT_CLASSES[height]} ${PIECE_CLASS}`}
+    />
+  );
+};
+
 // 목록 항목 자리: ListItem과 같은 높이 56, 아이콘 원 36
 export const SkeletonListItem = () => {
   return (

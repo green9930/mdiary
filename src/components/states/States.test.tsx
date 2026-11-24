@@ -9,6 +9,7 @@ import LoadMoreStatus from "@/components/states/LoadMoreStatus";
 import RefreshErrorBar from "@/components/states/RefreshErrorBar";
 import {
   SkeletonArea,
+  SkeletonBlock,
   SkeletonLine,
   SkeletonListItem,
 } from "@/components/states/Skeleton";
@@ -18,6 +19,7 @@ describe("Skeleton (CM ①)", () => {
   it("영역 하나만 '불러오는 중'으로 읽히고 조각은 읽히지 않는다", () => {
     render(
       <SkeletonArea>
+        <SkeletonBlock height="calendar" />
         <SkeletonLine width="1/2" />
         <SkeletonListItem />
       </SkeletonArea>,

@@ -45,8 +45,6 @@ const mockServer = ({ save }: Server = {}) =>
   vi.spyOn(globalThis, "fetch").mockImplementation(async (input, init) => {
     const url = String(input);
     if (url === "/api/titles") return Response.json({ titles: TITLES });
-    if (url === "/api/me")
-      return Response.json({ email: "a@b.c", oldestYear: 2023, totalCount: 0 });
     if (url === "/api/expenses" && init?.method === "POST") {
       if (save) return save();
       const body = JSON.parse(String(init.body)) as { date: string };

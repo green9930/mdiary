@@ -11,7 +11,7 @@ describe("createQueryClient: 세션 만료 (화면 명세 RT)", () => {
     const client = createQueryClient({ onUnauthorized });
 
     await client
-      .fetchQuery({
+      .query({
         queryKey: ["expenses"],
         queryFn: () => Promise.reject(unauthorized),
       })
@@ -48,7 +48,7 @@ describe("createQueryClient: 세션 만료 (화면 명세 RT)", () => {
     const client = createQueryClient({ onUnauthorized });
 
     await client
-      .fetchQuery({
+      .query({
         queryKey: ["expenses"],
         queryFn: () => Promise.reject(new ApiError(500, null)),
         retry: false,

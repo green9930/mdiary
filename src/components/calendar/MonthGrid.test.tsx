@@ -67,3 +67,81 @@ describe("MonthGrid (화면 명세 SC-03 달력, 토큰 5-5)", () => {
     );
   });
 });
+
+describe("MonthGrid 칸 금액 (화면 명세 SC-03 칸, 공통 정책값 달력 칸 축약 표시)", () => {
+  const renderWithTotals = (totals: Record<string, number>) =>
+    render(
+      <MonthGrid
+        month="2026-10"
+        selected="2026-10-18"
+        today="2026-10-21"
+        totals={totals}
+        onSelect={vi.fn()}
+      />,
+    );
+
+  it("그날 합계를 날짜 아래에 보여주고 금액까지 읽어 준다", () => {
+    renderWithTotals({ "2026-10-18": 21300 });
+    const day = screen.getByRole("button", {
+      name: "2026년 10월 18일 (일) 21,300원",
+    });
+    expect(day).toHaveTextContent("1821,300");
+  });
+
+  it("넘치는 금액은 줄여서 보여준다", () => {
+    renderWithTotals({ "2026-10-10": 1_080_000 });
+    expect(
+      screen.getByRole("button", { name: "2026년 10월 10일 (토) 1,080,000원" }),
+    ).toHaveTextContent("10108만");
+  });
+
+  it("합계가 없는 날은 비워 둔다", () => {
+    renderWithTotals({});
+    expect(
+      screen.getByRole("button", { name: "2026년 10월 18일 (일)" }),
+    ).toHaveTextContent(/^18$/);
+  });
+
+  it("앞뒤 달 날짜에는 금액을 보여주지 않는다", () => {
+    renderWithTotals({ "2026-11-02": 5000 });
+    expect(
+      screen.getByRole("button", { name: "2026년 11월 2일 (월)" }),
+    ).toHaveTextContent(/^2$/);
+  });
+});
+
+describe("MonthGrid 선택 가능 범위 (화면 명세 공통 정책값 선택 가능 연도)", () => {
+  it("2020-01-01보다 앞선 날짜는 누를 수 없다", () => {
+    render(
+      <MonthGrid
+        month="2020-01"
+        selected="2020-01-01"
+        today="2026-10-21"
+        onSelect={vi.fn()}
+      />,
+    );
+    expect(
+      screen.getByRole("button", { name: "2019년 12월 31일 (화)" }),
+    ).toBeDisabled();
+    expect(
+      screen.getByRole("button", { name: "2020년 1월 1일 (수)" }),
+    ).toBeEnabled();
+  });
+
+  it("2099-12-31보다 뒤 날짜는 누를 수 없다", () => {
+    render(
+      <MonthGrid
+        month="2099-12"
+        selected="2099-12-01"
+        today="2026-10-21"
+        onSelect={vi.fn()}
+      />,
+    );
+    expect(
+      screen.getByRole("button", { name: "2099년 12월 31일 (목)" }),
+    ).toBeEnabled();
+    expect(
+      screen.getByRole("button", { name: "2100년 1월 1일 (금)" }),
+    ).toBeDisabled();
+  });
+});

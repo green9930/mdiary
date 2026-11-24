@@ -51,13 +51,13 @@ export const STATE_TEXTS = {
 
 /** 월간 달력 문구 (화면 명세 SC-03) */
 export const CALENDAR_TEXTS = {
-  /** 월 합계 라벨: `10월 지출` */
-  monthTotal: (month: string) => `${Number(month.slice(5, 7))}월 지출`,
+  /** 월 합계 라벨: `Total.` */
+  totalLabel: "Total.",
   /** 하루 목록 건수: `2건` */
   dayCount: (count: number) => `${count}건`,
 } as const;
 
-/** 반복 배지 (화면 명세 SC-03 하루 목록) */
+/** 반복 배지 (화면 명세 SC-03 하루 목록, SC-04 카테고리별, SC-05 검색) */
 export const BADGE_TEXTS = {
   recurring: "정기",
   /** `할부 3/12` */
@@ -128,6 +128,8 @@ export const DATE_RULES = {
   pattern: /^\d{4}-\d{2}-\d{2}$/,
   /** 월 문자열 형식 YYYY-MM */
   monthPattern: /^\d{4}-\d{2}$/,
+  /** 선택 가능 연도의 처음 */
+  minDate: "2020-01-01",
   /** 입력 검증용 기술 상한 (선택 가능 연도) */
   maxDate: "2099-12-31",
   /** 달력은 항상 6줄로 그린다 (SC-03) */

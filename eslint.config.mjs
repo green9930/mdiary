@@ -144,5 +144,16 @@ export default defineConfig([
       "simple-import-sort/exports": "error",
     },
   },
+  // deprecated API를 쓰지 않는다 (타입 정보로 검사)
+  {
+    files: ["**/*.{ts,tsx,mts}"],
+    ignores: ["src/generated/**"],
+    languageOptions: {
+      parserOptions: { projectService: true },
+    },
+    rules: {
+      "@typescript-eslint/no-deprecated": "error",
+    },
+  },
   globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
 ]);

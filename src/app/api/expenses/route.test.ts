@@ -1,14 +1,17 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { POST } from "@/app/api/expenses/route";
-import { createExpense } from "@/server/expenseService";
+import { GET, POST } from "@/app/api/expenses/route";
+import { createExpense, getDayExpenses } from "@/server/expenseService";
 import { getSessionUser } from "@/server/session";
 
 vi.mock("@/server/session", async () => ({
   getSessionUser: vi.fn(),
   unauthorized: () => Response.json({ code: "UNAUTHORIZED" }, { status: 401 }),
 }));
-vi.mock("@/server/expenseService", () => ({ createExpense: vi.fn() }));
+vi.mock("@/server/expenseService", () => ({
+  createExpense: vi.fn(),
+  getDayExpenses: vi.fn(),
+}));
 
 const user = { id: "user-1", email: "user@mdiary.local" };
 
@@ -85,5 +88,50 @@ describe("POST /api/expenses (데이터 아키텍처 8-1·8-3)", () => {
 
     expect(response.status).toBe(401);
     expect(createExpense).not.toHaveBeenCalled();
+  });
+});
+
+describe("GET /api/expenses?date= (데이터 아키텍처 8-1 하루 목록)", () => {
+  const items = [
+    {
+      id: "expense-1",
+      date: "2026-10-18",
+      title: "점심",
+      category: "FOOD" as const,
+      amount: 8000,
+    },
+  ];
+  const get = (query: string) =>
+    GET(new Request(`http://localhost/api/expenses${query}`));
+
+  beforeEach(() => {
+    vi.mocked(getDayExpenses).mockReset().mockResolvedValue(items);
+  });
+
+  it("로그인 사용자의 그날 기록을 돌려준다", async () => {
+    const response = await get("?date=2026-10-18");
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ items });
+    expect(getDayExpenses).toHaveBeenCalledWith("user-1", "2026-10-18");
+  });
+
+  it("date가 없거나 잘못됐으면 400 VALIDATION", async () => {
+    for (const query of ["", "?date=2026-02-30", "?date=abc"]) {
+      const response = await get(query);
+
+      expect(response.status).toBe(400);
+      expect(await response.json()).toEqual({
+        code: "VALIDATION",
+        fields: { date: "INVALID" },
+      });
+    }
+    expect(getDayExpenses).not.toHaveBeenCalled();
+  });
+
+  it("세션이 없으면 401", async () => {
+    vi.mocked(getSessionUser).mockResolvedValue(null);
+
+    expect((await get("?date=2026-10-18")).status).toBe(401);
   });
 });

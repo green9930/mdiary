@@ -96,15 +96,22 @@ export const useHistoryLayer = (
       pushed: false,
       popped: false,
     };
-    // 개발 모드(Strict Mode)는 effect를 두 번 실행한다. 다음 틱에 쌓아 기록이 두 개 생기지 않게 한다
+    let closed = false;
+    // 개발 모드(Strict Mode)는 effect를 두 번 실행한다. 다음 틱에 쌓아 기록이 두 개 생기지 않게 한다.
+    // 앞 층의 기록을 되돌리는 중이면 되돌린 뒤 쌓는다. 먼저 쌓으면 대기 중인 되돌리기가
+    // 새 기록에서 출발하거나 취소되어(jsdom) 기록과 ignoredPops가 어긋난다
     const timer = window.setTimeout(() => {
-      listen();
-      pushEntry(layer.id);
-      layer.pushed = true;
-      layers.push(layer);
+      runAfterLayerPops(() => {
+        if (closed) return;
+        listen();
+        pushEntry(layer.id);
+        layer.pushed = true;
+        layers.push(layer);
+      });
     }, 0);
 
     return () => {
+      closed = true;
       window.clearTimeout(timer);
       const index = layers.indexOf(layer);
       if (index >= 0) layers.splice(index, 1);

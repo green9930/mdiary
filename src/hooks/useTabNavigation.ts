@@ -1,7 +1,8 @@
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-import { convertToKSTStr } from "@/lib/date";
+import { convertToKSTStr, dateOrToday } from "@/lib/date";
+import { newExpensePath } from "@/lib/navigation";
 import { PATHS, TABS_LIST } from "@/shared/sharedConstants";
 import type { TabType } from "@/types/tabTypes";
 
@@ -25,7 +26,8 @@ export const clearTabUrls = () => {
 /** 하단 탭 바의 이동 (화면 명세 SC-01): 현재 탭과 각 버튼이 갈 주소 */
 export const useTabNavigation = () => {
   const pathname = usePathname();
-  const search = useSearchParams().toString();
+  const params = useSearchParams();
+  const search = params.toString();
   const url = search ? `${pathname}?${search}` : pathname;
   const current = findTab(pathname);
 
@@ -37,8 +39,12 @@ export const useTabNavigation = () => {
   const tabHref = (tab: TabType) =>
     tab === current ? tab.path : (lastUrls.get(tab.path) ?? tab.path);
 
-  // F3: 달력에서 날짜를 골라둔 상태면 그 날짜를 쓴다
-  const newExpenseHref = `${PATHS.newExpense}?date=${convertToKSTStr()}`;
+  // ＋ 버튼: 달력에서 날짜를 골라둔 상태면 그 날짜, 그 밖에는 오늘 (와이어프레임 SC-01)
+  const pickedDate =
+    pathname === PATHS.calendar ? (params.get("date") ?? undefined) : undefined;
+  const newExpenseHref = newExpensePath(
+    dateOrToday(pickedDate, convertToKSTStr()),
+  );
 
   return { current, tabHref, newExpenseHref };
 };

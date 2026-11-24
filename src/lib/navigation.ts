@@ -12,3 +12,7 @@ export const hardNavigate = (path: string) => {
 /** 그 날짜가 선택된 달력 주소 (`/?month=2026-10&date=2026-10-18`) */
 export const calendarPath = (date: string) =>
   `${PATHS.calendar}?${new URLSearchParams({ month: monthOf(date), date })}`;
+
+/** 그 날짜로 여는 등록 화면 주소 (`/expenses/new?date=2026-10-19`) */
+export const newExpensePath = (date: string) =>
+  `${PATHS.newExpense}?${new URLSearchParams({ date })}`;

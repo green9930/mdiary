@@ -12,7 +12,9 @@ interface ListItemProps {
   onClick?: () => void;
 }
 
-// 목록 항목 (와이어프레임 CG ⑨, 토큰 5-4): 높이 56, 항목 전체가 누르는 영역
+const ROW_CLASS = "flex h-14 w-full items-center gap-3 border-b border-line";
+
+// 목록 항목 (와이어프레임 CG ⑨, 토큰 5-4): 높이 56, onClick이 있으면 항목 전체가 누르는 영역
 const ListItem = ({
   category,
   title,
@@ -21,12 +23,8 @@ const ListItem = ({
   amount,
   onClick,
 }: ListItemProps) => {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="flex h-14 w-full items-center gap-3 border-b border-line text-left active:bg-surface"
-    >
+  const content = (
+    <>
       <CategoryIcon category={category} />
       <span className="flex min-w-0 flex-1 flex-col">
         <span className="flex min-w-0 items-center gap-1.5 text-body text-text01">
@@ -42,6 +40,18 @@ const ListItem = ({
       <span className="shrink-0 font-num text-num-md text-text01 tabular-nums">
         {amount}
       </span>
+    </>
+  );
+
+  // 누를 동작이 없으면(상세 시트를 붙이기 전) 버튼으로 그리지 않는다
+  if (!onClick) return <div className={ROW_CLASS}>{content}</div>;
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`${ROW_CLASS} text-left active:bg-surface`}
+    >
+      {content}
     </button>
   );
 };

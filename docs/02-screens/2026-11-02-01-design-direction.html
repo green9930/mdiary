@@ -52,7 +52,7 @@
   .p-hd b { font-size: 17px; }
   .p-hd .nav { display: flex; gap: 6px; }
   .p-hd .nav span { width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--line); display: grid; place-items: center; color: var(--text02); font-size: 14px; }
-  .p-sum { display: flex; justify-content: space-between; align-items: baseline; padding: 0 16px 8px; }
+  .p-sum { display: flex; justify-content: flex-end; gap: 8px; align-items: baseline; padding: 0 16px 8px; }
   .p-sum span { color: var(--text02); font-size: 12px; }
   .p-sum strong { font-size: 20px; }
   .num { font-family: var(--num-font, inherit); font-variant-numeric: tabular-nums; }
@@ -231,7 +231,7 @@ function phone(d, t) {
   const amt = d.id === "legacy" ? `style="color:${t.amount}"` : "";
   return `<div class="mock phone" style="${vars(t)}">
     <div class="p-hd"><b>2026년 10월 ▾</b><span class="nav"><span>‹</span><span>›</span></span></div>
-    <div class="p-sum"><span>10월 지출</span><strong class="num" ${amt}>1,234,500원</strong></div>
+    <div class="p-sum"><span>Total.</span><strong class="num" ${amt}>1,234,500원</strong></div>
     ${calendar()}
     <div class="p-day"><b>10월 18일 (일)</b><span class="num">2건 · 21,300원</span></div>
     <div class="li"><span class="ic">식비</span><span class="tt"><span>점심 김밥</span></span><span class="m num" ${amt}>8,000원</span></div>

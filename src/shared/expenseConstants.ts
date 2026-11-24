@@ -28,4 +28,6 @@ export const EXPENSE_RULES = {
   titleSuggestionMinUses: 2,
   /** 자주 쓴 제목: 서버가 한 번에 내려주는 최대 개수 */
   titleSuggestionLoadMax: 300,
+  /** 달력 칸에서 금액을 줄이기 시작하는 자릿수 (100만 원 이상 → `108만`) */
+  calendarAbbrDigits: 7,
 } as const;
