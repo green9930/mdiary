@@ -286,15 +286,15 @@ describe("ExpenseForm (화면 명세 SC-06 등록)", () => {
       expect(router.replace).not.toHaveBeenCalled();
     });
 
-    it("저장 완료 알림의 [확인] 뒤에는 알림·작성 중 가로채기가 쌓은 기록을 모두 되돌린다", async () => {
+    it("저장 완료 알림의 [확인] 뒤에는 알림이 쌓은 기록을 되돌린다", async () => {
       mockServer();
       renderForm();
       const startState: unknown = window.history.state;
       await fillValid();
+      await userEvent.click(saveButton());
       await waitFor(() =>
         expect(window.history.state).toHaveProperty("mdiaryLayer"),
       );
-      await userEvent.click(saveButton());
 
       await userEvent.click(
         within(await waitFor(() => dialog("저장 완료"))).getByRole("button", {
@@ -473,7 +473,18 @@ describe("ExpenseForm (화면 명세 SC-06 등록)", () => {
       expect(document.querySelector("dialog[open]")).toBeNull();
     });
 
-    it("입력한 내용이 있으면 확인 다이얼로그를 띄운다", async () => {
+    it("입력해도 기록을 쌓지 않는다 (브라우저·기기 뒤로 가기는 확인 없이 이전 화면으로 간다)", async () => {
+      mockServer();
+      renderForm();
+      const startState: unknown = window.history.state;
+
+      await userEvent.type(contentInput(), "메모");
+      await new Promise((resolve) => setTimeout(resolve, 20));
+
+      expect(window.history.state).toEqual(startState);
+    });
+
+    it("입력한 내용이 있으면 [뒤로]는 확인 다이얼로그를 띄운다", async () => {
       mockServer();
       renderForm();
       await userEvent.type(contentInput(), "메모");

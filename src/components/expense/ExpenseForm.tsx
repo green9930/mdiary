@@ -100,7 +100,7 @@ const ExpenseForm = ({ initialDate, today }: ExpenseFormProps) => {
     resetAfterDone.current = true;
   };
 
-  // 알림이 쌓은 기록이 되돌려진 뒤에 비운다. 같이 비우면 작성 중 가로채기도 함께 닫혀 그 기록이 남는다.
+  // 알림이 쌓은 기록이 되돌려진 뒤에 비운다.
   // 알림이 닫히며 [저장]으로 돌려준 포커스는 그 뒤 제목 칸으로 옮겨 다음 기록을 바로 입력하게 한다
   useEffect(() => {
     if (saveDone || !resetAfterDone.current) return;

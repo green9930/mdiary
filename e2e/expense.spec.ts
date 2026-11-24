@@ -47,7 +47,7 @@ test.describe("지출 등록 (화면 명세 SC-06, 반복 없음)", () => {
     await expect(page).toHaveURL("/expenses/new");
   });
 
-  test("작성 중 브라우저 뒤로 가기는 확인 다이얼로그를 띄우고, [나가기]로 이전 화면에 간다", async ({
+  test("작성 중 브라우저 뒤로 가기는 확인 없이 이전 화면으로 간다", async ({
     page,
   }) => {
     await page.goto("/");
@@ -55,15 +55,36 @@ test.describe("지출 등록 (화면 명세 SC-06, 반복 없음)", () => {
     await page.getByRole("textbox", { name: "제목" }).fill("커피");
 
     await page.goBack();
+
+    await expect(page).toHaveURL("/");
+    await expect(
+      page.getByRole("alertdialog", { name: "작성 취소" }),
+    ).toBeHidden();
+  });
+
+  test("작성 중 [뒤로]는 확인 다이얼로그를 띄우고, [나가기]로 이전 화면에 간다", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await page.getByRole("link", { name: "기록하기" }).click();
+    await page.getByRole("textbox", { name: "제목" }).fill("커피");
+    const back = page.getByRole("button", { name: "뒤로" });
     const dialog = page.getByRole("alertdialog", { name: "작성 취소" });
+
+    await back.click();
+    await expect(dialog).toBeVisible();
+    // 다이얼로그는 버튼으로만 닫힌다: 브라우저 뒤로 가기는 무시한다
+    await page.goBack();
     await expect(dialog).toBeVisible();
     await expect(page).toHaveURL(/\/expenses\/new/);
 
     await dialog.getByRole("button", { name: "계속 작성" }).click();
     await expect(dialog).toBeHidden();
-    await page.goBack();
-    await expect(dialog).toBeVisible();
+    await expect(page.getByRole("textbox", { name: "제목" })).toHaveValue(
+      "커피",
+    );
 
+    await back.click();
     await dialog.getByRole("button", { name: "나가기" }).click();
     await expect(page).toHaveURL("/");
   });
