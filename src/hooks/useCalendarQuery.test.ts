@@ -41,6 +41,14 @@ describe("useCalendarQuery (화면 명세 SC-03 쿼리, 공통 규약 상태를 
     });
   });
 
+  it("주소를 바꿀 때 열린 상세 시트(expense)는 남긴다", () => {
+    setup("month=2026-13&date=2026-08-12&expense=e1");
+    expect(replace).toHaveBeenCalledWith(
+      "/?month=2026-11&date=2026-11-17&expense=e1",
+      { scroll: false },
+    );
+  });
+
   it("잘못된 쿼리는 기본값으로 그리고 주소를 바꾼다 (기록을 쌓지 않음)", () => {
     const { result } = setup("month=2026-13&date=2026-08-12");
     expect(result.current.month).toBe("2026-11");

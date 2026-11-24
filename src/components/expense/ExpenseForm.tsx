@@ -1,8 +1,9 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 
-import { isUnauthorized } from "@/api/apiClient";
+import { isNotFound, isUnauthorized } from "@/api/apiClient";
 import Button from "@/components/elements/Button";
 import { inputBoxClass } from "@/components/elements/inputBoxStyles";
 import TextArea from "@/components/elements/TextArea";
@@ -14,37 +15,54 @@ import PageHeader from "@/components/layout/PageHeader";
 import AlertDialog from "@/components/overlays/AlertDialog";
 import Dialog from "@/components/overlays/Dialog";
 import { useCreateExpense } from "@/hooks/useCreateExpense";
-import { useExpenseForm } from "@/hooks/useExpenseForm";
+import {
+  emptyExpenseValues,
+  toExpenseFormValues,
+  useExpenseForm,
+} from "@/hooks/useExpenseForm";
+import { useGoBack } from "@/hooks/useGoBack";
 import { runAfterLayerPops } from "@/hooks/useHistoryLayer";
 import { useLeaveGuard } from "@/hooks/useLeaveGuard";
 import { useTitleSuggestions } from "@/hooks/useTitleSuggestions";
+import { useUpdateExpense } from "@/hooks/useUpdateExpense";
 import { formatAmountInput } from "@/lib/amount";
 import { formatFullDate } from "@/lib/date";
-import { filterTitleSuggestions } from "@/lib/titleSuggestions";
+import { filterTitleSuggestions } from "@/lib/titleSuggestionsUtils";
+import { handleUpdateExpense } from "@/lib/updateExpense";
 import { EXPENSE_RULES } from "@/shared/expenseConstants";
 import {
   BTN_TEXTS,
   DIALOG_TEXTS,
   FIELD_LABELS,
   PAGE_TITLES,
+  PATHS,
   PLACEHOLDERS,
   UNITS,
 } from "@/shared/sharedConstants";
-import type { TitleSuggestion } from "@/types/expenseTypes";
+import type { ExpenseDetail, TitleSuggestion } from "@/types/expenseTypes";
 
 interface ExpenseFormProps {
   /** 날짜 기본값 (쿼리 date, 없거나 잘못됐으면 오늘) */
   initialDate: string;
   /** 서울 기준 오늘. 날짜 선택 달력의 오늘 표시 */
   today: string;
+  /** 수정할 원래 기록. 없으면 등록이다 */
+  editing?: ExpenseDetail["expense"];
 }
 
-// 지출 등록 (화면 명세 SC-06). 반복·[계산]은 F5·F6에서 붙인다
-const ExpenseForm = ({ initialDate, today }: ExpenseFormProps) => {
-  const form = useExpenseForm(initialDate);
+// 지출 등록·수정 (화면 명세 SC-06). 반복·[계산]은 F5·F6에서 붙인다
+const ExpenseForm = ({ initialDate, today, editing }: ExpenseFormProps) => {
+  const router = useRouter();
+  const goBack = useGoBack();
+  const form = useExpenseForm(
+    editing ? toExpenseFormValues(editing) : emptyExpenseValues(initialDate),
+  );
   const { values, errors } = form;
   const guard = useLeaveGuard(form.dirty);
   const createExpense = useCreateExpense();
+  const updateExpense = useUpdateExpense(editing?.id ?? "");
+  // 수정 저장 때 기록이 이미 없음 (다른 기기에서 삭제)
+  const [goneOnSave, setGoneOnSave] = useState(false);
   const titles = useTitleSuggestions();
   const [dateOpen, setDateOpen] = useState(false);
   const [suggestOpen, setSuggestOpen] = useState(false);
@@ -66,7 +84,7 @@ const ExpenseForm = ({ initialDate, today }: ExpenseFormProps) => {
   const suggestions = suggestOpen
     ? filterTitleSuggestions(titles.data ?? [], values.title)
     : [];
-  const saving = createExpense.isPending;
+  const saving = createExpense.isPending || updateExpense.isPending;
 
   const changeTitle = (title: string) => {
     form.setTitle(title);
@@ -87,11 +105,33 @@ const ExpenseForm = ({ initialDate, today }: ExpenseFormProps) => {
       target?.scrollIntoView({ block: "center" });
       return;
     }
-    createExpense.mutate(result.request, {
-      onSuccess: () => setSaveDone(true),
-      // 401은 QueryClient가 로그인으로 보낸다
-      onError: (error) => setSaveFailed(!isUnauthorized(error)),
+    if (!editing) {
+      createExpense.mutate(result.request, {
+        onSuccess: () => setSaveDone(true),
+        // 401은 QueryClient가 로그인으로 보낸다
+        onError: (error) => setSaveFailed(!isUnauthorized(error)),
+      });
+      return;
+    }
+    // 수정: 바꾼 필드만 보낸다. 바꾼 것이 없으면 요청 없이 이전 화면으로
+    const changes = handleUpdateExpense(editing, result.request);
+    if (!changes) {
+      goBack();
+      return;
+    }
+    updateExpense.mutate(changes, {
+      onSuccess: goBack,
+      onError: (error) => {
+        if (isNotFound(error)) setGoneOnSave(true);
+        else setSaveFailed(!isUnauthorized(error));
+      },
     });
+  };
+
+  // 기록 없음 [확인]: 알림이 쌓은 기록을 되돌린 뒤 달력으로 (화면 명세 SC-06 수정 저장 시 404)
+  const confirmGone = () => {
+    setGoneOnSave(false);
+    runAfterLayerPops(() => router.replace(PATHS.calendar));
   };
 
   /** 저장 완료 알림 [확인]: 알림을 닫고, 그 뒤 폼을 비운다 */
@@ -114,7 +154,7 @@ const ExpenseForm = ({ initialDate, today }: ExpenseFormProps) => {
   return (
     <div className="mx-auto flex min-h-dvh max-w-120 min-w-80 flex-col">
       <PageHeader
-        title={PAGE_TITLES.newExpense}
+        title={editing ? PAGE_TITLES.editExpense : PAGE_TITLES.newExpense}
         backDisabled={saving}
         onBack={guard.requestLeave}
       />
@@ -219,6 +259,13 @@ const ExpenseForm = ({ initialDate, today }: ExpenseFormProps) => {
         onClose={confirmSaveDone}
       >
         {DIALOG_TEXTS.saveDoneBody}
+      </AlertDialog>
+      <AlertDialog
+        open={goneOnSave}
+        title={DIALOG_TEXTS.notFoundTitle}
+        onClose={confirmGone}
+      >
+        {DIALOG_TEXTS.notFoundBody}
       </AlertDialog>
     </div>
   );

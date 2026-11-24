@@ -7,6 +7,7 @@ import CalendarHeader from "@/components/calendar/CalendarHeader";
 import DayExpenseList from "@/components/calendar/DayExpenseList";
 import MonthGrid from "@/components/calendar/MonthGrid";
 import MonthPickerSheet from "@/components/calendar/MonthPickerSheet";
+import ExpenseDetailSheet from "@/components/expense/ExpenseDetailSheet";
 import LoadError from "@/components/states/LoadError";
 import RefreshErrorBar from "@/components/states/RefreshErrorBar";
 import {
@@ -17,11 +18,12 @@ import {
 } from "@/components/states/Skeleton";
 import { useCalendarQuery } from "@/hooks/useCalendarQuery";
 import { useDayExpenses } from "@/hooks/useDayExpenses";
+import { useExpenseSheetQuery } from "@/hooks/useExpenseSheetQuery";
 import { runAfterLayerPops } from "@/hooks/useHistoryLayer";
 import { useMonthSwipe } from "@/hooks/useMonthSwipe";
 import { useCachedMonthTotals, useMonthTotals } from "@/hooks/useMonthTotals";
 import { addMonths, isMaxMonth, isMinMonth, monthOf } from "@/lib/date";
-import { newExpensePath } from "@/lib/navigation";
+import { editExpensePath, newExpensePath } from "@/lib/navigation";
 import { getQueryView } from "@/lib/queryView";
 import { PAGE_TITLES } from "@/shared/sharedConstants";
 import type { MonthTotals } from "@/types/expenseTypes";
@@ -69,6 +71,7 @@ const CalendarSkeleton = () => {
 // 월간 달력 (화면 명세 SC-03): 헤더 + 6줄 달력(스와이프) + 선택한 날짜의 목록
 const CalendarView = ({ today }: CalendarViewProps) => {
   const router = useRouter();
+  const sheet = useExpenseSheetQuery();
   const { month, date, selectDate, moveToMonth } = useCalendarQuery(today);
   const totalsQuery = useMonthTotals(month);
   const dayQuery = useDayExpenses(date);
@@ -164,6 +167,7 @@ const CalendarView = ({ today }: CalendarViewProps) => {
             today={today}
             items={dayQuery.data}
             onAdd={() => router.push(newExpensePath(date))}
+            onSelect={sheet.open}
           />
         )}
       </>
@@ -191,6 +195,13 @@ const CalendarView = ({ today }: CalendarViewProps) => {
         currentMonth={thisMonth}
         onSelect={(target) => setPicked({ month: target })}
         onClose={() => setPickerOpen(false)}
+      />
+      <ExpenseDetailSheet
+        expenseId={sheet.expenseId}
+        onClose={sheet.close}
+        onEdit={(id) =>
+          sheet.handleAfterClose(() => router.push(editExpensePath(id)))
+        }
       />
     </main>
   );

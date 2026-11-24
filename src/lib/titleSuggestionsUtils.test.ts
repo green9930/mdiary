@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { filterTitleSuggestions } from "@/lib/titleSuggestions";
+import { filterTitleSuggestions } from "@/lib/titleSuggestionsUtils";
 import type { TitleSuggestion } from "@/types/expenseTypes";
 
 const suggestion = (title: string): TitleSuggestion => ({

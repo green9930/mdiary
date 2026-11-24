@@ -5,7 +5,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 
-import { isUnauthorized } from "@/api/apiClient";
+import { isNotFound, isUnauthorized } from "@/api/apiClient";
 import { hardNavigate } from "@/lib/navigation";
 import { loginPath } from "@/shared/nextPath";
 import { QUERY_RULES } from "@/states/tanstackQuery/queryConstants";
@@ -40,9 +40,11 @@ export const createQueryClient = ({
       queries: {
         // 조건을 바꿔 다시 불러올 때(월 이동, 기간·필터 변경) 이전 데이터를 보여준 채 갱신한다 (화면 명세 공통 규약 · 로딩)
         placeholderData: keepPreviousData,
-        // 401은 다시 시도해도 같으므로 바로 로그인으로 보낸다
+        // 401·404는 다시 시도해도 같다. 401은 바로 로그인으로, 404는 화면이 "기록 없음"으로 처리한다
         retry: (failureCount, error) =>
-          !isUnauthorized(error) && failureCount < QUERY_RULES.maxRetries,
+          !isUnauthorized(error) &&
+          !isNotFound(error) &&
+          failureCount < QUERY_RULES.maxRetries,
       },
     },
   });

@@ -6,16 +6,29 @@ import { FIELD_ERRORS } from "@/shared/sharedConstants";
 import type {
   CategoryType,
   CreateExpenseRequestType,
+  ExpenseDetail,
+  ExpenseFormValues,
 } from "@/types/expenseTypes";
 
-interface ExpenseFormValues {
-  date: string;
-  title: string;
-  category: CategoryType | null;
-  /** 숫자만 담은 문자열. 비어 있을 수 있다 */
-  amount: string;
-  content: string;
-}
+/** 등록 폼의 처음 값: 받은 날짜 + 빈 칸 */
+export const emptyExpenseValues = (date: string): ExpenseFormValues => ({
+  date,
+  title: "",
+  category: null,
+  amount: "",
+  content: "",
+});
+
+/** 수정 폼의 처음 값: 원래 기록 */
+export const toExpenseFormValues = (
+  expense: ExpenseDetail["expense"],
+): ExpenseFormValues => ({
+  date: expense.date,
+  title: expense.title,
+  category: expense.category,
+  amount: String(expense.amount),
+  content: expense.content ?? "",
+});
 
 // 오류를 띄우는 칸. 화면 위에서 아래 순서 (첫 오류 칸으로 포커스할 때 쓴다)
 const ERROR_FIELDS = ["title", "category", "amount"] as const;
@@ -41,17 +54,11 @@ const validate = (
 };
 
 /**
- * 지출 등록 폼의 값과 오류 (화면 명세 공통 규약 · 폼 검증).
- * 입력 중에는 그 칸의 오류를 지우기만 하고, 칸을 벗어날 때와 [저장]을 누를 때 검증한다
+ * 지출 등록·수정 폼의 값과 오류 (화면 명세 공통 규약 · 폼 검증).
+ * 입력 중에는 그 칸의 오류를 지우기만 하고, 칸을 벗어날 때와 [저장]을 누를 때 검증한다.
+ * initial은 처음 값이다 (등록은 빈 칸, 수정은 원래 값). 입력한 내용이 있는지는 이 값과 비교한다
  */
-export const useExpenseForm = (initialDate: string) => {
-  const initial: ExpenseFormValues = {
-    date: initialDate,
-    title: "",
-    category: null,
-    amount: "",
-    content: "",
-  };
+export const useExpenseForm = (initial: ExpenseFormValues) => {
   const [values, setValues] = useState(initial);
   const [errors, setErrors] = useState<
     Partial<Record<ExpenseErrorFieldType, string>>
@@ -92,7 +99,7 @@ export const useExpenseForm = (initialDate: string) => {
   return {
     values,
     errors,
-    /** 처음 값과 하나라도 다른지 (작성 중 나가기 확인) */
+    /** 처음 값(수정은 원래 값)과 하나라도 다른지 (작성 중 나가기 확인) */
     dirty: (Object.keys(initial) as (keyof ExpenseFormValues)[]).some(
       (key) => values[key] !== initial[key],
     ),

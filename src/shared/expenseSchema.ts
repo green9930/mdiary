@@ -60,6 +60,34 @@ export const createExpenseSchema = z.object({
   ),
 });
 
+/** 수정·삭제 범위 (데이터 아키텍처 8-1 `scope`). 반복 기록의 범위(after·count)는 F6에서 받는다 */
+const scopeSchema = z.object(
+  { type: z.literal("one", { error: "INVALID" }) },
+  { error: "INVALID" },
+);
+
+/** 수정 요청 (데이터 아키텍처 8-1 `PATCH /api/expenses/:id`): 바꾼 필드 + scope. 바꾼 필드가 하나는 있어야 한다 */
+export const updateExpenseSchema = z
+  .object({
+    date: createExpenseSchema.shape.date.optional(),
+    title: titleSchema.optional(),
+    category: createExpenseSchema.shape.category.optional(),
+    amount: amountSchema.optional(),
+    // null은 내용 지우기, 빠지면 그대로
+    content: contentSchema.optional(),
+    scope: scopeSchema,
+  })
+  .refine(
+    ({ date, title, category, amount, content }) =>
+      [date, title, category, amount, content].some(
+        (value) => value !== undefined,
+      ),
+    { error: "NO_CHANGES", path: ["fields"] },
+  );
+
+/** 삭제 요청 (데이터 아키텍처 8-1 `DELETE /api/expenses/:id`) */
+export const deleteExpenseSchema = z.object({ scope: scopeSchema });
+
 /** 검증 실패를 필드별 코드로 모은다 (`{ title: "REQUIRED" }`). 필드마다 첫 오류만 쓴다 */
 export const fieldErrorCodes = (error: z.ZodError) => {
   const fields: Record<string, string> = {};

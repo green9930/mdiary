@@ -20,6 +20,13 @@ describe("createQueryClient: 세션 만료 (화면 명세 RT)", () => {
     expect(onUnauthorized).toHaveBeenCalledOnce();
   });
 
+  it("404(없는 기록)도 다시 시도하지 않는다", () => {
+    const retry = createQueryClient().getDefaultOptions().queries?.retry;
+    if (typeof retry !== "function") throw new Error("retry 함수가 없다");
+
+    expect(retry(0, new ApiError(404, "NOT_FOUND"))).toBe(false);
+  });
+
   it("401은 다시 시도하지 않고, 그 밖의 실패는 3번까지 다시 시도한다", () => {
     const retry = createQueryClient().getDefaultOptions().queries?.retry;
     if (typeof retry !== "function") throw new Error("retry 함수가 없다");

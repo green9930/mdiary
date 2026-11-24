@@ -1,5 +1,5 @@
 import { monthOf } from "@/lib/date";
-import { PATHS } from "@/shared/sharedConstants";
+import { PATHS, URL_PARAMS } from "@/shared/sharedConstants";
 
 /**
  * 페이지를 새로 불러오며 이동한다. 로그아웃·세션 만료처럼 화면에 남은 데이터(조회 캐시 등)를
@@ -9,10 +9,20 @@ export const hardNavigate = (path: string) => {
   window.location.assign(path);
 };
 
-/** 그 날짜가 선택된 달력 주소 (`/?month=2026-10&date=2026-10-18`) */
-export const calendarPath = (date: string) =>
-  `${PATHS.calendar}?${new URLSearchParams({ month: monthOf(date), date })}`;
+/**
+ * 그 날짜가 선택된 달력 주소 (`/?month=2026-10&date=2026-10-18`).
+ * expense를 주면 그 기록의 상세 시트가 열린 주소다 (`&expense={id}`)
+ */
+export const calendarPath = (date: string, expense?: string | null) => {
+  const params = new URLSearchParams({ month: monthOf(date), date });
+  if (expense) params.set(URL_PARAMS.expense, expense);
+  return `${PATHS.calendar}?${params}`;
+};
 
 /** 그 날짜로 여는 등록 화면 주소 (`/expenses/new?date=2026-10-19`) */
 export const newExpensePath = (date: string) =>
   `${PATHS.newExpense}?${new URLSearchParams({ date })}`;
+
+/** 기록 수정 화면 주소 (`/expenses/{id}/edit`) */
+export const editExpensePath = (id: string) =>
+  `/expenses/${encodeURIComponent(id)}/edit`;

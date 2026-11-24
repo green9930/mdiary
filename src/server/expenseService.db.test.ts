@@ -2,7 +2,13 @@ import { v7 as uuidv7 } from "uuid";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { prisma } from "@/server/db";
-import { createExpense, getDayExpenses } from "@/server/expenseService";
+import {
+  createExpense,
+  deleteExpense,
+  getDayExpenses,
+  getExpense,
+  updateExpense,
+} from "@/server/expenseService";
 
 const userId = "expense-service-user";
 const otherId = "expense-service-other";
@@ -205,5 +211,172 @@ describe("getDayExpenses (데이터 아키텍처 6장 SC-03 하루 목록)", () 
     });
 
     expect(await getDayExpenses(userId, "2026-09-11")).toEqual([]);
+  });
+});
+
+// 반복 없는 기록 1건을 만든다
+const seedOne = async (owner = userId) => {
+  const id = uuidv7();
+  await prisma.expense.create({
+    data: {
+      id,
+      userId: owner,
+      date: new Date("2026-08-05"),
+      title: "점심",
+      category: "FOOD",
+      amount: 8000,
+      content: "참치김밥",
+    },
+  });
+  return id;
+};
+
+// 할부 3회 묶음 (8·9·10월 20일)을 만들고 2회차 id를 돌려준다
+const seedInstallment = async () => {
+  const seriesId = uuidv7();
+  await prisma.series.create({
+    data: {
+      id: seriesId,
+      userId,
+      type: "INSTALLMENT",
+      billingDay: 20,
+      totalCount: 3,
+      installmentTotal: 300_000,
+    },
+  });
+  const ids = [uuidv7(), uuidv7(), uuidv7()] as const;
+  await prisma.expense.createMany({
+    data: ["2026-08-20", "2026-09-20", "2026-10-20"].map((date, i) => ({
+      id: ids[i] ?? "",
+      userId,
+      date: new Date(date),
+      title: "아이패드",
+      category: "APPLIANCE" as const,
+      amount: 100_000,
+      seriesId,
+      seq: i + 1,
+    })),
+  });
+  return ids[1];
+};
+
+describe("getExpense (데이터 아키텍처 6장 SC-08)", () => {
+  it("반복 없는 기록은 기록만 돌려준다", async () => {
+    const id = await seedOne();
+
+    expect(await getExpense(userId, id)).toEqual({
+      expense: {
+        id,
+        date: "2026-08-05",
+        title: "점심",
+        category: "FOOD",
+        amount: 8000,
+        content: "참치김밥",
+      },
+    });
+  });
+
+  it("반복 기록은 결제일·기간이 담긴 반복 정보를 함께 돌려준다", async () => {
+    const id = await seedInstallment();
+
+    expect((await getExpense(userId, id))?.series).toEqual({
+      type: "INSTALLMENT",
+      seq: 2,
+      totalCount: 3,
+      billingDay: 20,
+      isContinuous: false,
+      installmentTotal: 300_000,
+      fromMonth: "2026-08",
+      toMonth: "2026-10",
+    });
+  });
+
+  it("없거나 다른 사용자의 기록이면 null", async () => {
+    const othersId = await seedOne(otherId);
+
+    expect(await getExpense(userId, uuidv7())).toBeNull();
+    expect(await getExpense(userId, othersId)).toBeNull();
+  });
+});
+
+describe("updateExpense (데이터 아키텍처 8-1 PATCH, 범위 이 건)", () => {
+  it("보낸 필드만 바꾸고 바뀐 건수를 돌려준다", async () => {
+    const id = await seedOne();
+
+    const result = await updateExpense(userId, id, {
+      title: "저녁",
+      content: null,
+      scope: { type: "one" },
+    });
+
+    expect(result).toEqual({ updated: 1 });
+    expect(await getExpense(userId, id)).toMatchObject({
+      expense: { title: "저녁", amount: 8000, content: null },
+    });
+  });
+
+  it("날짜를 바꾼다", async () => {
+    const id = await seedOne();
+
+    await updateExpense(userId, id, {
+      date: "2026-08-31",
+      scope: { type: "one" },
+    });
+
+    expect((await getExpense(userId, id))?.expense.date).toBe("2026-08-31");
+  });
+
+  it("없거나 다른 사용자의 기록이면 null이고 바꾸지 않는다", async () => {
+    const othersId = await seedOne(otherId);
+
+    expect(
+      await updateExpense(userId, othersId, {
+        title: "남의 기록",
+        scope: { type: "one" },
+      }),
+    ).toBeNull();
+    expect(
+      (await prisma.expense.findUniqueOrThrow({ where: { id: othersId } }))
+        .title,
+    ).toBe("점심");
+  });
+
+  it("반복 기록은 F6 전까지 고를 수 없는 범위다", async () => {
+    const id = await seedInstallment();
+
+    expect(
+      await updateExpense(userId, id, {
+        title: "바꿈",
+        scope: { type: "one" },
+      }),
+    ).toEqual({ error: "SCOPE_NOT_ALLOWED" });
+  });
+});
+
+describe("deleteExpense (데이터 아키텍처 8-1 DELETE, 범위 이 건)", () => {
+  it("기록을 지우고 지운 건수를 돌려준다", async () => {
+    const id = await seedOne();
+
+    expect(await deleteExpense(userId, id)).toEqual({
+      deleted: 1,
+    });
+    expect(await getExpense(userId, id)).toBeNull();
+  });
+
+  it("없거나 다른 사용자의 기록이면 null이고 지우지 않는다", async () => {
+    const othersId = await seedOne(otherId);
+
+    expect(await deleteExpense(userId, othersId)).toBeNull();
+    expect(
+      await prisma.expense.findUnique({ where: { id: othersId } }),
+    ).not.toBeNull();
+  });
+
+  it("반복 기록은 F6 전까지 고를 수 없는 범위다", async () => {
+    const id = await seedInstallment();
+
+    expect(await deleteExpense(userId, id)).toEqual({
+      error: "SCOPE_NOT_ALLOWED",
+    });
   });
 });

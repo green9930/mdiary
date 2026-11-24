@@ -10,9 +10,11 @@ import { createQueryClient } from "@/states/tanstackQuery/queryClient";
 const navigation = { search: "" };
 const replace = vi.fn();
 const push = vi.fn();
+const back = vi.fn();
 
 vi.mock("next/navigation", () => ({
-  useRouter: () => ({ replace, push }),
+  useRouter: () => ({ replace, push, back }),
+  usePathname: () => "/",
   useSearchParams: () => new URLSearchParams(navigation.search),
 }));
 
@@ -61,6 +63,8 @@ const mockServer = ({ calendarFails = false }: ServerOptions = {}) =>
           : { total: 0, days: [] },
       );
     }
+    if (url.pathname === "/api/expenses/e1")
+      return Response.json({ expense: { ...items[0], content: null } });
     if (url.pathname === "/api/expenses")
       return Response.json({
         items: url.searchParams.get("date") === "2026-10-18" ? items : [],
@@ -74,11 +78,14 @@ const renderView = (search: string) => {
   client.setDefaultOptions({
     queries: { ...client.getDefaultOptions().queries, retry: false },
   });
-  return render(
+  const tree = () => (
     <QueryClientProvider client={client}>
       <CalendarView today={today} />
-    </QueryClientProvider>,
+    </QueryClientProvider>
   );
+  const result = render(tree());
+  // 주소가 바뀐 것처럼 다시 그린다
+  return { ...result, refresh: () => result.rerender(tree()) };
 };
 
 beforeEach(async () => {
@@ -104,6 +111,44 @@ describe("CalendarView (화면 명세 SC-03)", () => {
     expect(await screen.findByText("2건 · 21,300원")).toBeInTheDocument();
     expect(screen.getByText("넷플릭스")).toBeInTheDocument();
     expect(screen.getByText("정기")).toBeInTheDocument();
+  });
+
+  it("하루 목록의 항목을 누르면 상세 시트를 연다 (기록을 쌓는다)", async () => {
+    mockServer();
+    renderView("month=2026-10&date=2026-10-18");
+
+    await userEvent.click(
+      await screen.findByRole("button", { name: /점심 김밥/ }),
+    );
+
+    expect(push).toHaveBeenCalledWith(
+      "/?month=2026-10&date=2026-10-18&expense=e1",
+      { scroll: false },
+    );
+  });
+
+  it("쿼리 expense가 있으면 상세 시트를 열고, [수정]은 시트를 닫은 뒤 수정 화면으로 간다", async () => {
+    mockServer();
+    const view = renderView("month=2026-10&date=2026-10-18&expense=e1");
+    const sheet = screen.getByRole("dialog", {
+      name: "기록 상세",
+      hidden: true,
+    });
+    expect(sheet).toHaveAttribute("open");
+    await within(sheet).findByText("8,000원");
+
+    await userEvent.click(
+      within(sheet).getByRole("button", { name: "수정", hidden: true }),
+    );
+    // 주소로 열린 시트는 쿼리만 지운다. 지운 주소가 된 뒤 수정 화면으로 간다
+    expect(replace).toHaveBeenCalledWith("/?month=2026-10&date=2026-10-18", {
+      scroll: false,
+    });
+    expect(push).not.toHaveBeenCalled();
+    navigation.search = "month=2026-10&date=2026-10-18";
+    view.refresh();
+
+    expect(push).toHaveBeenCalledWith("/expenses/e1/edit");
   });
 
   it("날짜를 누르면 그 날짜를 고른다", async () => {

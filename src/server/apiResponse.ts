@@ -16,3 +16,11 @@ export const withApiErrors =
       return Response.json({ code: "INTERNAL" }, { status: 500 });
     }
   };
+
+/** 없는 기록 (남의 기록 포함, 데이터 아키텍처 8-3) */
+export const notFound = (): Response =>
+  Response.json({ code: "NOT_FOUND" }, { status: 404 });
+
+/** 고를 수 없는 범위 (데이터 아키텍처 5-3·8-3) */
+export const scopeNotAllowed = (): Response =>
+  Response.json({ code: "SCOPE_NOT_ALLOWED" }, { status: 400 });

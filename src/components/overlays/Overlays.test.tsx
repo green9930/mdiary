@@ -234,6 +234,36 @@ describe("BottomSheet (CG ⑦)", () => {
     });
     expect(screen.getByTestId("state")).toHaveTextContent("닫힘");
   });
+
+  it("기록을 URL이 다루면(상세 시트) 열어도 기록을 쌓지 않는다", async () => {
+    // 앞 테스트가 닫으며 되돌린 기록이 도착한 뒤에 잰다
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    const before: unknown = window.history.state;
+    render(
+      <BottomSheet
+        open
+        onClose={() => {}}
+        title="기록 상세"
+        historyLayer={false}
+      >
+        <p>시트 내용</p>
+      </BottomSheet>,
+    );
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    expect(window.history.state).toEqual(before);
+  });
+
+  it("제목을 숨겨도 시트 이름으로 읽힌다", () => {
+    render(
+      <BottomSheet open onClose={() => {}} title="기록 상세" titleHidden>
+        <p>시트 내용</p>
+      </BottomSheet>,
+    );
+    expect(
+      screen.getByRole("dialog", { name: "기록 상세", hidden: true }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("기록 상세")).toHaveClass("sr-only");
+  });
 });
 
 describe("Dropdown (CG ⑥)", () => {

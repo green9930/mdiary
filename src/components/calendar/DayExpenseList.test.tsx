@@ -31,13 +31,18 @@ const items: ExpenseListItem[] = [
   },
 ];
 
-const renderList = (list: ExpenseListItem[], onAdd = vi.fn()) =>
+const renderList = (
+  list: ExpenseListItem[],
+  onAdd = vi.fn(),
+  onSelect = vi.fn(),
+) =>
   render(
     <DayExpenseList
       date="2026-10-18"
       today="2026-11-17"
       items={list}
       onAdd={onAdd}
+      onSelect={onSelect}
     />,
   );
 
@@ -55,6 +60,7 @@ describe("DayExpenseList (화면 명세 SC-03 선택한 날짜의 목록)", () =
         today="2026-11-17"
         items={[]}
         onAdd={vi.fn()}
+        onSelect={vi.fn()}
       />,
     );
     expect(screen.getByText("2025년 10월 18일 (토)")).toBeInTheDocument();
@@ -68,6 +74,15 @@ describe("DayExpenseList (화면 명세 SC-03 선택한 날짜의 목록)", () =
       "넷플릭스정기13,300원",
       "아이패드할부 3/12100,000원",
     ]);
+  });
+
+  it("항목을 누르면 그 기록을 고른다 (상세 시트)", async () => {
+    const onSelect = vi.fn();
+    renderList(items, vi.fn(), onSelect);
+
+    await userEvent.click(screen.getByRole("button", { name: /넷플릭스/ }));
+
+    expect(onSelect).toHaveBeenCalledWith("e2");
   });
 
   it("기록이 없으면 0건과 빈 상태, [기록 추가하기]를 보여준다", async () => {

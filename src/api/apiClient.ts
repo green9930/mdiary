@@ -15,6 +15,10 @@ export class ApiError extends Error {
 export const isUnauthorized = (error: unknown): boolean =>
   error instanceof ApiError && error.status === 401;
 
+/** 없는 기록 (404, 다른 기기에서 이미 삭제) */
+export const isNotFound = (error: unknown): boolean =>
+  error instanceof ApiError && error.status === 404;
+
 const readCode = async (response: Response): Promise<string | null> => {
   try {
     const body: unknown = await response.json();

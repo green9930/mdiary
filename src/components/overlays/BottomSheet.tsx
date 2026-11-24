@@ -26,6 +26,13 @@ interface BottomSheetProps {
   children: ReactNode;
   /** 시트 아래 고정 영역 ([적용] 등). 내용이 길어 스크롤돼도 보인다 */
   footer?: ReactNode;
+  /**
+   * 열 때 기록을 쌓아 뒤로 가기로 닫는다. URL 쿼리로 여는 시트(상세 `?expense=`)는
+   * 주소가 이미 기록이므로 false로 둔다
+   */
+  historyLayer?: boolean;
+  /** 제목을 화면에 보이지 않게 한다. 스크린 리더는 시트 이름으로 읽는다 */
+  titleHidden?: boolean;
 }
 
 // 바텀시트 (와이어프레임 CG ⑦, 토큰 5-6).
@@ -36,6 +43,8 @@ const BottomSheet = ({
   title,
   children,
   footer,
+  historyLayer = true,
+  titleHidden = false,
 }: BottomSheetProps) => {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
@@ -44,7 +53,7 @@ const BottomSheet = ({
   const keyboardInset = useKeyboardInset(open);
 
   useModalDialog(ref, open, { closeDelay: SHEET_DURATION, focusSelf: true });
-  useHistoryLayer(open, "close", onClose);
+  useHistoryLayer(open && historyLayer, "close", onClose);
 
   // Esc: 브라우저가 바로 닫지 않게 하고 onClose로 넘긴다 (닫힘 움직임·기록 정리)
   const handleCancel = (event: SyntheticEvent<HTMLDialogElement>) => {
@@ -111,14 +120,17 @@ const BottomSheet = ({
           className="shrink-0 cursor-grab touch-none px-4 pt-2.5 pb-3 select-none"
         >
           <div className="mx-auto h-1 w-9 rounded-full bg-line-strong" />
-          <h2 id={titleId} className="pt-3 text-title-md">
+          <h2
+            id={titleId}
+            className={titleHidden ? "sr-only" : "pt-3 text-title-md"}
+          >
             {title}
           </h2>
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-4">
           {children}
         </div>
-        {footer && <div className="shrink-0 px-4 pb-4">{footer}</div>}
+        {footer && <div className="shrink-0 px-4 pb-6">{footer}</div>}
         <div className="shrink-0 pb-safe" />
       </div>
     </dialog>

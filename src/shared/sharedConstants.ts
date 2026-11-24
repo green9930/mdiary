@@ -19,12 +19,19 @@ export const PATHS = {
 } as const;
 
 /** 화면 제목 (화면 명세). 탭 라벨·헤더 제목·페이지 제목이 같이 쓴다 */
+/** 화면 상태를 담는 URL 쿼리 이름 (화면 명세 공통 규약 · 상태를 URL에 둔다) */
+export const URL_PARAMS = {
+  /** 열린 상세 시트의 기록 id (SC-08) */
+  expense: "expense",
+} as const;
+
 export const PAGE_TITLES = {
   calendar: "달력",
   categories: "카테고리",
   search: "검색",
   settings: "설정",
   newExpense: "기록하기",
+  editExpense: "수정하기",
 } as const;
 
 /** 버튼 글자 */
@@ -39,6 +46,9 @@ export const BTN_TEXTS = {
   leave: "나가기",
   today: "오늘",
   addRecord: "기록 추가하기",
+  edit: "수정",
+  delete: "삭제",
+  cancel: "취소",
 } as const;
 
 /** 불러오기 상태 문구 (와이어프레임 CM ②~④) */
@@ -84,12 +94,34 @@ export const DIALOG_TEXTS = {
   signOutFailed: "로그아웃하지 못했습니다. 잠시 후 다시 시도해 주세요.",
   leaveTitle: "작성 취소",
   leaveBody: "작성 중인 내용이 사라집니다. 나가시겠습니까?",
+  deleteBody: "이 기록을 삭제하시겠습니까?",
+  notFoundTitle: "기록 없음",
+  notFoundBody: "이미 삭제된 기록입니다.",
 } as const;
 
 /** 바텀시트 제목 */
+/** 상세의 반복 정보 (화면 명세 SC-08) */
+export const SERIES_TEXTS = {
+  recurring: "정기지출",
+  /** `매달 25일` */
+  monthlyOn: (day: number) => `매달 ${day}일`,
+  continuous: "반복",
+  /** `할부 2/3회 · 총 300,000원` (총액은 쉼표·원을 붙인 문자열) */
+  installment: (seq: number, total: number, totalAmount: string) =>
+    `할부 ${seq}/${total}회 · 총 ${totalAmount}`,
+} as const;
+
+/** 입력·조작 안내 */
+export const FIELD_HINTS = {
+  /** 임시: F6에서 범위 선택을 붙이면 지운다 */
+  repeatLocked: "반복 기록은 F6 이후 수정·삭제할 수 있습니다",
+} as const;
+
 export const SHEET_TITLES = {
   datePicker: "날짜 선택",
   monthPicker: "연·월 선택",
+  /** 상세 시트의 접근성 이름. 화면에는 보이지 않는다 */
+  expenseDetail: "기록 상세",
 } as const;
 
 /** 입력 라벨 (화면 명세 SC-06) */

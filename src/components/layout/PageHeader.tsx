@@ -13,7 +13,8 @@ interface PageHeaderProps {
   onBack?: () => void;
 }
 
-// 하위 화면 헤더 (토큰 5-7): [‹] + 제목
+// 하위 화면 헤더 (토큰 5-7): [‹] + 제목, 상단 고정
+// z-20: 본문의 펼침 목록(z-10)이 스크롤되어 헤더 위로 올라오지 않게 한다
 const PageHeader = ({
   title,
   backDisabled = false,
@@ -22,7 +23,7 @@ const PageHeader = ({
   const goBack = useGoBack();
 
   return (
-    <header className="flex h-13 items-center gap-1 pr-4">
+    <header className="sticky top-0 z-20 flex h-13 items-center gap-1 bg-bg pr-4">
       <IconButton
         aria-label={ARIA_LABELS.back}
         onClick={onBack ?? goBack}

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { defaultDateOf } from "@/lib/date";
 import { calendarPath } from "@/lib/navigation";
 import { resolveCalendarQuery } from "@/lib/resolveCalendarQuery";
+import { URL_PARAMS } from "@/shared/sharedConstants";
 
 /**
  * 달력의 월·선택 날짜를 URL 쿼리로 다룬다 (화면 명세 SC-03, 공통 규약 상태를 URL에 둔다).
@@ -20,14 +21,17 @@ export const useCalendarQuery = (today: string) => {
   );
   const hasQuery = rawMonth !== null || rawDate !== null;
   const needsReplace = hasQuery && (rawMonth !== month || rawDate !== date);
+  // 열린 상세 시트는 월·날짜를 바꿔도 남긴다
+  const expense = params.get(URL_PARAMS.expense);
 
   const go = (nextDate: string) => {
-    router.replace(calendarPath(nextDate), { scroll: false });
+    router.replace(calendarPath(nextDate, expense), { scroll: false });
   };
 
   useEffect(() => {
-    if (needsReplace) router.replace(calendarPath(date), { scroll: false });
-  }, [needsReplace, router, date]);
+    if (needsReplace)
+      router.replace(calendarPath(date, expense), { scroll: false });
+  }, [needsReplace, router, date, expense]);
 
   return {
     month,

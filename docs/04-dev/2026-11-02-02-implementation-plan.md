@@ -45,18 +45,20 @@
 - [x] F1 로그인·세션 (SC-02 로그인 화면 `LoginForm`·`Logo`, 안내 문구 `lib/authUtils.ts`의 `handleLoginNotice`, 공통 요청 `api/apiClient.ts`의 `apiFetch`·`ApiError`, 401이면 QueryClient가 `/login?reason=expired`로, 임시 [로그아웃] `SignOutButton`)
 - [x] F2 지출 등록 (SC-06 등록 폼 `ExpenseForm`·`CategoryGrid`·`DatePickerSheet`·`TitleSuggestions`, 6줄 달력 격자 `MonthGrid`, 카테고리 아이콘 `CategoryIcon`, 폼 상태 `useExpenseForm`·작성 중 나가기 `useLeaveGuard`, 제목 추천 비교 `lib/hangul.ts`, `POST /api/expenses`(반복 없음)·`GET /api/titles`, 검증 `shared/expenseSchema.ts`)
 - [x] F3 월간 달력 (SC-03 `CalendarView`·`CalendarHeader`·`DayExpenseList`, 연·월 선택 `MonthPickerSheet`·`MonthPickerGrid`(날짜 선택 시트와 같이 씀), 칸 금액 `lib/amount.ts`의 `formatCalendarAmount`, URL 상태 `useCalendarQuery`·쿼리 정리 `lib/resolveCalendarQuery.ts`, 스와이프 `useMonthSwipe`, `GET /api/calendar`·`GET /api/expenses?date=`·`GET /api/me`)
-- [ ] F4 ← 다음
-- [ ] F5 ~ F12
+- [x] F4 상세·수정·삭제 (SC-08 상세 시트 `ExpenseDetailSheet`(쿼리 `expense`, `useExpenseSheetQuery`), 반복 정보 `lib/expenseDetailUtils.ts`, SC-06 수정 `/expenses/[id]/edit`·`EditExpenseView`, 바꾼 필드만 보내기 `lib/updateExpense.ts`, `GET`·`PATCH`·`DELETE /api/expenses/:id`(범위는 이 건만), 무효화 공통 `invalidateExpenseQueries`, 404는 다시 시도하지 않음)
+- [ ] F5 ← 다음
+- [ ] F6 ~ F12
 
 미뤄 둔 작업:
 
-| 시점              | 작업                                                                                                                                     |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| F5                | 등록 폼 금액 칸 오른쪽에 [계산] 버튼을 붙인다                                                                                            |
-| F6                | 등록 폼에 반복 3단 선택과 반복 입력을 붙이고, 등록 스키마(`createExpenseSchema`)의 `repeat`를 넓힌다                                     |
-| F10               | 오프라인이면 등록 폼 [저장]을 막는다                                                                                                     |
-| F9                | 설정 화면의 임시 [로그아웃](`SignOutButton`)을 SC-10 배치로 옮긴다                                                                       |
-| F10               | 오프라인 띠를 `(tabs)` 레이아웃의 자리 표시 주석 위치에 넣는다                                                                           |
-| F12               | pnpm 12로 올릴지 정한다 (Vercel·GitHub Actions 지원 확인 후. pnpm 10 지원은 2027년 4월까지)                                              |
-| 견본 화면 삭제 시 | `/dev/components`를 없앨 때 로그인 없이 여는 처리도 지운다: `PATHS.devComponents`, `proxy.ts`의 통과 조건, `proxy.test.ts`의 해당 테스트 |
-| 사용자            | `.env`의 Neon 주소 두 개를 `sslmode=verify-full`로 바꾸면 `pg`의 SSL 경고가 없어진다                                                     |
+| 시점              | 작업                                                                                                                                                                            |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| F5                | 등록 폼 금액 칸 오른쪽에 [계산] 버튼을 붙인다                                                                                                                                   |
+| F6                | 등록 폼에 반복 3단 선택과 반복 입력을 붙이고, 등록 스키마(`createExpenseSchema`)의 `repeat`를 넓힌다                                                                            |
+| F6                | 상세 시트에서 반복 기록의 [수정]·[삭제]를 SC-09 범위 선택으로 연결하고 임시 안내(`FIELD_HINTS.repeatLocked`)를 지운다. 반복 기록 수정 화면에 바로 들어오는 경우도 함께 처리한다 |
+| F10               | 오프라인이면 등록 폼 [저장]을 막는다                                                                                                                                            |
+| F9                | 설정 화면의 임시 [로그아웃](`SignOutButton`)을 SC-10 배치로 옮긴다                                                                                                              |
+| F10               | 오프라인 띠를 `(tabs)` 레이아웃의 자리 표시 주석 위치에 넣는다                                                                                                                  |
+| F12               | pnpm 12로 올릴지 정한다 (Vercel·GitHub Actions 지원 확인 후. pnpm 10 지원은 2027년 4월까지)                                                                                     |
+| 견본 화면 삭제 시 | `/dev/components`를 없앨 때 로그인 없이 여는 처리도 지운다: `PATHS.devComponents`, `proxy.ts`의 통과 조건, `proxy.test.ts`의 해당 테스트                                        |
+| 사용자            | `.env`의 Neon 주소 두 개를 `sslmode=verify-full`로 바꾸면 `pg`의 SSL 경고가 없어진다                                                                                            |

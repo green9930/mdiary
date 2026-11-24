@@ -38,10 +38,11 @@ const TITLES = [
 
 interface Server {
   save?: () => Response | Promise<Response>;
+  update?: () => Response;
 }
 
 // /api/titles는 TITLES, POST /api/expenses는 save (기본: 성공)
-const mockServer = ({ save }: Server = {}) =>
+const mockServer = ({ save, update }: Server = {}) =>
   vi.spyOn(globalThis, "fetch").mockImplementation(async (input, init) => {
     const url = String(input);
     if (url === "/api/titles") return Response.json({ titles: TITLES });
@@ -50,6 +51,8 @@ const mockServer = ({ save }: Server = {}) =>
       const body = JSON.parse(String(init.body)) as { date: string };
       return Response.json({ id: "e1", date: body.date }, { status: 201 });
     }
+    if (url.startsWith("/api/expenses/") && init?.method === "PATCH")
+      return update?.() ?? Response.json({ updated: 1 });
     throw new Error(`unexpected ${url}`);
   });
 
@@ -540,6 +543,122 @@ describe("ExpenseForm (화면 명세 SC-06 등록)", () => {
       await userEvent.click(screen.getByRole("button", { name: "뒤로" }));
 
       expect(router.replace).toHaveBeenCalledWith("/");
+    });
+  });
+
+  describe("수정 (SC-06 수정)", () => {
+    const original = {
+      id: "e1",
+      date: "2026-10-18",
+      title: "점심",
+      category: "FOOD" as const,
+      amount: 8000,
+      content: "참치김밥",
+    };
+
+    const renderEdit = () => {
+      const client = createQueryClient({ onUnauthorized: () => {} });
+      client.setDefaultOptions({ queries: { retry: false } });
+      return render(
+        <QueryClientProvider client={client}>
+          <ExpenseForm
+            initialDate={original.date}
+            today="2026-10-21"
+            editing={original}
+          />
+        </QueryClientProvider>,
+      );
+    };
+
+    const patchBodies = (fetch: ReturnType<typeof mockServer>) =>
+      fetch.mock.calls
+        .filter(([, init]) => init?.method === "PATCH")
+        .map(([, init]) => JSON.parse(String(init?.body)) as unknown);
+
+    it("제목은 수정하기이고 원래 값을 채워서 연다", () => {
+      mockServer();
+      renderEdit();
+
+      expect(
+        screen.getByRole("heading", { name: "수정하기" }),
+      ).toBeInTheDocument();
+      expect(dateButton("2026년 10월 18일 (일)")).toBeInTheDocument();
+      expect(titleInput()).toHaveValue("점심");
+      expect(screen.getByRole("button", { name: "식비" })).toHaveAttribute(
+        "aria-pressed",
+        "true",
+      );
+      expect(amountInput()).toHaveValue("8,000");
+      expect(contentInput()).toHaveValue("참치김밥");
+    });
+
+    it("바꾼 필드만 보내고, 저장하면 이전 화면으로 간다", async () => {
+      const fetch = mockServer();
+      renderEdit();
+      await userEvent.clear(titleInput());
+      await userEvent.type(titleInput(), "저녁");
+
+      await userEvent.click(saveButton());
+
+      await waitFor(() => expect(router.replace).toHaveBeenCalledWith("/"));
+      expect(patchBodies(fetch)).toEqual([
+        { title: "저녁", scope: { type: "one" } },
+      ]);
+      expect(document.querySelector("dialog[open]")).toBeNull();
+    });
+
+    it("바꾼 것이 없으면 요청 없이 이전 화면으로 간다", async () => {
+      const fetch = mockServer();
+      renderEdit();
+
+      await userEvent.click(saveButton());
+
+      expect(router.replace).toHaveBeenCalledWith("/");
+      expect(patchBodies(fetch)).toEqual([]);
+    });
+
+    it("원래 값과 같으면 [뒤로]는 확인 없이 나간다", async () => {
+      mockServer();
+      renderEdit();
+
+      await userEvent.click(screen.getByRole("button", { name: "뒤로" }));
+
+      expect(router.replace).toHaveBeenCalledWith("/");
+    });
+
+    it("저장하려는데 이미 없으면 기록 없음 알림 뒤 달력으로 간다", async () => {
+      mockServer({
+        update: () => Response.json({ code: "NOT_FOUND" }, { status: 404 }),
+      });
+      renderEdit();
+      await userEvent.type(titleInput(), "!");
+      await userEvent.click(saveButton());
+
+      await userEvent.click(
+        within(await waitFor(() => dialog("기록 없음"))).getByRole("button", {
+          name: "확인",
+          hidden: true,
+        }),
+      );
+
+      await waitFor(() => expect(router.replace).toHaveBeenCalledWith("/"));
+    });
+
+    it("저장에 실패하면 알림을 띄우고 입력값을 둔다", async () => {
+      mockServer({
+        update: () => Response.json({ code: "INTERNAL" }, { status: 500 }),
+      });
+      renderEdit();
+      await userEvent.type(titleInput(), "!");
+      await userEvent.click(saveButton());
+
+      await waitFor(() =>
+        expect(dialog("저장하기")).toHaveAccessibleDescription(
+          "저장하지 못했습니다. 잠시 후 다시 시도해 주세요.",
+        ),
+      );
+      expect(titleInput()).toHaveValue("점심!");
+      expect(router.replace).not.toHaveBeenCalled();
     });
   });
 });

@@ -18,10 +18,18 @@ interface DayExpenseListProps {
   items: ExpenseListItem[];
   /** [기록 추가하기]: 이 날짜로 등록 화면을 연다 */
   onAdd: () => void;
+  /** 항목을 누르면 그 기록의 상세 시트를 연다 */
+  onSelect: (id: string) => void;
 }
 
 // 선택한 날짜의 목록 (와이어프레임 SC-03 ⑧~⑪): 요약 + 항목, 없으면 빈 상태
-const DayExpenseList = ({ date, today, items, onAdd }: DayExpenseListProps) => {
+const DayExpenseList = ({
+  date,
+  today,
+  items,
+  onAdd,
+  onSelect,
+}: DayExpenseListProps) => {
   const total = items.reduce((sum, item) => sum + item.amount, 0);
   const count = CALENDAR_TEXTS.dayCount(items.length);
 
@@ -44,6 +52,7 @@ const DayExpenseList = ({ date, today, items, onAdd }: DayExpenseListProps) => {
                 title={item.title}
                 badge={item.series && <SeriesBadge series={item.series} />}
                 amount={formatAmount(item.amount)}
+                onClick={() => onSelect(item.id)}
               />
             </li>
           ))}

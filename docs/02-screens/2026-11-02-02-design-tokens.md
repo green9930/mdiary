@@ -263,7 +263,7 @@ Tailwind 기본 색·글자 크기·모서리·그림자는 꺼 두었다. 이 �
 
 - 탭 바: 높이 56 + 안전 여백, 면 `bg`, 위 `line`. 아이콘 24, 라벨 `micro`. 기본 `text02`, 활성 아이콘 `primary` · 라벨 `accent` 700.
 - ＋ 버튼: 지름 52, 면 `primary`, ＋ `white`, `shadow-2`, 탭 바 위로 12 솟는다.
-- 헤더: 높이 52, [‹] 44×44, 제목 `title-md`.
+- 헤더: 높이 52, 면 `bg`, 상단 고정(스크롤해도 가려지지 않는다). [‹] 44×44, 제목 `title-md`.
 - 로고: "다씀" `font-logo` + `icon_pencil`, 색 `primary`, 사이 6. 로그인 화면 `logo-lg` + 아이콘 32, 그 밖 `logo` + 아이콘 18.
 - 로그인 소개 문구: `font-body` 16 / 24 / 700, 색 `accent`. 로고 아래 `Money Diary`는 `caption` `text02`.
 - [Google로 계속하기]: secondary line L 모양. 아이콘·문구는 Google 로그인 브랜드 가이드를 따른다. Google 로고(18)는 공통 아이콘과 달리 글자색을 따르지 않고 원래 4색을 라이트·다크 모두 그대로 쓴다.
