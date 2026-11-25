@@ -1,5 +1,7 @@
 // 여러 화면·모듈이 두루 쓰는 상수
 
+import { EXPENSE_RULES } from "@/shared/expenseConstants";
+
 /** 서비스 이름. ko: 로고와 브라우저 탭 제목, en: 로그인 화면 로고 아래 (화면 명세 SC-02) */
 export const APP_NAME = {
   ko: "다씀",
@@ -49,6 +51,8 @@ export const BTN_TEXTS = {
   edit: "수정",
   delete: "삭제",
   cancel: "취소",
+  calculate: "계산",
+  apply: "적용",
 } as const;
 
 /** 불러오기 상태 문구 (와이어프레임 CM ②~④) */
@@ -122,6 +126,8 @@ export const SHEET_TITLES = {
   monthPicker: "연·월 선택",
   /** 상세 시트의 접근성 이름. 화면에는 보이지 않는다 */
   expenseDetail: "기록 상세",
+  /** 계산기 시트의 접근성 이름. 화면에는 보이지 않는다 */
+  calculator: "계산기",
 } as const;
 
 /** 입력 라벨 (화면 명세 SC-06) */
@@ -145,6 +151,33 @@ export const FIELD_ERRORS = {
   titleRequired: "제목을 입력해 주세요.",
   categoryRequired: "카테고리를 선택해 주세요.",
   amountRequired: "금액을 입력해 주세요.",
+} as const;
+
+/** 계산기 문구 (화면 명세 SC-07) */
+export const CALCULATOR_TEXTS = {
+  recordFormula: "계산식을 내용에 기록",
+  rounding: "끝전 처리",
+  roundUp: "올림",
+  roundDown: "버림",
+  /** 끝전 처리 단위 칸 (`10원`) */
+  unit: (unit: number) => `${unit}원`,
+  /** 내용에 남기는 계산식 끝의 끝전 처리 표시 (`(10원 올림)`) */
+  roundingNote: (unit: number, up: boolean) =>
+    `(${unit}원 ${up ? "올림" : "버림"})`,
+  /** 결과 미리보기 (`= 40,500`) */
+  result: (value: string) => `= ${value}`,
+  /** 키패드 C (식 전체 지우기) */
+  clearKey: "C",
+  /** 키패드 ← (한 글자 지우기) */
+  backspaceKey: "←",
+  contentOverflow: `내용이 ${EXPENSE_RULES.contentMax}자를 넘어 계산식은 기록되지 않습니다.`,
+} as const;
+
+/** 계산기 [적용]을 막는 이유 (화면 명세 SC-07) */
+export const CALCULATOR_ERRORS = {
+  belowMin: `결과가 ${EXPENSE_RULES.amountMin}원 이상이어야 적용할 수 있습니다.`,
+  divideByZero: "0으로 나눌 수 없습니다.",
+  overMax: `${EXPENSE_RULES.amountMax.toLocaleString("ko-KR")}원까지 적용할 수 있습니다.`,
 } as const;
 
 /** 입력칸 단위 */
@@ -201,6 +234,10 @@ export const ARIA_LABELS = {
   prevYear: "이전 해",
   nextYear: "다음 해",
   openMonthPicker: "연·월 선택",
+  backspace: "한 글자 지우기",
+  clear: "식 전체 지우기",
+  roundingUnit: "끝전 처리 단위",
+  roundingDirection: "끝전 처리 방향",
 } as const;
 
 /** 쿠키 이름 */

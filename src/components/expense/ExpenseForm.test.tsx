@@ -447,6 +447,40 @@ describe("ExpenseForm (화면 명세 SC-06 등록)", () => {
     });
   });
 
+  describe("계산기 (SC-07)", () => {
+    it("[계산]은 금액 값으로 계산기를 열고, [적용]하면 금액과 내용에 넣는다", async () => {
+      mockServer();
+      renderForm();
+      await userEvent.type(amountInput(), "36000");
+      await userEvent.type(contentInput(), "회식");
+
+      await userEvent.click(screen.getByRole("button", { name: "계산" }));
+      const key = (name: string) =>
+        screen.getByRole("button", { name, hidden: true });
+      await userEvent.click(key("÷"));
+      await userEvent.click(key("3"));
+      await userEvent.click(key("적용"));
+
+      expect(amountInput()).toHaveValue("12,000");
+      expect(contentInput()).toHaveValue("회식\n36,000 ÷ 3 = 12,000");
+    });
+
+    it("적용한 금액은 금액 오류를 지운다", async () => {
+      mockServer();
+      renderForm();
+      await userEvent.click(saveButton());
+      expect(screen.getByText("금액을 입력해 주세요.")).toBeInTheDocument();
+
+      await userEvent.click(screen.getByRole("button", { name: "계산" }));
+      await userEvent.keyboard("500{Enter}");
+
+      expect(amountInput()).toHaveValue("500");
+      expect(
+        screen.queryByText("금액을 입력해 주세요."),
+      ).not.toBeInTheDocument();
+    });
+  });
+
   describe("날짜", () => {
     it("날짜를 누르면 날짜 선택 시트가 열리고, 고른 날짜로 바뀐다", async () => {
       mockServer();

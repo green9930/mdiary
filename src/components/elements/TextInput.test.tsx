@@ -86,6 +86,22 @@ describe("TextInput (CG ②③)", () => {
     expect(screen.getByText("원")).toBeInTheDocument();
   });
 
+  it("입력칸 바깥 오른쪽에 버튼을 둘 수 있고, 오류 문구는 그 아래다", () => {
+    render(
+      <ControlledText
+        label="금액"
+        error="금액을 입력해 주세요."
+        action={<button type="button">계산</button>}
+      />,
+    );
+    const button = screen.getByRole("button", { name: "계산" });
+    const input = screen.getByLabelText("금액");
+    expect(input.parentElement).not.toContainElement(button);
+    expect(
+      screen.getByText("금액을 입력해 주세요.").parentElement,
+    ).toContainElement(button);
+  });
+
   it("비활성이면 입력할 수 없다", async () => {
     render(<ControlledText label="제목" disabled initial="월세" />);
     const input = screen.getByLabelText("제목");

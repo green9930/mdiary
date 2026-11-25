@@ -8,6 +8,7 @@ import Button from "@/components/elements/Button";
 import { inputBoxClass } from "@/components/elements/inputBoxStyles";
 import TextArea from "@/components/elements/TextArea";
 import TextInput from "@/components/elements/TextInput";
+import CalculatorSheet from "@/components/expense/CalculatorSheet";
 import CategoryGrid from "@/components/expense/CategoryGrid";
 import DatePickerSheet from "@/components/expense/DatePickerSheet";
 import TitleSuggestions from "@/components/expense/TitleSuggestions";
@@ -50,7 +51,7 @@ interface ExpenseFormProps {
   editing?: ExpenseDetail["expense"];
 }
 
-// 지출 등록·수정 (화면 명세 SC-06). 반복·[계산]은 F5·F6에서 붙인다
+// 지출 등록·수정 (화면 명세 SC-06). 반복은 F6에서 붙인다
 const ExpenseForm = ({ initialDate, today, editing }: ExpenseFormProps) => {
   const router = useRouter();
   const goBack = useGoBack();
@@ -65,6 +66,7 @@ const ExpenseForm = ({ initialDate, today, editing }: ExpenseFormProps) => {
   const [goneOnSave, setGoneOnSave] = useState(false);
   const titles = useTitleSuggestions();
   const [dateOpen, setDateOpen] = useState(false);
+  const [calculatorOpen, setCalculatorOpen] = useState(false);
   const [suggestOpen, setSuggestOpen] = useState(false);
   const [saveFailed, setSaveFailed] = useState(false);
   const [saveDone, setSaveDone] = useState(false);
@@ -132,6 +134,12 @@ const ExpenseForm = ({ initialDate, today, editing }: ExpenseFormProps) => {
   const confirmGone = () => {
     setGoneOnSave(false);
     runAfterLayerPops(() => router.replace(PATHS.calendar));
+  };
+
+  // 계산기 [적용]: 금액을 넣고, 계산식을 붙였으면 내용도 바꾼다
+  const applyCalculation = (applied: { amount: number; content?: string }) => {
+    form.setAmount(String(applied.amount));
+    if (applied.content !== undefined) form.setContent(applied.content);
   };
 
   /** 저장 완료 알림 [확인]: 알림을 닫고, 그 뒤 폼을 비운다 */
@@ -210,6 +218,15 @@ const ExpenseForm = ({ initialDate, today, editing }: ExpenseFormProps) => {
           placeholder={PLACEHOLDERS.amount}
           error={errors.amount}
           onBlur={() => form.blur("amount")}
+          action={
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => setCalculatorOpen(true)}
+            >
+              {BTN_TEXTS.calculate}
+            </Button>
+          }
         />
         <TextArea
           label={FIELD_LABELS.content}
@@ -234,6 +251,13 @@ const ExpenseForm = ({ initialDate, today, editing }: ExpenseFormProps) => {
         today={today}
         onSelect={form.setDate}
         onClose={() => setDateOpen(false)}
+      />
+      <CalculatorSheet
+        open={calculatorOpen}
+        amount={values.amount}
+        content={values.content}
+        onApply={applyCalculation}
+        onClose={() => setCalculatorOpen(false)}
       />
       <Dialog
         open={guard.confirmOpen}

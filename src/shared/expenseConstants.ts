@@ -31,3 +31,10 @@ export const EXPENSE_RULES = {
   /** 달력 칸에서 금액을 줄이기 시작하는 자릿수 (100만 원 이상 → `108만`) */
   calendarAbbrDigits: 7,
 } as const;
+
+/** 계산기 규칙 (화면 명세 SC-07, 공통 정책값 · 계산기 식). 숫자 하나의 자릿수는 EXPENSE_RULES.amountDigits */
+export const CALCULATOR_RULES = {
+  operatorMax: 10, // 식 하나에 넣을 수 있는 연산자 수
+  roundingUnits: [1, 10, 100], // 끝전 처리 단위 (원)
+  operatorSymbols: { "+": "+", "-": "−", "*": "×", "/": "÷" },
+} as const;

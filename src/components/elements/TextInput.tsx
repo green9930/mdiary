@@ -25,6 +25,8 @@ interface TextInputProps {
   unit?: string;
   /** 단위·카운터 뒤에 붙는 요소 (검색 지우기 버튼 등) */
   trailing?: ReactNode;
+  /** 입력칸 바깥 오른쪽의 버튼 (금액 [계산]). 오류 문구는 입력칸과 버튼 아래에 보인다 */
+  action?: ReactNode;
   /** 숫자 키패드를 띄우고 입력값을 숫자 글꼴(Rubik)로 보인다 (금액) */
   numeric?: boolean;
   /** 없으면 자동으로 만든다. 라벨·오류 문구 연결에 쓴다 */
@@ -47,6 +49,7 @@ const TextInput = ({
   maxLength,
   unit,
   trailing,
+  action,
   numeric = false,
   id,
   placeholder,
@@ -60,32 +63,43 @@ const TextInput = ({
     maxLength === undefined ? v : clampChars(v, maxLength),
   );
 
+  const BoxComponent = (
+    <div
+      className={`h-12 items-center ${inputBoxClass({ invalid: !!error, disabled })}`}
+    >
+      <input
+        id={inputId}
+        value={value}
+        placeholder={placeholder}
+        inputMode={numeric ? "numeric" : undefined}
+        disabled={disabled}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error || hint ? fieldMessageId(inputId) : undefined}
+        className={cn("h-full", numeric && "font-num", inputControlClass)}
+        onBlur={onBlur}
+        onFocus={onFocus}
+        onChange={handlers.onChange}
+        onCompositionStart={handlers.onCompositionStart}
+        onCompositionEnd={handlers.onCompositionEnd}
+      />
+      {unit && <span className="shrink-0 text-text02">{unit}</span>}
+      {maxLength !== undefined && (
+        <CharCounter count={countChars(value)} max={maxLength} />
+      )}
+      {trailing}
+    </div>
+  );
+
   return (
     <Field id={inputId} label={label} error={error} hint={hint}>
-      <div
-        className={`h-12 items-center ${inputBoxClass({ invalid: !!error, disabled })}`}
-      >
-        <input
-          id={inputId}
-          value={value}
-          placeholder={placeholder}
-          inputMode={numeric ? "numeric" : undefined}
-          disabled={disabled}
-          aria-invalid={error ? true : undefined}
-          aria-describedby={error || hint ? fieldMessageId(inputId) : undefined}
-          className={cn("h-full", numeric && "font-num", inputControlClass)}
-          onBlur={onBlur}
-          onFocus={onFocus}
-          onChange={handlers.onChange}
-          onCompositionStart={handlers.onCompositionStart}
-          onCompositionEnd={handlers.onCompositionEnd}
-        />
-        {unit && <span className="shrink-0 text-text02">{unit}</span>}
-        {maxLength !== undefined && (
-          <CharCounter count={countChars(value)} max={maxLength} />
-        )}
-        {trailing}
-      </div>
+      {action ? (
+        <div className="flex gap-2">
+          <div className="min-w-0 flex-1">{BoxComponent}</div>
+          <div className="shrink-0">{action}</div>
+        </div>
+      ) : (
+        BoxComponent
+      )}
     </Field>
   );
 };

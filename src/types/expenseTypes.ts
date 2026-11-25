@@ -1,6 +1,9 @@
 import type { z } from "zod";
 
-import type { CATEGORY_LIST } from "@/shared/expenseConstants";
+import type {
+  CALCULATOR_RULES,
+  CATEGORY_LIST,
+} from "@/shared/expenseConstants";
 import type {
   createExpenseSchema,
   updateExpenseSchema,
@@ -118,4 +121,26 @@ export interface ExpenseFormValues {
   /** 숫자만 담은 문자열. 비어 있을 수 있다 */
   amount: string;
   content: string;
+}
+
+/** 계산기 연산자 (`+ - * /`) */
+export type CalculatorOperatorType =
+  keyof (typeof CALCULATOR_RULES)["operatorSymbols"];
+
+/** 계산기 숫자 키 */
+export type CalculatorDigitType =
+  "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "00";
+
+/** 계산기 키: 숫자 · 연산자 · ←(backspace) · C(clear) */
+export type CalculatorKeyType =
+  CalculatorDigitType | CalculatorOperatorType | "backspace" | "clear";
+
+/** 계산기 끝전 처리 단위 (원) */
+export type RoundingUnitType =
+  (typeof CALCULATOR_RULES)["roundingUnits"][number];
+
+/** 계산기 끝전 처리: 단위 × 방향 (올림 up · 버림 down) */
+export interface Rounding {
+  unit: RoundingUnitType;
+  direction: "up" | "down";
 }
