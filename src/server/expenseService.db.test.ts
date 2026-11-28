@@ -13,11 +13,10 @@ import { convertToDateStr } from "@/lib/date";
 import { prisma } from "@/server/db";
 import {
   createExpense,
-  deleteExpense,
   getDayExpenses,
   getExpense,
-  updateExpense,
 } from "@/server/expenseService";
+import { deleteExpense, updateExpense } from "@/server/scopeService";
 
 const userId = "expense-service-user";
 const otherId = "expense-service-other";
@@ -384,7 +383,7 @@ describe("getExpense (데이터 아키텍처 6장 SC-08)", () => {
   });
 });
 
-describe("updateExpense (데이터 아키텍처 8-1 PATCH, 범위 이 건)", () => {
+describe("updateExpense (데이터 아키텍처 8-1 PATCH, 반복 없는 기록)", () => {
   it("보낸 필드만 바꾸고 바뀐 건수를 돌려준다", async () => {
     const id = await seedOne();
 
@@ -425,24 +424,13 @@ describe("updateExpense (데이터 아키텍처 8-1 PATCH, 범위 이 건)", () 
         .title,
     ).toBe("점심");
   });
-
-  it("반복 기록은 F6 전까지 고를 수 없는 범위다", async () => {
-    const id = await seedInstallment();
-
-    expect(
-      await updateExpense(userId, id, {
-        title: "바꿈",
-        scope: { type: "one" },
-      }),
-    ).toEqual({ error: "SCOPE_NOT_ALLOWED" });
-  });
 });
 
-describe("deleteExpense (데이터 아키텍처 8-1 DELETE, 범위 이 건)", () => {
+describe("deleteExpense (데이터 아키텍처 8-1 DELETE, 반복 없는 기록)", () => {
   it("기록을 지우고 지운 건수를 돌려준다", async () => {
     const id = await seedOne();
 
-    expect(await deleteExpense(userId, id)).toEqual({
+    expect(await deleteExpense(userId, id, { type: "one" })).toEqual({
       deleted: 1,
     });
     expect(await getExpense(userId, id)).toBeNull();
@@ -451,18 +439,10 @@ describe("deleteExpense (데이터 아키텍처 8-1 DELETE, 범위 이 건)", ()
   it("없거나 다른 사용자의 기록이면 null이고 지우지 않는다", async () => {
     const othersId = await seedOne(otherId);
 
-    expect(await deleteExpense(userId, othersId)).toBeNull();
+    expect(await deleteExpense(userId, othersId, { type: "one" })).toBeNull();
     expect(
       await prisma.expense.findUnique({ where: { id: othersId } }),
     ).not.toBeNull();
-  });
-
-  it("반복 기록은 F6 전까지 고를 수 없는 범위다", async () => {
-    const id = await seedInstallment();
-
-    expect(await deleteExpense(userId, id)).toEqual({
-      error: "SCOPE_NOT_ALLOWED",
-    });
   });
 });
 

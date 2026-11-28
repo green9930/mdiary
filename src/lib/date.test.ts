@@ -9,6 +9,7 @@ import {
   defaultDateOf,
   formatDayHeading,
   formatFullDate,
+  formatLongDate,
   formatMonth,
   formatMonthNumber,
   formatYear,
@@ -17,6 +18,7 @@ import {
   isValidDate,
   isValidMonth,
   lastDayOf,
+  monthDiff,
   monthGridDates,
   monthOf,
 } from "@/lib/date";
@@ -199,5 +201,20 @@ describe("lastDayOf", () => {
     expect(lastDayOf("2027-02")).toBe(28);
     expect(lastDayOf("2028-02")).toBe(29);
     expect(lastDayOf("2099-12")).toBe(31);
+  });
+});
+
+describe("formatLongDate", () => {
+  it("요일 없이 `2026년 10월 18일`", () => {
+    expect(formatLongDate("2026-10-18")).toBe("2026년 10월 18일");
+  });
+});
+
+describe("monthDiff", () => {
+  it("뒤 달은 양수, 앞 달은 음수, 해를 넘겨도 센다", () => {
+    expect(monthDiff("2026-12", "2027-01")).toBe(1);
+    expect(monthDiff("2026-12", "2026-11")).toBe(-1);
+    expect(monthDiff("2026-10", "2026-10")).toBe(0);
+    expect(monthDiff("2026-10-25", "2028-01-03")).toBe(15);
   });
 });

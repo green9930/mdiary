@@ -21,7 +21,7 @@ test.describe("공통 컴포넌트 견본 (F0-2)", () => {
     await title.fill("가".repeat(30));
     await expect(title).toHaveValue("가".repeat(25));
 
-    const months = page.getByRole("textbox", { name: "기간" });
+    const months = page.getByRole("textbox", { name: "기간", exact: true });
     await months.pressSequentially("0a123");
     await expect(months).toHaveValue("12");
   });
@@ -32,7 +32,7 @@ test.describe("공통 컴포넌트 견본 (F0-2)", () => {
       page.getByRole("checkbox", { name: "위 내용을 확인했습니다" }),
     ).toBeChecked();
 
-    await page.getByText("이후 전체").click();
+    await page.locator("label", { hasText: "이후 전체" }).click();
     await expect(page.getByRole("radio", { name: "이후 전체" })).toBeChecked();
   });
 

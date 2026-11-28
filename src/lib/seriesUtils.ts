@@ -2,12 +2,7 @@ import { formatAmount } from "@/lib/amount";
 import { addMonths, formatMonth, lastDayOf, monthOf } from "@/lib/date";
 import { SERIES_RULES } from "@/shared/expenseConstants";
 import { isRepeatWithinMax } from "@/shared/expenseSchema";
-import {
-  DATE_RULES,
-  REPEAT_PREVIEW_TEXTS,
-  REPEAT_TEXTS,
-  SERIES_TEXTS,
-} from "@/shared/sharedConstants";
+import { DATE_RULES, REPEAT_TEXTS } from "@/shared/sharedConstants";
 import type {
   ExpenseDetailSeriesType,
   ExpenseFormValues,
@@ -145,10 +140,10 @@ const validRepeatCount = (raw: string, date: string) => {
     : null;
 };
 
-const monthlyOn = (billingDay: number) => SERIES_TEXTS.monthlyOn(billingDay);
+const monthlyOn = (billingDay: number) => REPEAT_TEXTS.monthlyOn(billingDay);
 
 const rangeText = (from: string, to: string) =>
-  REPEAT_PREVIEW_TEXTS.range(formatMonth(from), formatMonth(to));
+  REPEAT_TEXTS.range(formatMonth(from), formatMonth(to));
 
 // 할부 금액 줄: 금액이 없거나 총액 < 회차 수면 뺀다
 const installmentAmountText = (values: ExpenseFormValues, count: number) => {
@@ -161,12 +156,8 @@ const installmentAmountText = (values: ExpenseFormValues, count: number) => {
     values.installmentBasis,
   );
   return first === rest
-    ? REPEAT_PREVIEW_TEXTS.perCount(formatAmount(rest))
-    : REPEAT_PREVIEW_TEXTS.firstAndRest(
-        formatAmount(first),
-        formatAmount(rest),
-        count,
-      );
+    ? REPEAT_TEXTS.perCountAmount(formatAmount(rest))
+    : REPEAT_TEXTS.firstAndRest(formatAmount(first), formatAmount(rest), count);
 };
 
 /**
@@ -179,7 +170,7 @@ export const convertRepeatPreview = (values: ExpenseFormValues): string[] => {
   const start = monthOf(values.date);
   const note =
     billingDay >= SERIES_RULES.lastDayNoteFrom
-      ? [REPEAT_PREVIEW_TEXTS.lastDayNote]
+      ? [REPEAT_TEXTS.lastDayNote]
       : [];
 
   if (values.repeat === "recurring") {

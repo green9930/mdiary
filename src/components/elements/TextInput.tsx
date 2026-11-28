@@ -4,13 +4,16 @@ import { type ReactNode, useId } from "react";
 
 import CharCounter from "@/components/elements/CharCounter";
 import Field, { fieldMessageId } from "@/components/elements/Field";
-import {
-  inputBoxClass,
-  inputControlClass,
-} from "@/components/elements/inputBoxStyles";
 import { useNormalizedInput } from "@/hooks/useNormalizedInput";
 import { cn } from "@/lib/cn";
 import { clampChars, countChars } from "@/lib/text";
+import {
+  INPUT_BOX_CLASS,
+  INPUT_CONTROL_CLASS,
+  INPUT_SIZE_CLASSES,
+  INPUT_STATE_CLASSES,
+} from "@/shared/styleConstants";
+import type { InputSizeType } from "@/types/styleTypes";
 
 interface TextInputProps {
   value: string;
@@ -29,6 +32,8 @@ interface TextInputProps {
   action?: ReactNode;
   /** 숫자 키패드를 띄우고 입력값을 숫자 글꼴(Rubik)로 보인다 (금액) */
   numeric?: boolean;
+  /** 높이: lg 48 (기본) · md 40 */
+  size?: InputSizeType;
   /** 없으면 자동으로 만든다. 라벨·오류 문구 연결에 쓴다 */
   id?: string;
   placeholder?: string;
@@ -51,6 +56,7 @@ const TextInput = ({
   trailing,
   action,
   numeric = false,
+  size = "lg",
   id,
   placeholder,
   disabled = false,
@@ -63,9 +69,16 @@ const TextInput = ({
     maxLength === undefined ? v : clampChars(v, maxLength),
   );
 
+  const state = disabled ? "disabled" : error ? "invalid" : "default";
+
   const BoxComponent = (
     <div
-      className={`h-12 items-center ${inputBoxClass({ invalid: !!error, disabled })}`}
+      className={cn(
+        INPUT_BOX_CLASS,
+        INPUT_SIZE_CLASSES[size],
+        "items-center",
+        INPUT_STATE_CLASSES[state],
+      )}
     >
       <input
         id={inputId}
@@ -75,7 +88,7 @@ const TextInput = ({
         disabled={disabled}
         aria-invalid={error ? true : undefined}
         aria-describedby={error || hint ? fieldMessageId(inputId) : undefined}
-        className={cn("h-full", numeric && "font-num", inputControlClass)}
+        className={cn("h-full", numeric && "font-num", INPUT_CONTROL_CLASS)}
         onBlur={onBlur}
         onFocus={onFocus}
         onChange={handlers.onChange}

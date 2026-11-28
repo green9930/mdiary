@@ -4,6 +4,8 @@ import type {
   CreateExpenseRequestType,
   ExpenseDetail,
   ExpenseListItem,
+  ScopePreview,
+  ScopeType,
   TitleSuggestion,
   UpdateExpenseRequestType,
 } from "@/types/expenseTypes";
@@ -40,9 +42,19 @@ export const patchExpense = (id: string, request: UpdateExpenseRequestType) =>
     body: JSON.stringify(request),
   });
 
-/** 기록 삭제. 범위는 이 건만 (`DELETE /api/expenses/:id`, 반복 기록 범위는 F6) */
-export const deleteExpense = (id: string) =>
+/** 기록 삭제: 범위 (`DELETE /api/expenses/:id`) */
+export const deleteExpense = (id: string, scope: ScopeType) =>
   apiFetch<{ deleted: number }>(expensePath(id), {
     method: "DELETE",
-    body: JSON.stringify({ scope: { type: "one" } }),
+    body: JSON.stringify({ scope }),
   });
+
+/** 반복 기록 범위 미리보기. date는 수정에서 바꾼 날짜 (`GET /api/expenses/:id/scope`) */
+export const getScopePreview = (id: string, scope: ScopeType, date?: string) =>
+  apiFetch<ScopePreview>(
+    `${expensePath(id)}/scope?${new URLSearchParams({
+      scope: scope.type,
+      ...(scope.type === "count" ? { n: String(scope.n) } : {}),
+      ...(date ? { date } : {}),
+    })}`,
+  );

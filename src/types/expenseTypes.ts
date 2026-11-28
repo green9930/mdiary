@@ -36,6 +36,25 @@ export type UpdateExpenseRequestType = z.input<typeof updateExpenseSchema>;
 /** 검증을 거친 수정 값 */
 export type UpdateExpenseType = z.output<typeof updateExpenseSchema>;
 
+/** 수정·삭제 범위 (데이터 아키텍처 8-1 `scope`) */
+export type ScopeType = UpdateExpenseType["scope"];
+
+/** 범위 미리보기 (`GET /api/expenses/:id/scope`, 데이터 아키텍처 5-6) */
+export interface ScopePreview {
+  /** 이 건을 포함한 남은 건수. 계속 반복이면 null */
+  remaining: number | null;
+  affected: {
+    /** 영향받는 건수. 계속 반복의 이후 전체면 null (끝이 없다) */
+    count: number | null;
+    /** 첫 건의 달 (YYYY-MM). 뒤 달로 민 이후 전체면 민 달 */
+    fromMonth: string;
+    /** 마지막 건의 달. 계속 반복의 이후 전체면 null */
+    toMonth: string | null;
+    /** 계속 반복의 이후 전체인지 */
+    continuous: boolean;
+  };
+}
+
 /** 등록 응답 */
 export interface CreatedExpense {
   id: string;

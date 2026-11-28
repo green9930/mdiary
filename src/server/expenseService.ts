@@ -15,9 +15,7 @@ import type {
   ExpenseDetail,
   ExpenseListItem,
   ExpenseListSeriesType,
-  ExpenseScopeRefused,
   SeriesKindType,
-  UpdateExpenseType,
 } from "@/types/expenseTypes";
 
 /**
@@ -171,52 +169,4 @@ export const getExpense = async (
       toMonth: monthOf(convertToDateStr(to)),
     },
   };
-};
-
-// 수정·삭제할 기록을 찾는다. 반복 기록의 범위 수정·삭제는 F6 전까지 받지 않는다
-const findTarget = async (
-  userId: string,
-  id: string,
-): Promise<ExpenseScopeRefused | "ok" | null> => {
-  const row = await prisma.expense.findFirst({
-    where: { id, userId },
-    select: { seriesId: true },
-  });
-  if (!row) return null;
-  return row.seriesId ? { error: "SCOPE_NOT_ALLOWED" } : "ok";
-};
-
-/** 기록 수정 (데이터 아키텍처 8-1 `PATCH /api/expenses/:id`). 보낸 필드만 바꾼다. 없거나 남의 기록이면 null */
-export const updateExpense = async (
-  userId: string,
-  id: string,
-  { date, title, category, amount, content }: UpdateExpenseType,
-): Promise<{ updated: number } | ExpenseScopeRefused | null> => {
-  const target = await findTarget(userId, id);
-  if (target !== "ok") return target;
-  const { count } = await prisma.expense.updateMany({
-    where: { id, userId },
-    data: {
-      title,
-      category,
-      amount,
-      content,
-      date: date === undefined ? undefined : convertToDbDate(date),
-    },
-  });
-  return { updated: count };
-};
-
-/**
- * 기록 삭제 (데이터 아키텍처 8-1 `DELETE /api/expenses/:id`). 없거나 남의 기록이면 null.
- * 범위는 이 건만이다 (반복 기록의 범위 삭제는 F6)
- */
-export const deleteExpense = async (
-  userId: string,
-  id: string,
-): Promise<{ deleted: number } | ExpenseScopeRefused | null> => {
-  const target = await findTarget(userId, id);
-  if (target !== "ok") return target;
-  const { count } = await prisma.expense.deleteMany({ where: { id, userId } });
-  return { deleted: count };
 };

@@ -19,6 +19,8 @@ export const QUERY_KEYS = {
   titleSuggestions: "titleSuggestions",
   /** 기록 1건 + 반복 정보 (`/api/expenses/:id`) */
   expenseDetail: "expenseDetail",
+  /** 반복 기록 범위 미리보기 (`/api/expenses/:id/scope`). 시트를 열 때마다 새로 받으므로 무효화하지 않는다 */
+  scopePreview: "scopePreview",
 } as const;
 
 /** 등록·수정·삭제가 성공하면 무효화하는 키. 범위 수정은 여러 달에 걸치므로 키를 골라 지우지 않는다 */
@@ -39,4 +41,6 @@ export const QUERY_RULES = {
   maxRetries: 3,
   /** 월 합계를 다시 요청하지 않고 쓰는 시간 (ms) */
   monthTotalsStaleTime: 5 * 60 * 1000,
+  /** 범위 N을 입력하고 이만큼 멈추면 미리보기를 요청한다 (ms) */
+  scopePreviewDelay: 300,
 } as const;

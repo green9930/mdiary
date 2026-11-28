@@ -119,9 +119,17 @@ export const createExpenseSchema = z
       });
   });
 
-/** 수정·삭제 범위 (데이터 아키텍처 8-1 `scope`). 반복 기록의 범위(after·count)는 F6에서 받는다 */
-const scopeSchema = z.object(
-  { type: z.literal("one", { error: "INVALID" }) },
+/** 수정·삭제 범위 (데이터 아키텍처 8-1 `scope`): 이번 건만 · 이후 전체 · 이 건부터 N개월 */
+const scopeSchema = z.union(
+  [
+    z.strictObject({ type: z.literal("one") }),
+    z.strictObject({ type: z.literal("after") }),
+    z.strictObject({
+      type: z.literal("count"),
+      // 남은 건수 이하인지는 서버가 DB를 보고 다시 확인한다 (계속 반복은 99까지)
+      n: z.number().int().min(1).max(SERIES_RULES.repeatMax),
+    }),
+  ],
   { error: "INVALID" },
 );
 
@@ -156,3 +164,23 @@ export const fieldErrorCodes = (error: z.ZodError) => {
   }
   return fields;
 };
+
+/** 범위 미리보기 쿼리 (`GET /api/expenses/:id/scope?scope=&n=&date=`). date는 수정에서 바꾼 날짜 */
+export const scopePreviewQuerySchema = z
+  .object({
+    scope: z.enum(["one", "after", "count"]),
+    n: z.string().regex(/^\d+$/).optional(),
+    date: z.string().refine(isValidDate).optional(),
+  })
+  .transform(({ scope, n, date }, context) => {
+    const parsed = scopeSchema.safeParse(
+      scope === "count" ? { type: scope, n: Number(n) } : { type: scope },
+    );
+    if (!parsed.success) {
+      context.addIssue({ code: "custom", path: ["scope"], message: "INVALID" });
+      return z.NEVER;
+    }
+    return date === undefined
+      ? { scope: parsed.data }
+      : { scope: parsed.data, date };
+  });

@@ -23,11 +23,19 @@ const detail: ExpenseDetail = {
 interface Server {
   get?: () => Response;
   remove?: () => Response;
+  /** GET /api/expenses/:id/scope (쿼리를 받아 미리보기) */
+  scope?: (query: URLSearchParams) => Response;
 }
 
-// GET·DELETE /api/expenses/:id
-const mockServer = ({ get, remove }: Server = {}) =>
-  vi.spyOn(globalThis, "fetch").mockImplementation(async (_input, init) => {
+// GET·DELETE /api/expenses/:id, GET /api/expenses/:id/scope
+const mockServer = ({ get, remove, scope }: Server = {}) =>
+  vi.spyOn(globalThis, "fetch").mockImplementation(async (input, init) => {
+    const url = String(input);
+    if (url.includes("/scope?"))
+      return (
+        scope?.(new URL(url, "http://localhost").searchParams) ??
+        Response.json({})
+      );
     if (init?.method === "DELETE")
       return remove?.() ?? Response.json({ deleted: 1 });
     return get?.() ?? Response.json(detail);
@@ -180,29 +188,179 @@ describe("ExpenseDetailSheet (화면 명세 SC-08)", () => {
     await waitFor(() => expect(handlers.onClose).toHaveBeenCalledOnce());
   });
 
-  it("반복 기록은 반복 정보를 보여 주고, F6 전까지 [수정]·[삭제]를 막는다", async () => {
-    mockServer({
-      get: () =>
-        Response.json({
-          ...detail,
-          series: {
-            type: "INSTALLMENT",
-            seq: 2,
-            totalCount: 3,
-            billingDay: 1,
-            isContinuous: false,
-            installmentTotal: 300_000,
-            fromMonth: "2026-11",
-            toMonth: "2027-01",
-          },
-        }),
-    });
-    renderSheet();
+  describe("반복 기록 (SC-09 삭제 범위)", () => {
+    // 할부 3회 중 2회차 (12월 1일). 남은 건수 2
+    const installment = {
+      expense: { ...detail.expense, date: "2026-12-01" },
+      series: {
+        type: "INSTALLMENT",
+        seq: 2,
+        totalCount: 3,
+        billingDay: 1,
+        isContinuous: false,
+        installmentTotal: 300_000,
+        fromMonth: "2026-11",
+        toMonth: "2027-01",
+      },
+    };
+    const scopePreview = (query: URLSearchParams) => {
+      const type = query.get("scope");
+      const count = type === "one" ? 1 : type === "after" ? 2 : 1;
+      return Response.json({
+        remaining: 2,
+        affected: {
+          count,
+          fromMonth: "2026-12",
+          toMonth: count === 2 ? "2027-01" : "2026-12",
+          continuous: false,
+        },
+      });
+    };
+    const scopeSheet = () =>
+      screen.getByRole("dialog", { name: "반복 기록 삭제", hidden: true });
+    const radio = (name: string) =>
+      screen.getByRole("radio", { name, hidden: true });
 
-    await waitFor(() => within(sheet()).getByText("할부 2/3회 · 총 300,000원"));
-    expect(within(sheet()).getByText("2026년 11월 ~ 2027년 1월"));
-    expect(button("수정", sheet())).toBeDisabled();
-    expect(button("삭제", sheet())).toBeDisabled();
+    const openScope = async () => {
+      await waitFor(() =>
+        within(sheet()).getByText("할부 2/3회 · 총 300,000원"),
+      );
+      await userEvent.click(button("삭제", sheet()));
+      return waitFor(() => scopeSheet());
+    };
+
+    it("반복 정보를 보여 주고, [수정]은 수정 화면으로 간다", async () => {
+      mockServer({ get: () => Response.json(installment) });
+      renderSheet();
+
+      await waitFor(() =>
+        within(sheet()).getByText("할부 2/3회 · 총 300,000원"),
+      );
+      expect(within(sheet()).getByText("2026년 11월 ~ 2027년 1월"));
+      await userEvent.click(button("수정", sheet()));
+      expect(handlers.onEdit).toHaveBeenCalledWith(id);
+    });
+
+    it("[삭제]는 시트 안에서 범위 선택으로 바뀌고, [취소]로 상세에 돌아온다", async () => {
+      mockServer({
+        get: () => Response.json(installment),
+        scope: scopePreview,
+      });
+      renderSheet();
+
+      const view = within(await openScope());
+      expect(radio("이번 건만")).toBeChecked();
+      expect(radio("이후 전체 (남은 회차)")).toBeEnabled();
+      await waitFor(() => view.getByText("2026년 12월 1일 1건"));
+
+      await userEvent.click(button("취소", scopeSheet()));
+      expect(within(sheet()).getByText("할부 2/3회 · 총 300,000원"));
+    });
+
+    it("이후 전체를 고르면 범위를 보여 주고, 건수를 확인한 뒤 그 범위로 지운다", async () => {
+      const fetch = mockServer({
+        get: () => Response.json(installment),
+        scope: scopePreview,
+        remove: () => Response.json({ deleted: 2 }),
+      });
+      renderSheet();
+      const view = within(await openScope());
+
+      await userEvent.click(radio("이후 전체 (남은 회차)"));
+      await waitFor(() => view.getByText("2026년 12월 ~ 2027년 1월 (2건)"));
+      await userEvent.click(button("삭제", scopeSheet()));
+
+      const confirm = await waitFor(() => alert("삭제하기"));
+      expect(confirm).toHaveAccessibleDescription("2건을 삭제하시겠습니까?");
+      await userEvent.click(button("삭제", confirm));
+
+      await waitFor(() => expect(handlers.onClose).toHaveBeenCalledOnce());
+      const removeCall = fetch.mock.calls.find(
+        ([, init]) => init?.method === "DELETE",
+      );
+      expect(JSON.parse(String(removeCall?.[1]?.body))).toEqual({
+        scope: { type: "after" },
+      });
+    });
+
+    it("N이 비었거나 남은 건수를 넘으면 칸 아래 오류를 보이고 진행하지 않는다", async () => {
+      mockServer({
+        get: () => Response.json(installment),
+        scope: scopePreview,
+      });
+      renderSheet();
+      await openScope();
+      await waitFor(() =>
+        within(scopeSheet()).getByText("2026년 12월 1일 1건"),
+      );
+
+      await userEvent.click(radio("이 건부터"));
+      const count = screen.getByRole("textbox", {
+        name: "개월 수",
+        hidden: true,
+      });
+      await userEvent.click(button("삭제", scopeSheet()));
+      expect(count).toHaveAccessibleDescription("개월 수를 입력해 주세요.");
+
+      await userEvent.type(count, "5");
+      await userEvent.click(button("삭제", scopeSheet()));
+      expect(count).toHaveAccessibleDescription(
+        "2개월까지 입력할 수 있습니다.",
+      );
+      expect(
+        document.querySelector("dialog[role=alertdialog][open]"),
+      ).toBeNull();
+    });
+
+    it("계속 반복의 이후 전체는 반복 종료를 확인한다", async () => {
+      mockServer({
+        get: () =>
+          Response.json({
+            ...installment,
+            series: {
+              ...installment.series,
+              type: "RECURRING",
+              totalCount: null,
+              isContinuous: true,
+              installmentTotal: null,
+            },
+          }),
+        scope: (query) =>
+          Response.json({
+            remaining: null,
+            affected:
+              query.get("scope") === "after"
+                ? {
+                    count: null,
+                    fromMonth: "2026-12",
+                    toMonth: null,
+                    continuous: true,
+                  }
+                : {
+                    count: 1,
+                    fromMonth: "2026-12",
+                    toMonth: "2026-12",
+                    continuous: false,
+                  },
+          }),
+      });
+      renderSheet();
+      await waitFor(() =>
+        within(sheet()).getByText(/정기지출 · 매달 1일 · 반복/),
+      );
+      await userEvent.click(button("삭제", sheet()));
+      const view = within(await waitFor(() => scopeSheet()));
+
+      await userEvent.click(radio("이후 전체"));
+      await waitFor(() => view.getByText("2026년 12월부터 계속"));
+      await userEvent.click(button("삭제", scopeSheet()));
+
+      expect(
+        await waitFor(() => alert("삭제하기")),
+      ).toHaveAccessibleDescription(
+        "이 건부터 반복이 종료됩니다. 삭제하시겠습니까?",
+      );
+    });
   });
 
   it("닫혀 있으면 요청하지 않는다", () => {

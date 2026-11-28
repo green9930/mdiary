@@ -1,7 +1,7 @@
 import { formatAmount } from "@/lib/amount";
 import { formatMonth } from "@/lib/date";
 import { CATEGORY_LIST } from "@/shared/expenseConstants";
-import { SERIES_TEXTS } from "@/shared/sharedConstants";
+import { REPEAT_TEXTS } from "@/shared/sharedConstants";
 import type {
   CategoryType,
   ExpenseDetailSeriesType,
@@ -12,7 +12,10 @@ export const convertCategoryLabel = (category: CategoryType) =>
   CATEGORY_LIST.find(({ value }) => value === category)?.label ?? category;
 
 const convertFormatPeriod = (series: ExpenseDetailSeriesType) =>
-  `${formatMonth(series.fromMonth)} ~ ${formatMonth(series.toMonth)}`;
+  REPEAT_TEXTS.range(
+    formatMonth(series.fromMonth),
+    formatMonth(series.toMonth),
+  );
 
 /**
  * 상세의 반복 정보 줄 (화면 명세 SC-08, 와이어프레임 SC-08 ⑦).
@@ -23,20 +26,20 @@ export const convertSeriesInfoText = (
 ): string[] => {
   if (series.type === "RECURRING") {
     const span = series.isContinuous
-      ? SERIES_TEXTS.continuous
+      ? REPEAT_TEXTS.continuousInfo
       : convertFormatPeriod(series);
 
     return [
       [
-        SERIES_TEXTS.recurring,
-        SERIES_TEXTS.monthlyOn(series.billingDay),
+        REPEAT_TEXTS.recurring,
+        REPEAT_TEXTS.monthlyOn(series.billingDay),
         span,
       ].join(" · "),
     ];
   }
 
   return [
-    SERIES_TEXTS.installment(
+    REPEAT_TEXTS.installmentInfo(
       series.seq,
       series.totalCount,
       formatAmount(series.installmentTotal ?? 0),

@@ -5,13 +5,13 @@ import { useEffect, useId, useRef, useState } from "react";
 
 import { isNotFound, isUnauthorized } from "@/api/apiClient";
 import Button from "@/components/elements/Button";
-import { inputBoxClass } from "@/components/elements/inputBoxStyles";
 import TextArea from "@/components/elements/TextArea";
 import TextInput from "@/components/elements/TextInput";
 import CalculatorSheet from "@/components/expense/CalculatorSheet";
 import CategoryGrid from "@/components/expense/CategoryGrid";
 import DatePickerSheet from "@/components/expense/DatePickerSheet";
 import RepeatFields from "@/components/expense/RepeatFields";
+import ScopeEditSheet from "@/components/expense/ScopeEditSheet";
 import TitleSuggestions from "@/components/expense/TitleSuggestions";
 import PageHeader from "@/components/layout/PageHeader";
 import AlertDialog from "@/components/overlays/AlertDialog";
@@ -42,10 +42,17 @@ import {
   PLACEHOLDERS,
   UNITS,
 } from "@/shared/sharedConstants";
+import {
+  INPUT_BOX_CLASS,
+  INPUT_SIZE_CLASSES,
+  INPUT_STATE_CLASSES,
+} from "@/shared/styleConstants";
 import type {
   ExpenseDetail,
   ExpenseFormValues,
+  ScopeType,
   TitleSuggestion,
+  UpdateExpenseRequestType,
 } from "@/types/expenseTypes";
 
 interface ExpenseFormProps {
@@ -101,6 +108,11 @@ const ExpenseForm = ({
   const [suggestOpen, setSuggestOpen] = useState(false);
   const [saveFailed, setSaveFailed] = useState(false);
   const [saveDone, setSaveDone] = useState(false);
+  // 반복 기록 수정: 범위를 고르는 동안 보낼 바꾼 필드 (SC-09)
+  const [scopeChanges, setScopeChanges] =
+    useState<UpdateExpenseRequestType | null>(null);
+  // 범위 시트를 닫은 뒤 이전 화면으로 갈지
+  const backAfterScope = useRef(false);
   // 저장 완료 알림을 닫은 뒤 폼을 비울지
   const resetAfterDone = useRef(false);
 
@@ -154,13 +166,36 @@ const ExpenseForm = ({
       goBack();
       return;
     }
-    updateExpense.mutate(changes, {
-      onSuccess: goBack,
+    // 반복 기록은 범위를 고른 뒤 저장한다
+    if (series) {
+      setScopeChanges(changes);
+      return;
+    }
+    submitUpdate(changes);
+  };
+
+  const submitUpdate = (request: UpdateExpenseRequestType) => {
+    updateExpense.mutate(request, {
+      onSuccess: () => {
+        if (!scopeChanges) {
+          goBack();
+          return;
+        }
+        // 범위 시트를 닫고, 쌓은 기록이 되돌려진 뒤 이전 화면으로 (아래 effect)
+        backAfterScope.current = true;
+        setScopeChanges(null);
+      },
       onError: (error) => {
-        if (isNotFound(error)) setGoneOnSave(true);
-        else setSaveFailed(!isUnauthorized(error));
+        if (isNotFound(error)) {
+          setScopeChanges(null);
+          setGoneOnSave(true);
+        } else setSaveFailed(!isUnauthorized(error));
       },
     });
+  };
+
+  const saveWithScope = (scope: ScopeType) => {
+    if (scopeChanges) submitUpdate({ ...scopeChanges, scope });
   };
 
   // 기록 없음 [확인]: 알림이 쌓은 기록을 되돌린 뒤 달력으로 (화면 명세 SC-06 수정 저장 시 404)
@@ -180,6 +215,13 @@ const ExpenseForm = ({
     setSaveDone(false);
     resetAfterDone.current = true;
   };
+
+  // 범위 시트가 닫혀 쌓은 기록이 되돌려진 뒤에 옮긴다. 먼저 옮기면 뒤로 가기가 시트 기록만 지운다
+  useEffect(() => {
+    if (scopeChanges || !backAfterScope.current) return;
+    backAfterScope.current = false;
+    runAfterLayerPops(goBack);
+  }, [scopeChanges, goBack]);
 
   // 알림이 쌓은 기록이 되돌려진 뒤에 비운다.
   // 알림이 닫히며 [저장]으로 돌려준 포커스는 그 뒤 제목 칸으로 옮겨 다음 기록을 바로 입력하게 한다
@@ -208,7 +250,7 @@ const ExpenseForm = ({
             type="button"
             aria-labelledby={`${ids.dateLabel} ${ids.dateValue}`}
             onClick={() => setDateOpen(true)}
-            className={`h-12 items-center text-left ${inputBoxClass({ invalid: false, disabled: false })}`}
+            className={`${INPUT_BOX_CLASS} ${INPUT_SIZE_CLASSES.lg} items-center text-left ${INPUT_STATE_CLASSES.default}`}
           >
             <span id={ids.dateValue}>{formatFullDate(values.date)}</span>
           </button>
@@ -312,6 +354,18 @@ const ExpenseForm = ({
         onApply={applyCalculation}
         onClose={() => setCalculatorOpen(false)}
       />
+      {editing && series && (
+        <ScopeEditSheet
+          open={scopeChanges !== null}
+          id={editing.id}
+          seriesType={series.type}
+          originalDate={editing.date}
+          date={values.date}
+          saving={updateExpense.isPending}
+          onSave={saveWithScope}
+          onClose={() => setScopeChanges(null)}
+        />
+      )}
       <Dialog
         open={guard.confirmOpen}
         title={DIALOG_TEXTS.leaveTitle}

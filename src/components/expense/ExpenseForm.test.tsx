@@ -53,6 +53,16 @@ const mockServer = ({ save, update }: Server = {}) =>
     }
     if (url.startsWith("/api/expenses/") && init?.method === "PATCH")
       return update?.() ?? Response.json({ updated: 1 });
+    if (url.includes("/scope?"))
+      return Response.json({
+        remaining: 4,
+        affected: {
+          count: url.includes("scope=after") ? 4 : 1,
+          fromMonth: "2026-12",
+          toMonth: url.includes("scope=after") ? "2027-03" : "2026-12",
+          continuous: false,
+        },
+      });
     throw new Error(`unexpected ${url}`);
   });
 
@@ -887,6 +897,130 @@ describe("ExpenseForm (화면 명세 SC-06 등록)", () => {
         screen.getByRole("button", { name: "날짜 2026년 11월 1일 (일)" }),
       ).toBeInTheDocument();
       expect(amountInput()).toBeInTheDocument();
+    });
+
+    describe("반복 기록 (SC-09 수정 범위)", () => {
+      const recurring = { ...original, title: "월세", date: "2026-12-25" };
+      const series = {
+        type: "RECURRING" as const,
+        seq: 3,
+        totalCount: 6,
+        billingDay: 25,
+        isContinuous: false,
+        installmentTotal: null,
+        fromMonth: "2026-10",
+        toMonth: "2027-03",
+      };
+      const renderSeries = () => {
+        const client = createQueryClient({ onUnauthorized: () => {} });
+        client.setDefaultOptions({ queries: { retry: false } });
+        return render(
+          <QueryClientProvider client={client}>
+            <ExpenseForm
+              initialDate={recurring.date}
+              today="2026-10-21"
+              editing={recurring}
+              series={series}
+            />
+          </QueryClientProvider>,
+        );
+      };
+      const scopeSheet = () =>
+        screen.getByRole("dialog", { name: "반복 기록 수정", hidden: true });
+      const radio = (name: string) =>
+        screen.getByRole("radio", { name, hidden: true });
+
+      it("바꾼 필드가 있으면 [저장]에 범위를 고르고, 고른 범위로 저장한다", async () => {
+        const fetch = mockServer();
+        renderSeries();
+        await userEvent.clear(titleInput());
+        await userEvent.type(titleInput(), "관리비");
+        await userEvent.click(saveButton());
+
+        const view = within(await waitFor(() => scopeSheet()));
+        await waitFor(() => view.getByText("2026년 12월 25일 1건"));
+        await userEvent.click(radio("이후 전체"));
+        await waitFor(() => view.getByText("2026년 12월 ~ 2027년 3월 (4건)"));
+        await userEvent.click(
+          view.getByRole("button", { name: "저장", hidden: true }),
+        );
+
+        await waitFor(() => expect(router.replace).toHaveBeenCalledWith("/"));
+        expect(patchBodies(fetch)).toEqual([
+          { title: "관리비", scope: { type: "after" } },
+        ]);
+      });
+
+      it("저장하면 범위 시트가 쌓은 기록을 되돌린 뒤 이전 화면으로 간다", async () => {
+        mockServer();
+        renderSeries();
+        const startState: unknown = window.history.state;
+        let stateOnLeave: unknown = "not called";
+        router.replace.mockImplementation(() => {
+          stateOnLeave = window.history.state;
+        });
+        await userEvent.type(titleInput(), "!");
+        await userEvent.click(saveButton());
+        await waitFor(() =>
+          expect(window.history.state).toHaveProperty("mdiaryLayer"),
+        );
+
+        await userEvent.click(
+          within(scopeSheet()).getByRole("button", {
+            name: "저장",
+            hidden: true,
+          }),
+        );
+
+        await waitFor(() => expect(router.replace).toHaveBeenCalledWith("/"));
+        expect(stateOnLeave).toEqual(startState);
+      });
+
+      it("날짜를 앞 달로 바꾸면 이번 건만 고를 수 있다", async () => {
+        mockServer();
+        renderSeries();
+        await userEvent.click(dateButton("2026년 12월 25일 (금)"));
+        await userEvent.click(
+          screen.getByRole("button", { name: "이전 달", hidden: true }),
+        );
+        await userEvent.click(
+          screen.getByRole("button", {
+            name: "2026년 11월 3일 (화)",
+            hidden: true,
+          }),
+        );
+        await userEvent.click(
+          screen.getByRole("button", { name: "선택", hidden: true }),
+        );
+        await userEvent.click(saveButton());
+
+        const view = within(await waitFor(() => scopeSheet()));
+        expect(radio("이후 전체")).toBeDisabled();
+        expect(radio("이 건부터")).toBeDisabled();
+        expect(
+          view.getByText("앞 달로 옮기면 이번 건만 수정할 수 있습니다."),
+        ).toBeInTheDocument();
+        await waitFor(() => view.getByText("2026년 11월 3일 1건"));
+      });
+
+      it("[취소]는 저장하지 않고 입력값을 둔다", async () => {
+        const fetch = mockServer();
+        renderSeries();
+        await userEvent.type(titleInput(), "!");
+        await userEvent.click(saveButton());
+        await waitFor(() => scopeSheet());
+
+        await userEvent.click(
+          within(scopeSheet()).getByRole("button", {
+            name: "취소",
+            hidden: true,
+          }),
+        );
+
+        expect(patchBodies(fetch)).toEqual([]);
+        expect(titleInput()).toHaveValue("월세!");
+        expect(router.replace).not.toHaveBeenCalled();
+      });
     });
 
     it("저장에 실패하면 알림을 띄우고 입력값을 둔다", async () => {

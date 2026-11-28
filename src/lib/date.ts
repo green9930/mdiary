@@ -23,11 +23,21 @@ export const isValidDate = (value: string) =>
 export const dateOrToday = (value: string | undefined, today: string) =>
   value !== undefined && isValidDate(value) ? value : today;
 
-/** `2026년 10월 18일 (일)` */
-export const formatFullDate = (date: string) => {
+/** `2026년 10월 18일` */
+export const formatLongDate = (date: string) => {
   const value = toUtc(date);
-  return `${value.getUTCFullYear()}년 ${value.getUTCMonth() + 1}월 ${value.getUTCDate()}일 (${WEEKDAY_LABELS[value.getUTCDay()]})`;
+  return `${value.getUTCFullYear()}년 ${value.getUTCMonth() + 1}월 ${value.getUTCDate()}일`;
 };
+
+/** `2026년 10월 18일 (일)` */
+export const formatFullDate = (date: string) =>
+  `${formatLongDate(date)} (${WEEKDAY_LABELS[toUtc(date).getUTCDay()]})`;
+
+/** from 달에서 to 달까지 몇 달 뒤인지 (앞이면 음수) */
+export const monthDiff = (from: string, to: string) =>
+  (Number(to.slice(0, 4)) - Number(from.slice(0, 4))) * 12 +
+  Number(to.slice(5, 7)) -
+  Number(from.slice(5, 7));
 
 /** 날짜 목록 헤더: `10월 18일 (일)`, 오늘과 다른 해면 `2025년 10월 18일 (토)` */
 export const formatDayHeading = (date: string, today: string) =>

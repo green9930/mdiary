@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { createExpenseSchema, fieldErrorCodes } from "@/shared/expenseSchema";
+import {
+  createExpenseSchema,
+  deleteExpenseSchema,
+  fieldErrorCodes,
+  scopePreviewQuerySchema,
+  updateExpenseSchema,
+} from "@/shared/expenseSchema";
 
 const valid = {
   date: "2026-10-18",
@@ -168,5 +174,55 @@ describe("createExpenseSchema (데이터 아키텍처 3-2, 8-2)", () => {
       title: "REQUIRED",
       amount: "OUT_OF_RANGE",
     });
+  });
+});
+
+describe("범위 (데이터 아키텍처 8-1 scope)", () => {
+  it("이번 건만 · 이후 전체 · 이 건부터 N개월(1~99)을 받는다", () => {
+    for (const scope of [
+      { type: "one" },
+      { type: "after" },
+      { type: "count", n: 1 },
+      { type: "count", n: 99 },
+    ]) {
+      expect(deleteExpenseSchema.safeParse({ scope }).data?.scope).toEqual(
+        scope,
+      );
+      expect(
+        updateExpenseSchema.safeParse({ title: "점심", scope }).success,
+      ).toBe(true);
+    }
+  });
+
+  it("N이 없거나 1~99 밖이면 거절한다", () => {
+    for (const scope of [
+      { type: "count" },
+      { type: "count", n: 0 },
+      { type: "count", n: 100 },
+      { type: "all" },
+    ])
+      expect(deleteExpenseSchema.safeParse({ scope }).success).toBe(false);
+  });
+});
+
+describe("scopePreviewQuerySchema (`GET /api/expenses/:id/scope`)", () => {
+  const parse = (query: Record<string, string>) =>
+    scopePreviewQuerySchema.safeParse(query);
+
+  it("범위와 바꾼 날짜를 읽는다", () => {
+    expect(parse({ scope: "count", n: "6" }).data).toEqual({
+      scope: { type: "count", n: 6 },
+    });
+    expect(parse({ scope: "after", date: "2027-01-03" }).data).toEqual({
+      scope: { type: "after" },
+      date: "2027-01-03",
+    });
+  });
+
+  it("범위가 틀리거나 날짜가 잘못됐으면 거절한다", () => {
+    expect(parse({ scope: "count" }).success).toBe(false);
+    expect(parse({ scope: "count", n: "abc" }).success).toBe(false);
+    expect(parse({ scope: "after", date: "2027-02-30" }).success).toBe(false);
+    expect(parse({}).success).toBe(false);
   });
 });

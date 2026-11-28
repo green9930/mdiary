@@ -1,11 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { DELETE, GET, PATCH } from "@/app/api/expenses/[id]/route";
-import {
-  deleteExpense,
-  getExpense,
-  updateExpense,
-} from "@/server/expenseService";
+import { getExpense } from "@/server/expenseService";
+import { deleteExpense, updateExpense } from "@/server/scopeService";
 import { getSessionUser } from "@/server/session";
 import type { ExpenseDetail } from "@/types/expenseTypes";
 
@@ -13,8 +10,8 @@ vi.mock("@/server/session", async () => ({
   getSessionUser: vi.fn(),
   unauthorized: () => Response.json({ code: "UNAUTHORIZED" }, { status: 401 }),
 }));
-vi.mock("@/server/expenseService", () => ({
-  getExpense: vi.fn(),
+vi.mock("@/server/expenseService", () => ({ getExpense: vi.fn() }));
+vi.mock("@/server/scopeService", () => ({
   updateExpense: vi.fn(),
   deleteExpense: vi.fn(),
 }));
@@ -137,12 +134,18 @@ describe("PATCH /api/expenses/:id (데이터 아키텍처 8-1·8-3)", () => {
 });
 
 describe("DELETE /api/expenses/:id (데이터 아키텍처 8-1·8-3)", () => {
-  it("기록을 지우고 지운 건수를 돌려준다", async () => {
-    const response = await call(DELETE, "DELETE", { scope: { type: "one" } });
+  it("범위대로 지우고 지운 건수를 돌려준다", async () => {
+    vi.mocked(deleteExpense).mockResolvedValueOnce({ deleted: 3 });
+    const response = await call(DELETE, "DELETE", {
+      scope: { type: "count", n: 3 },
+    });
 
     expect(response.status).toBe(200);
-    expect(await response.json()).toEqual({ deleted: 1 });
-    expect(deleteExpense).toHaveBeenCalledWith("user-1", id);
+    expect(await response.json()).toEqual({ deleted: 3 });
+    expect(deleteExpense).toHaveBeenCalledWith("user-1", id, {
+      type: "count",
+      n: 3,
+    });
   });
 
   it("범위가 없으면 400, 없는 기록은 404, 고를 수 없는 범위는 400 SCOPE_NOT_ALLOWED", async () => {

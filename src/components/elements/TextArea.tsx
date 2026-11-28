@@ -4,12 +4,14 @@ import { type ReactNode, useId, useLayoutEffect, useRef } from "react";
 
 import CharCounter from "@/components/elements/CharCounter";
 import Field, { fieldMessageId } from "@/components/elements/Field";
-import {
-  inputBoxClass,
-  inputControlClass,
-} from "@/components/elements/inputBoxStyles";
 import { useNormalizedInput } from "@/hooks/useNormalizedInput";
 import { clampChars, countChars } from "@/lib/text";
+import {
+  INPUT_BOX_CLASS,
+  INPUT_CONTROL_CLASS,
+  INPUT_STATE_CLASSES,
+  TEXTAREA_CONTROL_CLASS,
+} from "@/shared/styleConstants";
 
 interface TextAreaProps {
   value: string;
@@ -48,7 +50,7 @@ const TextArea = ({
     (v) => (maxLength === undefined ? v : clampChars(v, maxLength)),
   );
 
-  // 내용 높이에 맞춘다. 최소·최대 높이는 클래스(min-h-18 · max-h-36)가 정한다
+  // 내용 높이에 맞춘다. 최소·최대 높이는 TEXTAREA_CONTROL_CLASS가 정한다
   useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
@@ -56,12 +58,12 @@ const TextArea = ({
     el.style.height = `${el.scrollHeight}px`;
   }, [value]);
 
+  const state = disabled ? "disabled" : error ? "invalid" : "default";
+
   return (
     <Field id={inputId} label={label} error={error} hint={hint}>
       <div
-        className={`relative items-start pt-3 ${
-          maxLength === undefined ? "pb-3" : "pb-6.5"
-        } ${inputBoxClass({ invalid: !!error, disabled })}`}
+        className={`${INPUT_BOX_CLASS} relative items-start pt-3 ${maxLength === undefined ? "pb-3" : "pb-6.5"} ${INPUT_STATE_CLASSES[state]}`}
       >
         <textarea
           ref={ref}
@@ -72,7 +74,7 @@ const TextArea = ({
           disabled={disabled}
           aria-invalid={error ? true : undefined}
           aria-describedby={error || hint ? fieldMessageId(inputId) : undefined}
-          className={`max-h-36 min-h-18 resize-none ${inputControlClass}`}
+          className={`${TEXTAREA_CONTROL_CLASS} ${INPUT_CONTROL_CLASS}`}
           onBlur={onBlur}
           onChange={handlers.onChange}
           onCompositionStart={handlers.onCompositionStart}

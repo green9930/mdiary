@@ -24,7 +24,7 @@ const Radio = ({
 }: RadioProps) => {
   return (
     <label
-      className={`flex min-h-11 items-center gap-2 text-body ${
+      className={`touch-44 flex min-h-10 items-center gap-2 text-body ${
         disabled ? "text-text03" : "text-text01"
       }`}
     >

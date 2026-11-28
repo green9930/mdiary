@@ -377,26 +377,27 @@ ALTER TABLE "Series"  ADD CONSTRAINT series_billing_day CHECK ("billingDay" BETW
 
 ### 8-3. 오류
 
-| 상태 | 언제                       | 본문                                                       | 화면 처리                                                                 |
-| ---- | -------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------- |
-| 400  | 검증 실패                  | `{ code: "VALIDATION", fields: { title: "REQUIRED", … } }` | 서버 검증은 클라이언트와 같아 평소 나오지 않는다. 나오면 저장 실패로 처리 |
-| 400  | 고를 수 없는 범위 (5-3)    | `{ code: "SCOPE_NOT_ALLOWED" }`                            | 화면이 미리 막으므로 평소 나오지 않는다. 나오면 저장 실패로 처리          |
-| 401  | 세션 없음·만료             | `{ code: "UNAUTHORIZED" }`                                 | 로그인으로                                                                |
-| 404  | 없는 기록 (남의 기록 포함) | `{ code: "NOT_FOUND" }`                                    | "이미 삭제된 기록입니다"                                                  |
-| 500  | 그 밖                      | `{ code: "INTERNAL" }`                                     | 저장·삭제 실패 다이얼로그, 조회 실패                                      |
+| 상태 | 언제                                             | 본문                                                       | 화면 처리                                                                 |
+| ---- | ------------------------------------------------ | ---------------------------------------------------------- | ------------------------------------------------------------------------- |
+| 400  | 검증 실패                                        | `{ code: "VALIDATION", fields: { title: "REQUIRED", … } }` | 서버 검증은 클라이언트와 같아 평소 나오지 않는다. 나오면 저장 실패로 처리 |
+| 400  | 고를 수 없는 범위 (5-3), 범위 N이 남은 건수 초과 | `{ code: "SCOPE_NOT_ALLOWED" }`                            | 화면이 미리 막으므로 평소 나오지 않는다. 나오면 저장 실패로 처리          |
+| 401  | 세션 없음·만료                                   | `{ code: "UNAUTHORIZED" }`                                 | 로그인으로                                                                |
+| 404  | 없는 기록 (남의 기록 포함)                       | `{ code: "NOT_FOUND" }`                                    | "이미 삭제된 기록입니다"                                                  |
+| 500  | 그 밖                                            | `{ code: "INTERNAL" }`                                     | 저장·삭제 실패 다이얼로그, 조회 실패                                      |
 
 ### 8-4. 클라이언트 캐시 (TanStack Query)
 
-| 쿼리 키                                          | API                           |
-| ------------------------------------------------ | ----------------------------- |
-| `["accountSummary"]`                             | `/api/me`                     |
-| `["monthTotals", month]`                         | `/api/calendar`               |
-| `["dayExpenses", date]`                          | `/api/expenses?date=`         |
-| `["categoryStats", from, to]`                    | `/api/stats`                  |
-| `["categoryExpenses", from, to, category, sort]` | `/api/expenses?from=…` (무한) |
-| `["searchResults", q, period]`                   | `/api/search` (무한)          |
-| `["titleSuggestions"]`                           | `/api/titles`                 |
-| `["expenseDetail", id]`                          | `/api/expenses/:id`           |
+| 쿼리 키                                          | API                                                                        |
+| ------------------------------------------------ | -------------------------------------------------------------------------- |
+| `["accountSummary"]`                             | `/api/me`                                                                  |
+| `["monthTotals", month]`                         | `/api/calendar`                                                            |
+| `["dayExpenses", date]`                          | `/api/expenses?date=`                                                      |
+| `["categoryStats", from, to]`                    | `/api/stats`                                                               |
+| `["categoryExpenses", from, to, category, sort]` | `/api/expenses?from=…` (무한)                                              |
+| `["searchResults", q, period]`                   | `/api/search` (무한)                                                       |
+| `["titleSuggestions"]`                           | `/api/titles`                                                              |
+| `["expenseDetail", id]`                          | `/api/expenses/:id`                                                        |
+| `["scopePreview", id, scope, n, date]`           | `/api/expenses/:id/scope` (시트를 열 때마다 새로 받는다. 무효화 대상 아님) |
 
 - 등록·수정·삭제가 성공하면 `accountSummary`, `monthTotals`, `dayExpenses`, `categoryStats`, `categoryExpenses`, `searchResults`, `titleSuggestions`, `expenseDetail`을 모두 무효화한다. 범위 수정은 여러 달에 걸치므로 키를 골라 지우지 않는다.
 

@@ -109,6 +109,17 @@ describe("TextInput (CG ②③)", () => {
     await userEvent.type(input, "가");
     expect(input).toHaveValue("월세");
   });
+
+  it("크기 기본 lg는 높이 48, md는 40이다", () => {
+    render(
+      <>
+        <ControlledText label="큰 칸" />
+        <ControlledText label="중간 칸" size="md" />
+      </>,
+    );
+    expect(screen.getByLabelText("큰 칸").parentElement).toHaveClass("h-12");
+    expect(screen.getByLabelText("중간 칸").parentElement).toHaveClass("h-10");
+  });
 });
 
 describe("TextArea (토큰 5-2)", () => {
@@ -170,5 +181,16 @@ describe("NumberInput (CG ⑤)", () => {
     expect(screen.getByLabelText("회차")).toHaveAccessibleDescription(
       "2부터 입력할 수 있습니다.",
     );
+  });
+
+  it("크기 기본 lg는 높이 48, md는 40이다", () => {
+    render(
+      <>
+        <ControlledNumber label="기간" unit="개월" />
+        <ControlledNumber label="회차" unit="회" size="md" />
+      </>,
+    );
+    expect(screen.getByLabelText("기간").parentElement).toHaveClass("h-12");
+    expect(screen.getByLabelText("회차").parentElement).toHaveClass("h-10");
   });
 });

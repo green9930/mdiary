@@ -12,5 +12,8 @@ export type ButtonVariantType =
 
 export type ButtonSizeType = "lg" | "md" | "sm";
 
+/** 한 줄 입력 크기: lg 48 · md 40 (토큰 5-2) */
+export type InputSizeType = "lg" | "md";
+
 /** 로고 크기: 로그인 화면 lg, 그 밖 md (토큰 5-7) */
 export type LogoSizeType = "lg" | "md";

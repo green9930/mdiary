@@ -20,13 +20,13 @@ export const PATHS = {
   devComponents: "/dev/components",
 } as const;
 
-/** 화면 제목 (화면 명세). 탭 라벨·헤더 제목·페이지 제목이 같이 쓴다 */
 /** 화면 상태를 담는 URL 쿼리 이름 (화면 명세 공통 규약 · 상태를 URL에 둔다) */
 export const URL_PARAMS = {
   /** 열린 상세 시트의 기록 id (SC-08) */
   expense: "expense",
 } as const;
 
+/** 화면 제목 (화면 명세). 탭 라벨·헤더 제목·페이지 제목이 같이 쓴다 */
 export const PAGE_TITLES = {
   calendar: "달력",
   categories: "카테고리",
@@ -63,64 +63,125 @@ export const STATE_TEXTS = {
   noRecords: "기록이 없습니다.",
 } as const;
 
-/** 월간 달력 문구 (화면 명세 SC-03) */
-export const CALENDAR_TEXTS = {
-  /** 월 합계 라벨: `Total.` */
-  totalLabel: "Total.",
-  /** 하루 목록 건수: `2건` */
-  dayCount: (count: number) => `${count}건`,
+/** 단위 */
+export const UNITS = {
+  won: "원",
+  man: "만",
+  eok: "억",
+  /** 기록 건수 */
+  count: "건",
 } as const;
 
-/** 반복 배지 (화면 명세 SC-03 하루 목록, SC-04 카테고리별, SC-05 검색) */
-export const BADGE_TEXTS = {
-  recurring: "정기",
-  /** `할부 3/12` */
-  installment: (seq: number, total: number) => `할부 ${seq}/${total}`,
-} as const;
+// 여러 실패 문구가 같이 쓰는 끝맺음
+const RETRY_LATER = "잠시 후 다시 시도해 주세요.";
 
 /** 로그인 화면 문구 (화면 명세 SC-02) */
 export const LOGIN_TEXTS = {
   tagline: "나의 지출만 확인하고 싶을 때",
   expired: "세션이 만료되었습니다. 다시 로그인해 주세요.",
   withdrawn: "탈퇴가 완료되었습니다.",
-  failed: "로그인에 실패했습니다. 잠시 후 다시 시도해 주세요.",
+  failed: `로그인에 실패했습니다. ${RETRY_LATER}`,
 } as const;
 
-/** 알림 다이얼로그 문구 (와이어프레임 CM ⑤⑥, SC-06 ⑭, SC-10 ⑤) */
+/** 월간 달력 문구 (화면 명세 SC-03) */
+export const CALENDAR_TEXTS = {
+  /** 월 합계 라벨: `Total.` */
+  totalLabel: "Total.",
+  /** 하루 목록 건수: `2건` */
+  dayCount: (count: number) => `${count}${UNITS.count}`,
+} as const;
+
+/** 알림·확인 다이얼로그 문구 (와이어프레임 CM ⑤⑥, SC-06 ⑭, SC-10 ⑤) */
 export const DIALOG_TEXTS = {
   saveTitle: "저장하기",
-  saveFailed: "저장하지 못했습니다. 잠시 후 다시 시도해 주세요.",
+  saveFailed: `저장하지 못했습니다. ${RETRY_LATER}`,
   saveDoneTitle: "저장 완료",
   saveDoneBody: "기록을 저장했습니다.",
   deleteTitle: "삭제하기",
-  deleteFailed: "삭제하지 못했습니다. 잠시 후 다시 시도해 주세요.",
+  deleteFailed: `삭제하지 못했습니다. ${RETRY_LATER}`,
   signOutTitle: "로그아웃하기",
-  signOutFailed: "로그아웃하지 못했습니다. 잠시 후 다시 시도해 주세요.",
+  signOutFailed: `로그아웃하지 못했습니다. ${RETRY_LATER}`,
   leaveTitle: "작성 취소",
   leaveBody: "작성 중인 내용이 사라집니다. 나가시겠습니까?",
   deleteBody: "이 기록을 삭제하시겠습니까?",
+  /** 반복 기록 범위 삭제 (SC-09) */
+  deleteCount: (count: number) => `${count}${UNITS.count}을 삭제하시겠습니까?`,
+  /** 계속 반복하는 정기지출의 이후 전체 삭제 (SC-09) */
+  deleteContinuousEnd: "이 건부터 반복이 종료됩니다. 삭제하시겠습니까?",
   notFoundTitle: "기록 없음",
   notFoundBody: "이미 삭제된 기록입니다.",
 } as const;
 
-/** 바텀시트 제목 */
-/** 상세의 반복 정보 (화면 명세 SC-08) */
-export const SERIES_TEXTS = {
+// 반복 문구가 서로 이어 쓰는 말
+const INSTALLMENT = "할부";
+const COUNT_UNIT = "회";
+const CONTINUOUS = "계속";
+const SCOPE_AFTER = "이후 전체";
+const monthlyOn = (day: number) => `매달 ${day}일`;
+
+/**
+ * 반복 기록 문구 (화면 명세 SC-06 반복 입력, SC-08 반복 정보, SC-09 범위 선택).
+ * 금액은 쉼표·원을 붙인 문자열, 월은 `2026년 10월` 형식 문자열로 받는다
+ */
+export const REPEAT_TEXTS = {
+  // 반복 입력 (SC-06)
+  none: "일시불",
   recurring: "정기지출",
+  installment: INSTALLMENT,
+  continuous: CONTINUOUS,
+  months: "기간 선택",
+  perCount: "회차당 금액",
+  total: "총액",
+  monthUnit: "개월",
+  countUnit: COUNT_UNIT,
+
+  // 반복 미리보기 (SC-06 ⑤⑥)
+  /** `2026년 10월 ~ 2027년 3월` */
+  range: (from: string, to: string) => `${from} ~ ${to}`,
+  lastDayNote: "없는 달은 말일로 기록됩니다.",
+  /** `회차당 33,333원` */
+  perCountAmount: (amount: string) => `회차당 ${amount}`,
+  /** `1회차 33,334원 · 2~3회차 33,333원`. 2회면 `2회차` */
+  firstAndRest: (first: string, rest: string, count: number) =>
+    `1회차 ${first} · ${count === 2 ? "2" : `2~${count}`}회차 ${rest}`,
+
+  // 상세의 반복 정보 (SC-08)
   /** `매달 25일` */
-  monthlyOn: (day: number) => `매달 ${day}일`,
-  continuous: "반복",
-  /** `할부 2/3회 · 총 300,000원` (총액은 쉼표·원을 붙인 문자열) */
-  installment: (seq: number, total: number, totalAmount: string) =>
-    `할부 ${seq}/${total}회 · 총 ${totalAmount}`,
+  monthlyOn,
+  /** 계속 반복하는 정기지출 줄 끝 (`정기지출 · 매달 25일 · 반복`) */
+  continuousInfo: "반복",
+  /** `할부 2/3회 · 총 300,000원` */
+  installmentInfo: (seq: number, total: number, totalAmount: string) =>
+    `${INSTALLMENT} ${seq}/${total}${COUNT_UNIT} · 총 ${totalAmount}`,
+
+  // 수정·삭제 범위 선택 (SC-09)
+  scopeOne: "이번 건만",
+  scopeAfter: SCOPE_AFTER,
+  /** 할부의 이후 전체 */
+  scopeAfterInstallment: `${SCOPE_AFTER} (남은 회차)`,
+  /** `이 건부터 [N] 개월`의 앞부분 */
+  scopeCountPrefix: "이 건부터",
+  /** `2026년 10월 25일 1건` */
+  scopeOneDay: (date: string, count: number) =>
+    `${date} ${count}${UNITS.count}`,
+  /** `2026년 10월 ~ 2027년 3월 (6건)` (기간은 range로 만든 문자열) */
+  scopeRangeCount: (range: string, count: number) =>
+    `${range} (${count}${UNITS.count})`,
+  /** `2026년 10월부터 계속` */
+  scopeFromContinuous: (month: string) => `${month}부터 ${CONTINUOUS}`,
+  /** `2027년 1월부터 계속 · 매달 3일` (날짜를 바꾼 계속 반복) */
+  scopeFromContinuousOn: (month: string, day: number) =>
+    `${month}부터 ${CONTINUOUS} · ${monthlyOn(day)}`,
+  scopeLaterMonthHint:
+    "날짜의 달을 바꾸면 이 건부터 N개월은 선택할 수 없습니다.",
+  scopeEarlierMonthHint: "앞 달로 옮기면 이번 건만 수정할 수 있습니다.",
 } as const;
 
-/** 입력·조작 안내 */
-export const FIELD_HINTS = {
-  /** 수정 화면의 반복 잠금 (화면 명세 SC-06) */
-  repeatLocked: "반복 종류와 기간은 바꿀 수 없습니다.",
-  /** 임시: F6-2에서 범위 선택을 붙이면 지운다 */
-  seriesActionPending: "반복 기록은 F6-2 이후 수정·삭제할 수 있습니다",
+/** 반복 배지 (화면 명세 SC-03 하루 목록, SC-04 카테고리별, SC-05 검색) */
+export const BADGE_TEXTS = {
+  recurring: "정기",
+  /** `할부 3/12` */
+  installment: (seq: number, total: number) => `${INSTALLMENT} ${seq}/${total}`,
 } as const;
 
 export const SHEET_TITLES = {
@@ -130,6 +191,36 @@ export const SHEET_TITLES = {
   expenseDetail: "기록 상세",
   /** 계산기 시트의 접근성 이름. 화면에는 보이지 않는다 */
   calculator: "계산기",
+  /** 반복 기록 범위 선택 (SC-09) */
+  scopeEdit: "반복 기록 수정",
+  scopeDelete: "반복 기록 삭제",
+} as const;
+
+/** 화면에는 보이지 않고 스크린 리더가 읽는 이름 */
+export const ARIA_LABELS = {
+  back: "뒤로",
+  mainNav: "주요 화면",
+  loading: "불러오는 중",
+  prevMonth: "이전 달",
+  nextMonth: "다음 달",
+  prevYear: "이전 해",
+  nextYear: "다음 해",
+  /** 연·월 선택 시트를 여는 버튼 */
+  openMonthPicker: SHEET_TITLES.monthPicker,
+  backspace: "한 글자 지우기",
+  clear: "식 전체 지우기",
+  roundingUnit: "끝전 처리 단위",
+  roundingDirection: "끝전 처리 방향",
+  repeatMonths: "개월 수",
+  installmentCount: "회차",
+  /** 반복 기록 범위 라디오 묶음 (SC-09) */
+  scope: "적용 범위",
+} as const;
+
+/** 입력·조작 안내 */
+export const FIELD_HINTS = {
+  /** 수정 화면의 반복 잠금 (화면 명세 SC-06) */
+  repeatLocked: "반복 종류와 기간은 바꿀 수 없습니다.",
 } as const;
 
 /** 날짜 규칙 (화면 명세 공통 정책값, 데이터 아키텍처 3-1·3-2) */
@@ -146,47 +237,24 @@ export const DATE_RULES = {
   calendarWeeks: 6,
 } as const;
 
+const DATE_LABEL = "날짜";
+
 /** 입력 라벨 (화면 명세 SC-06) */
 export const FIELD_LABELS = {
-  date: "날짜",
+  date: DATE_LABEL,
   title: "제목",
   category: "카테고리",
   amount: "금액",
   content: "내용 (선택)",
   repeat: "반복",
   /** 정기지출을 고르면 날짜 라벨 */
-  dateFirstRecurring: "날짜 (첫 결제일)",
+  dateFirstRecurring: `${DATE_LABEL} (첫 결제일)`,
   /** 할부를 고르면 날짜 라벨 */
-  dateFirstInstallment: "날짜 (1회차 결제일)",
+  dateFirstInstallment: `${DATE_LABEL} (1회차 결제일)`,
   /** 할부 총액 기준이면 금액 라벨 */
-  amountTotal: "총액",
+  amountTotal: REPEAT_TEXTS.total,
   period: "기간",
   installmentBasis: "금액 기준 · 회차",
-} as const;
-
-/** 반복 입력 (화면 명세 SC-06 반복 입력) */
-export const REPEAT_TEXTS = {
-  none: "일시불",
-  recurring: "정기지출",
-  installment: "할부",
-  continuous: "계속",
-  months: "기간 선택",
-  perCount: "회차당 금액",
-  total: "총액",
-  monthUnit: "개월",
-  countUnit: "회",
-} as const;
-
-/** 반복 입력 아래 미리보기 (와이어프레임 SC-06 ⑤⑥) */
-export const REPEAT_PREVIEW_TEXTS = {
-  /** `2026년 10월 ~ 2027년 3월` */
-  range: (from: string, to: string) => `${from} ~ ${to}`,
-  lastDayNote: "없는 달은 말일로 기록됩니다.",
-  /** `회차당 33,333원` (금액은 쉼표·원을 붙인 문자열) */
-  perCount: (amount: string) => `회차당 ${amount}`,
-  /** `1회차 33,334원 · 2~3회차 33,333원`. 2회면 `2회차` */
-  firstAndRest: (first: string, rest: string, count: number) =>
-    `1회차 ${first} · ${count === 2 ? "2" : `2~${count}`}회차 ${rest}`,
 } as const;
 
 /** 입력칸 placeholder (와이어프레임 SC-06 ①) */
@@ -198,29 +266,36 @@ export const PLACEHOLDERS = {
   repeatCount: `${SERIES_RULES.repeatMin}~${SERIES_RULES.repeatMax}`,
 } as const;
 
-/** 필드 오류 문구 (화면 명세 SC-06) */
+/** 필드 오류 문구 (화면 명세 SC-06). 개월 수·회차 문구는 그 칸의 이름을 쓴다 (이름이 받침으로 끝나면 조사를 고친다) */
 export const FIELD_ERRORS = {
   titleRequired: "제목을 입력해 주세요.",
   categoryRequired: "카테고리를 선택해 주세요.",
   amountRequired: "금액을 입력해 주세요.",
-  monthsRequired: "개월 수를 입력해 주세요.",
-  countRequired: "회차를 입력해 주세요.",
+  monthsRequired: `${ARIA_LABELS.repeatMonths}를 입력해 주세요.`,
+  countRequired: `${ARIA_LABELS.installmentCount}를 입력해 주세요.`,
   repeatMin: `${SERIES_RULES.repeatMin}부터 입력할 수 있습니다.`,
   totalBelowCount: "총액은 회차 수 이상이어야 합니다.",
   overYearMax: `${DATE_RULES.maxDate.slice(0, 4)}년 12월까지만 기록할 수 있습니다.`,
+  /** 범위의 N이 남은 건수(계속 반복은 99)를 넘음 (SC-09) */
+  scopeCountMax: (max: number) =>
+    `${max}${REPEAT_TEXTS.monthUnit}까지 입력할 수 있습니다.`,
 } as const;
+
+// 계산기 문구가 이어 쓰는 말
+const ROUND_UP = "올림";
+const ROUND_DOWN = "버림";
 
 /** 계산기 문구 (화면 명세 SC-07) */
 export const CALCULATOR_TEXTS = {
   recordFormula: "계산식을 내용에 기록",
   rounding: "끝전 처리",
-  roundUp: "올림",
-  roundDown: "버림",
+  roundUp: ROUND_UP,
+  roundDown: ROUND_DOWN,
   /** 끝전 처리 단위 칸 (`10원`) */
-  unit: (unit: number) => `${unit}원`,
+  unit: (unit: number) => `${unit}${UNITS.won}`,
   /** 내용에 남기는 계산식 끝의 끝전 처리 표시 (`(10원 올림)`) */
   roundingNote: (unit: number, up: boolean) =>
-    `(${unit}원 ${up ? "올림" : "버림"})`,
+    `(${unit}${UNITS.won} ${up ? ROUND_UP : ROUND_DOWN})`,
   /** 결과 미리보기 (`= 40,500`) */
   result: (value: string) => `= ${value}`,
   /** 키패드 C (식 전체 지우기) */
@@ -232,16 +307,9 @@ export const CALCULATOR_TEXTS = {
 
 /** 계산기 [적용]을 막는 이유 (화면 명세 SC-07) */
 export const CALCULATOR_ERRORS = {
-  belowMin: `결과가 ${EXPENSE_RULES.amountMin}원 이상이어야 적용할 수 있습니다.`,
+  belowMin: `결과가 ${EXPENSE_RULES.amountMin}${UNITS.won} 이상이어야 적용할 수 있습니다.`,
   divideByZero: "0으로 나눌 수 없습니다.",
-  overMax: `${EXPENSE_RULES.amountMax.toLocaleString("ko-KR")}원까지 적용할 수 있습니다.`,
-} as const;
-
-/** 입력칸 단위 */
-export const UNITS = {
-  won: "원",
-  man: "만",
-  eok: "억",
+  overMax: `${EXPENSE_RULES.amountMax.toLocaleString("ko-KR")}${UNITS.won}까지 적용할 수 있습니다.`,
 } as const;
 
 /** 입력 글자 규칙 (화면 명세 공통 규약 · 입력) */
@@ -266,24 +334,6 @@ export const WEEKDAY_LABELS = [
   "금",
   "토",
 ] as const;
-
-/** 화면에는 보이지 않고 스크린 리더가 읽는 이름 */
-export const ARIA_LABELS = {
-  back: "뒤로",
-  mainNav: "주요 화면",
-  loading: "불러오는 중",
-  prevMonth: "이전 달",
-  nextMonth: "다음 달",
-  prevYear: "이전 해",
-  nextYear: "다음 해",
-  openMonthPicker: "연·월 선택",
-  backspace: "한 글자 지우기",
-  clear: "식 전체 지우기",
-  roundingUnit: "끝전 처리 단위",
-  roundingDirection: "끝전 처리 방향",
-  repeatMonths: "개월 수",
-  installmentCount: "회차",
-} as const;
 
 /** 쿠키 이름 */
 export const COOKIES = {

@@ -199,6 +199,22 @@ const ComponentsPreview = () => {
           onValueChange={() => {}}
         />
         <TextInput
+          label="제목 (md)"
+          size="md"
+          placeholder="제목을 입력해 주세요"
+          maxLength={25}
+          value=""
+          onValueChange={() => {}}
+        />
+        <NumberInput
+          label="기간 (md)"
+          size="md"
+          unit="개월"
+          placeholder="2~99"
+          value=""
+          onValueChange={() => {}}
+        />
+        <TextInput
           label="제목 (비활성)"
           value="월세"
           disabled

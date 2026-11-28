@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { isNotFound, isUnauthorized } from "@/api/apiClient";
 import CategoryIcon from "@/components/category/CategoryIcon";
 import Button from "@/components/elements/Button";
+import ScopeFields from "@/components/expense/ScopeFields";
 import AlertDialog from "@/components/overlays/AlertDialog";
 import BottomSheet from "@/components/overlays/BottomSheet";
 import Dialog from "@/components/overlays/Dialog";
@@ -14,6 +15,11 @@ import { SkeletonArea, SkeletonLine } from "@/components/states/Skeleton";
 import { useDeleteExpense } from "@/hooks/useDeleteExpense";
 import { useExpenseDetail } from "@/hooks/useExpenseDetail";
 import { runAfterLayerPops } from "@/hooks/useHistoryLayer";
+import {
+  convertDeleteConfirmText,
+  type ScopeSelected,
+  useScopeSelection,
+} from "@/hooks/useScopeSelection";
 import { formatAmount } from "@/lib/amount";
 import { formatFullDate } from "@/lib/date";
 import {
@@ -23,7 +29,6 @@ import {
 import {
   BTN_TEXTS,
   DIALOG_TEXTS,
-  FIELD_HINTS,
   SHEET_TITLES,
 } from "@/shared/sharedConstants";
 import { invalidateExpenseQueries } from "@/states/tanstackQuery/invalidateExpenseQueries";
@@ -72,9 +77,6 @@ const DetailBody = ({ detail }: DetailBodyProps) => {
           {convertSeriesInfoText(series).map((line) => (
             <p key={line}>{line}</p>
           ))}
-          <p className="text-caption text-text03">
-            {FIELD_HINTS.seriesActionPending}
-          </p>
         </div>
       )}
     </div>
@@ -92,7 +94,8 @@ const DetailSkeleton = () => {
   );
 };
 
-// 지출 상세 바텀시트 (화면 명세 SC-08). 쿼리 `expense`로 열리고, 반복 없는 기록은 이 건만 삭제한다
+// 지출 상세 바텀시트 (화면 명세 SC-08). 쿼리 `expense`로 열린다.
+// 반복 기록의 [삭제]는 시트를 하나 더 띄우지 않고 이 시트 안에서 범위 선택(SC-09)으로 바꾼다
 const ExpenseDetailSheet = ({
   expenseId,
   onClose,
@@ -115,6 +118,23 @@ const ExpenseDetailSheet = ({
   const loadNotFound = active && isNotFound(query.error);
   const notFoundOpen = loadNotFound || deleteNotFound;
   const sheetOpen = active && !loadNotFound;
+  const detail = query.data;
+
+  // 범위 선택 중인지. 시트가 닫히면 상세로 돌아간다
+  const [scopeMode, setScopeMode] = useState(false);
+  const [wasSheetOpen, setWasSheetOpen] = useState(sheetOpen);
+  if (sheetOpen !== wasSheetOpen) {
+    setWasSheetOpen(sheetOpen);
+    if (!sheetOpen) setScopeMode(false);
+  }
+  const scopeSelection = useScopeSelection({
+    open: sheetOpen && scopeMode,
+    id: shownId ?? "",
+    originalDate: detail?.expense.date ?? "",
+    date: detail?.expense.date ?? "",
+  });
+  // 확인 다이얼로그에서 [삭제]하면 지울 범위. 반복 없는 기록은 이번 건만
+  const [pending, setPending] = useState<ScopeSelected | null>(null);
 
   // 다이얼로그가 쌓은 기록이 되돌려진 뒤에 시트를 닫는다. 먼저 닫으면 뒤로 가기가 다이얼로그 기록을 지운다
   const closeAfterDialog = useRef(false);
@@ -129,8 +149,22 @@ const ExpenseDetailSheet = ({
     closeAfterDialog.current = true;
   };
 
+  // [삭제]: 반복 기록은 범위 선택으로, 범위 선택에서는 고른 범위로 확인을 띄운다
+  const requestDelete = () => {
+    if (detail?.series && !scopeMode) {
+      setScopeMode(true);
+      return;
+    }
+    if (scopeMode) {
+      const selected = scopeSelection.submit();
+      if (!selected) return;
+      setPending(selected);
+    } else setPending(null);
+    setConfirmOpen(true);
+  };
+
   const confirmDelete = () => {
-    remove.mutate(undefined, {
+    remove.mutate(pending?.scope ?? { type: "one" }, {
       onSuccess: () => {
         markGone();
         setConfirmOpen(false);
@@ -151,10 +185,14 @@ const ExpenseDetailSheet = ({
     invalidateExpenseQueries(client);
   };
 
-  const detail = query.data;
-  const locked = detail?.series !== undefined;
-
   const renderBody = () => {
+    if (detail?.series && scopeMode)
+      return (
+        <ScopeFields
+          selection={scopeSelection}
+          seriesType={detail.series.type}
+        />
+      );
     if (detail) return <DetailBody detail={detail} />;
     if (query.isError && !isNotFound(query.error))
       return (
@@ -171,27 +209,36 @@ const ExpenseDetailSheet = ({
       <BottomSheet
         open={sheetOpen}
         onClose={onClose}
-        title={SHEET_TITLES.expenseDetail}
-        titleHidden
+        title={
+          scopeMode ? SHEET_TITLES.scopeDelete : SHEET_TITLES.expenseDetail
+        }
+        titleHidden={!scopeMode}
         historyLayer={false}
         footer={
-          detail && (
+          detail &&
+          (scopeMode ? (
             <div className="grid grid-cols-2 gap-2">
+              <Button variant="line" onClick={() => setScopeMode(false)}>
+                {BTN_TEXTS.cancel}
+              </Button>
               <Button
                 variant="danger"
-                disabled={locked}
-                onClick={() => setConfirmOpen(true)}
+                disabled={!scopeSelection.ready}
+                onClick={requestDelete}
               >
                 {BTN_TEXTS.delete}
               </Button>
-              <Button
-                disabled={locked}
-                onClick={() => onEdit(detail.expense.id)}
-              >
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-2">
+              <Button variant="danger" onClick={requestDelete}>
+                {BTN_TEXTS.delete}
+              </Button>
+              <Button onClick={() => onEdit(detail.expense.id)}>
                 {BTN_TEXTS.edit}
               </Button>
             </div>
-          )
+          ))
         }
       >
         {renderBody()}
@@ -206,7 +253,7 @@ const ExpenseDetailSheet = ({
         onCancel={() => setConfirmOpen(false)}
         loading={remove.isPending}
       >
-        {DIALOG_TEXTS.deleteBody}
+        {pending ? convertDeleteConfirmText(pending) : DIALOG_TEXTS.deleteBody}
       </Dialog>
       <AlertDialog
         open={deleteFailed}

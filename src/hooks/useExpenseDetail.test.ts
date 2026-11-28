@@ -6,6 +6,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { useDeleteExpense } from "@/hooks/useDeleteExpense";
 import { useExpenseDetail } from "@/hooks/useExpenseDetail";
+import { useScopePreview } from "@/hooks/useScopePreview";
 import { useUpdateExpense } from "@/hooks/useUpdateExpense";
 import { QUERY_KEYS } from "@/states/tanstackQuery/queryConstants";
 
@@ -89,13 +90,54 @@ describe("useUpdateExpense · useDeleteExpense (데이터 아키텍처 8-1·8-4)
     const invalidate = vi.spyOn(client, "invalidateQueries");
     const { result } = renderHook(() => useDeleteExpense(id), { wrapper });
 
-    await act(() => result.current.mutateAsync());
+    await act(() => result.current.mutateAsync({ type: "count", n: 3 }));
 
     const [, init] = fetch.mock.calls[0] ?? [];
     expect(init?.method).toBe("DELETE");
-    expect(JSON.parse(String(init?.body))).toEqual({ scope: { type: "one" } });
+    expect(JSON.parse(String(init?.body))).toEqual({
+      scope: { type: "count", n: 3 },
+    });
     expect(invalidate).toHaveBeenCalledWith({
       queryKey: [QUERY_KEYS.dayExpenses],
     });
+  });
+});
+
+describe("useScopePreview (데이터 아키텍처 8-1 범위 미리보기)", () => {
+  const preview = {
+    remaining: 6,
+    affected: {
+      count: 3,
+      fromMonth: "2026-10",
+      toMonth: "2026-12",
+      continuous: false,
+    },
+  };
+
+  it("범위·바꾼 날짜를 쿼리로 보내 미리보기를 받는다", async () => {
+    const fetch = mockFetch(preview);
+    const { wrapper } = setup();
+    const { result } = renderHook(
+      () =>
+        useScopePreview({
+          id,
+          scope: { type: "count", n: 3 },
+          date: "2026-10-03",
+        }),
+      { wrapper },
+    );
+
+    await waitFor(() => expect(result.current.data).toEqual(preview));
+    expect(String(fetch.mock.calls[0]?.[0])).toBe(
+      `/api/expenses/${id}/scope?scope=count&n=3&date=2026-10-03`,
+    );
+  });
+
+  it("범위가 없으면(N이 틀림) 요청하지 않는다", () => {
+    const fetch = mockFetch(preview);
+    const { wrapper } = setup();
+    renderHook(() => useScopePreview({ id, scope: null }), { wrapper });
+
+    expect(fetch).not.toHaveBeenCalled();
   });
 });
