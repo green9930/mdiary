@@ -17,6 +17,8 @@ interface NumberInputProps {
   /** 입력칸 오른쪽 안쪽에 고정으로 보이는 단위 (개월·회) */
   unit: string;
   label?: ReactNode;
+  /** 보이는 라벨 없이 쓸 때의 접근성 이름 */
+  "aria-label"?: string;
   error?: string;
   hint?: ReactNode;
   /** 최대 자릿수 */
@@ -35,6 +37,7 @@ const NumberInput = ({
   onValueChange,
   unit,
   label,
+  "aria-label": ariaLabel,
   error,
   hint,
   maxDigits = 2,
@@ -63,6 +66,7 @@ const NumberInput = ({
           value={value}
           placeholder={placeholder}
           disabled={disabled}
+          aria-label={ariaLabel}
           aria-invalid={error ? true : undefined}
           aria-describedby={error || hint ? fieldMessageId(inputId) : undefined}
           className={`h-full font-num ${inputControlClass}`}

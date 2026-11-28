@@ -1,7 +1,14 @@
 import { v7 as uuidv7 } from "uuid";
 
-import { convertToDateStr, convertToDbDate, monthOf } from "@/lib/date";
+import {
+  convertToDateStr,
+  convertToDbDate,
+  convertToKSTStr,
+  monthOf,
+} from "@/lib/date";
+import { buildSeriesRows } from "@/lib/seriesUtils";
 import { prisma } from "@/server/db";
+import { extendContinuousSeries } from "@/server/seriesService";
 import type {
   CreatedExpense,
   CreateExpenseType,
@@ -13,24 +20,63 @@ import type {
   UpdateExpenseType,
 } from "@/types/expenseTypes";
 
-/** 지출 등록 (데이터 아키텍처 8-1 `POST /api/expenses`). 반복은 F6 전까지 없음만 */
+/**
+ * 지출 등록 (데이터 아키텍처 8-1 `POST /api/expenses`, 5-2 생성).
+ * 반복이면 묶음과 모든 행을 한 트랜잭션으로 만들고 첫 행의 id·날짜를 돌려준다
+ */
 export const createExpense = async (
   userId: string,
   input: CreateExpenseType,
 ): Promise<CreatedExpense> => {
-  const expense = await prisma.expense.create({
-    data: {
-      id: uuidv7(),
-      userId,
-      date: convertToDbDate(input.date),
-      title: input.title,
-      category: input.category,
-      amount: input.amount,
-      content: input.content,
-    },
-    select: { id: true, date: true },
-  });
-  return { id: expense.id, date: convertToDateStr(expense.date) };
+  const fields = {
+    userId,
+    title: input.title,
+    category: input.category,
+    content: input.content,
+  };
+  const built = buildSeriesRows(input, monthOf(convertToKSTStr()));
+  if (!built) {
+    const expense = await prisma.expense.create({
+      data: {
+        ...fields,
+        id: uuidv7(),
+        date: convertToDbDate(input.date),
+        amount: input.amount,
+      },
+      select: { id: true, date: true },
+    });
+    return { id: expense.id, date: convertToDateStr(expense.date) };
+  }
+
+  const seriesId = uuidv7();
+  const rows = built.rows.map((row) => ({ ...row, id: uuidv7() }));
+  const { generatedUntil, ...series } = built.series;
+  await prisma.$transaction([
+    prisma.series.create({
+      data: {
+        ...series,
+        id: seriesId,
+        userId,
+        generatedUntil:
+          generatedUntil === null
+            ? null
+            : convertToDbDate(`${generatedUntil}-01`),
+      },
+    }),
+    prisma.expense.createMany({
+      data: rows.map(({ id, seq, date, amount }) => ({
+        ...fields,
+        id,
+        seriesId,
+        seq,
+        date: convertToDbDate(date),
+        amount,
+      })),
+    }),
+  ]);
+  const [first] = rows;
+  if (!first) throw new Error(`반복 묶음에 행이 없습니다: ${seriesId}`);
+  return { id: first.id, date: first.date };
 };
 
 /** 목록 항목의 반복 정보. 할부에 총 회차가 없으면 깨진 데이터라 에러를 낸다 */
@@ -51,6 +97,8 @@ export const getDayExpenses = async (
   userId: string,
   date: string,
 ): Promise<ExpenseListItem[]> => {
+  // 계속 반복은 그 달까지 먼저 연장한다 (데이터 아키텍처 5-4 조회 직전)
+  await extendContinuousSeries({ userId, untilMonth: monthOf(date) });
   const rows = await prisma.expense.findMany({
     where: { userId, date: convertToDbDate(date) },
     orderBy: [{ createdAt: "asc" }, { id: "asc" }],

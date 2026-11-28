@@ -1,6 +1,6 @@
 // 여러 화면·모듈이 두루 쓰는 상수
 
-import { EXPENSE_RULES } from "@/shared/expenseConstants";
+import { EXPENSE_RULES, SERIES_RULES } from "@/shared/expenseConstants";
 
 /** 서비스 이름. ko: 로고와 브라우저 탭 제목, en: 로그인 화면 로고 아래 (화면 명세 SC-02) */
 export const APP_NAME = {
@@ -117,8 +117,10 @@ export const SERIES_TEXTS = {
 
 /** 입력·조작 안내 */
 export const FIELD_HINTS = {
-  /** 임시: F6에서 범위 선택을 붙이면 지운다 */
-  repeatLocked: "반복 기록은 F6 이후 수정·삭제할 수 있습니다",
+  /** 수정 화면의 반복 잠금 (화면 명세 SC-06) */
+  repeatLocked: "반복 종류와 기간은 바꿀 수 없습니다.",
+  /** 임시: F6-2에서 범위 선택을 붙이면 지운다 */
+  seriesActionPending: "반복 기록은 F6-2 이후 수정·삭제할 수 있습니다",
 } as const;
 
 export const SHEET_TITLES = {
@@ -130,6 +132,20 @@ export const SHEET_TITLES = {
   calculator: "계산기",
 } as const;
 
+/** 날짜 규칙 (화면 명세 공통 정책값, 데이터 아키텍처 3-1·3-2) */
+export const DATE_RULES = {
+  /** 날짜 문자열 형식 YYYY-MM-DD */
+  pattern: /^\d{4}-\d{2}-\d{2}$/,
+  /** 월 문자열 형식 YYYY-MM */
+  monthPattern: /^\d{4}-\d{2}$/,
+  /** 선택 가능 연도의 처음 */
+  minDate: "2020-01-01",
+  /** 입력 검증용 기술 상한 (선택 가능 연도) */
+  maxDate: "2099-12-31",
+  /** 달력은 항상 6줄로 그린다 (SC-03) */
+  calendarWeeks: 6,
+} as const;
+
 /** 입력 라벨 (화면 명세 SC-06) */
 export const FIELD_LABELS = {
   date: "날짜",
@@ -137,6 +153,40 @@ export const FIELD_LABELS = {
   category: "카테고리",
   amount: "금액",
   content: "내용 (선택)",
+  repeat: "반복",
+  /** 정기지출을 고르면 날짜 라벨 */
+  dateFirstRecurring: "날짜 (첫 결제일)",
+  /** 할부를 고르면 날짜 라벨 */
+  dateFirstInstallment: "날짜 (1회차 결제일)",
+  /** 할부 총액 기준이면 금액 라벨 */
+  amountTotal: "총액",
+  period: "기간",
+  installmentBasis: "금액 기준 · 회차",
+} as const;
+
+/** 반복 입력 (화면 명세 SC-06 반복 입력) */
+export const REPEAT_TEXTS = {
+  none: "일시불",
+  recurring: "정기지출",
+  installment: "할부",
+  continuous: "계속",
+  months: "기간 선택",
+  perCount: "회차당 금액",
+  total: "총액",
+  monthUnit: "개월",
+  countUnit: "회",
+} as const;
+
+/** 반복 입력 아래 미리보기 (와이어프레임 SC-06 ⑤⑥) */
+export const REPEAT_PREVIEW_TEXTS = {
+  /** `2026년 10월 ~ 2027년 3월` */
+  range: (from: string, to: string) => `${from} ~ ${to}`,
+  lastDayNote: "없는 달은 말일로 기록됩니다.",
+  /** `회차당 33,333원` (금액은 쉼표·원을 붙인 문자열) */
+  perCount: (amount: string) => `회차당 ${amount}`,
+  /** `1회차 33,334원 · 2~3회차 33,333원`. 2회면 `2회차` */
+  firstAndRest: (first: string, rest: string, count: number) =>
+    `1회차 ${first} · ${count === 2 ? "2" : `2~${count}`}회차 ${rest}`,
 } as const;
 
 /** 입력칸 placeholder (와이어프레임 SC-06 ①) */
@@ -144,6 +194,8 @@ export const PLACEHOLDERS = {
   title: "제목을 입력해 주세요",
   amount: "0",
   content: "메모",
+  /** 개월 수·회차 (`2~99`) */
+  repeatCount: `${SERIES_RULES.repeatMin}~${SERIES_RULES.repeatMax}`,
 } as const;
 
 /** 필드 오류 문구 (화면 명세 SC-06) */
@@ -151,6 +203,11 @@ export const FIELD_ERRORS = {
   titleRequired: "제목을 입력해 주세요.",
   categoryRequired: "카테고리를 선택해 주세요.",
   amountRequired: "금액을 입력해 주세요.",
+  monthsRequired: "개월 수를 입력해 주세요.",
+  countRequired: "회차를 입력해 주세요.",
+  repeatMin: `${SERIES_RULES.repeatMin}부터 입력할 수 있습니다.`,
+  totalBelowCount: "총액은 회차 수 이상이어야 합니다.",
+  overYearMax: `${DATE_RULES.maxDate.slice(0, 4)}년 12월까지만 기록할 수 있습니다.`,
 } as const;
 
 /** 계산기 문구 (화면 명세 SC-07) */
@@ -185,20 +242,6 @@ export const UNITS = {
   won: "원",
   man: "만",
   eok: "억",
-} as const;
-
-/** 날짜 규칙 (화면 명세 공통 정책값, 데이터 아키텍처 3-1·3-2) */
-export const DATE_RULES = {
-  /** 날짜 문자열 형식 YYYY-MM-DD */
-  pattern: /^\d{4}-\d{2}-\d{2}$/,
-  /** 월 문자열 형식 YYYY-MM */
-  monthPattern: /^\d{4}-\d{2}$/,
-  /** 선택 가능 연도의 처음 */
-  minDate: "2020-01-01",
-  /** 입력 검증용 기술 상한 (선택 가능 연도) */
-  maxDate: "2099-12-31",
-  /** 달력은 항상 6줄로 그린다 (SC-03) */
-  calendarWeeks: 6,
 } as const;
 
 /** 입력 글자 규칙 (화면 명세 공통 규약 · 입력) */
@@ -238,6 +281,8 @@ export const ARIA_LABELS = {
   clear: "식 전체 지우기",
   roundingUnit: "끝전 처리 단위",
   roundingDirection: "끝전 처리 방향",
+  repeatMonths: "개월 수",
+  installmentCount: "회차",
 } as const;
 
 /** 쿠키 이름 */

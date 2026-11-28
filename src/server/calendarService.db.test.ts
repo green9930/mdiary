@@ -81,3 +81,36 @@ describe("getMonthTotals (데이터 아키텍처 6장 SC-03 날짜별 합계, �
     expect((await getMonthTotals(userId, "2026-10")).total).toBe(2_999_999_997);
   });
 });
+
+describe("getMonthTotals 조회 직전 연장 (데이터 아키텍처 5-4)", () => {
+  it("요청한 달까지 계속 반복을 먼저 연장해 합계에 넣는다", async () => {
+    const seriesId = uuidv7();
+    await prisma.series.create({
+      data: {
+        id: seriesId,
+        userId,
+        type: "RECURRING",
+        billingDay: 31,
+        isContinuous: true,
+        generatedUntil: new Date("2027-01-01"),
+      },
+    });
+    await prisma.expense.create({
+      data: {
+        id: uuidv7(),
+        userId,
+        seriesId,
+        seq: 1,
+        date: new Date("2027-01-31"),
+        title: "월세",
+        category: "LIVING",
+        amount: 500000,
+      },
+    });
+
+    expect(await getMonthTotals(userId, "2027-02")).toEqual({
+      total: 500000,
+      days: [{ date: "2027-02-28", total: 500000 }],
+    });
+  });
+});

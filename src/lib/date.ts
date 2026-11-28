@@ -63,6 +63,13 @@ export const addMonths = (month: string, n: number) => {
   return fromUtc(value).slice(0, 7);
 };
 
+/** 그 달의 마지막 날 (28~31) */
+export const lastDayOf = (month: string) => {
+  const value = toUtc(`${addMonths(month, 1)}-01`);
+  value.setUTCDate(0);
+  return value.getUTCDate();
+};
+
 /** 선택 가능 연도의 첫 달(2020년 1월)인지. 그 전 달로는 옮기지 않는다 */
 export const isMinMonth = (month: string) =>
   month <= DATE_RULES.minDate.slice(0, 7);

@@ -11,6 +11,7 @@ import TextInput from "@/components/elements/TextInput";
 import CalculatorSheet from "@/components/expense/CalculatorSheet";
 import CategoryGrid from "@/components/expense/CategoryGrid";
 import DatePickerSheet from "@/components/expense/DatePickerSheet";
+import RepeatFields from "@/components/expense/RepeatFields";
 import TitleSuggestions from "@/components/expense/TitleSuggestions";
 import PageHeader from "@/components/layout/PageHeader";
 import AlertDialog from "@/components/overlays/AlertDialog";
@@ -28,6 +29,7 @@ import { useTitleSuggestions } from "@/hooks/useTitleSuggestions";
 import { useUpdateExpense } from "@/hooks/useUpdateExpense";
 import { formatAmountInput } from "@/lib/amount";
 import { formatFullDate } from "@/lib/date";
+import { convertRepeatPreview, convertSeriesPreview } from "@/lib/seriesUtils";
 import { filterTitleSuggestions } from "@/lib/titleSuggestionsUtils";
 import { handleUpdateExpense } from "@/lib/updateExpense";
 import { EXPENSE_RULES } from "@/shared/expenseConstants";
@@ -40,7 +42,11 @@ import {
   PLACEHOLDERS,
   UNITS,
 } from "@/shared/sharedConstants";
-import type { ExpenseDetail, TitleSuggestion } from "@/types/expenseTypes";
+import type {
+  ExpenseDetail,
+  ExpenseFormValues,
+  TitleSuggestion,
+} from "@/types/expenseTypes";
 
 interface ExpenseFormProps {
   /** 날짜 기본값 (쿼리 date, 없거나 잘못됐으면 오늘) */
@@ -49,14 +55,39 @@ interface ExpenseFormProps {
   today: string;
   /** 수정할 원래 기록. 없으면 등록이다 */
   editing?: ExpenseDetail["expense"];
+  /** 수정할 기록의 반복 정보. 반복 기록이면 있다 */
+  series?: ExpenseDetail["series"];
 }
 
-// 지출 등록·수정 (화면 명세 SC-06). 반복은 F6에서 붙인다
-const ExpenseForm = ({ initialDate, today, editing }: ExpenseFormProps) => {
+// 반복을 고르면 날짜 라벨이 결제일로, 할부 총액이면 금액 라벨이 총액으로 바뀐다 (등록만)
+const dateLabelOf = (values: ExpenseFormValues, editing: boolean) => {
+  if (editing || values.repeat === "none") return FIELD_LABELS.date;
+  return values.repeat === "recurring"
+    ? FIELD_LABELS.dateFirstRecurring
+    : FIELD_LABELS.dateFirstInstallment;
+};
+
+const amountLabelOf = (values: ExpenseFormValues, editing: boolean) =>
+  !editing &&
+  values.repeat === "installment" &&
+  values.installmentBasis === "total"
+    ? FIELD_LABELS.amountTotal
+    : FIELD_LABELS.amount;
+
+// 지출 등록·수정 (화면 명세 SC-06). 수정 화면은 반복 종류·기간을 잠근다
+const ExpenseForm = ({
+  initialDate,
+  today,
+  editing,
+  series,
+}: ExpenseFormProps) => {
   const router = useRouter();
   const goBack = useGoBack();
   const form = useExpenseForm(
-    editing ? toExpenseFormValues(editing) : emptyExpenseValues(initialDate),
+    editing
+      ? toExpenseFormValues(editing, series)
+      : emptyExpenseValues(initialDate),
+    { repeatLocked: !!editing },
   );
   const { values, errors } = form;
   const guard = useLeaveGuard(form.dirty);
@@ -81,6 +112,8 @@ const ExpenseForm = ({ initialDate, today, editing }: ExpenseFormProps) => {
     suggestions: `${id}-suggestions`,
     category: `${id}-category`,
     amount: `${id}-amount`,
+    months: `${id}-months`,
+    installmentCount: `${id}-installment-count`,
   };
 
   const suggestions = suggestOpen
@@ -169,7 +202,7 @@ const ExpenseForm = ({ initialDate, today, editing }: ExpenseFormProps) => {
       <div className="flex flex-1 flex-col gap-6 px-4 pt-2 pb-6">
         <div className="flex flex-col gap-2">
           <p id={ids.dateLabel} className="text-body text-text01">
-            {FIELD_LABELS.date}
+            {dateLabelOf(values, !!editing)}
           </p>
           <button
             type="button"
@@ -210,7 +243,7 @@ const ExpenseForm = ({ initialDate, today, editing }: ExpenseFormProps) => {
         />
         <TextInput
           id={ids.amount}
-          label={FIELD_LABELS.amount}
+          label={amountLabelOf(values, !!editing)}
           value={formatAmountInput(values.amount)}
           onValueChange={form.setAmount}
           numeric
@@ -234,6 +267,26 @@ const ExpenseForm = ({ initialDate, today, editing }: ExpenseFormProps) => {
           onValueChange={form.setContent}
           maxLength={EXPENSE_RULES.contentMax}
           placeholder={PLACEHOLDERS.content}
+        />
+        <RepeatFields
+          values={values}
+          errors={errors}
+          ids={ids}
+          locked={!!editing}
+          preview={
+            series
+              ? convertSeriesPreview(series)
+              : editing
+                ? []
+                : convertRepeatPreview(values)
+          }
+          onRepeatChange={form.setRepeat}
+          onPeriodChange={form.setRecurringPeriod}
+          onMonthsChange={form.setMonths}
+          onBasisChange={form.setInstallmentBasis}
+          onCountChange={form.setInstallmentCount}
+          onMonthsBlur={() => form.blur("months")}
+          onCountBlur={() => form.blur("installmentCount")}
         />
       </div>
       {/* 하단 고정 [저장]: 늘 활성, 요청 중만 막는다 */}

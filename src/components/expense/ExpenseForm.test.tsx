@@ -580,6 +580,160 @@ describe("ExpenseForm (화면 명세 SC-06 등록)", () => {
     });
   });
 
+  describe("반복 (SC-06 반복 입력)", () => {
+    const repeatOption = (name: string) =>
+      within(screen.getByRole("radiogroup", { name: "반복" })).getByRole(
+        "radio",
+        { name },
+      );
+    const monthsInput = () => screen.getByRole("textbox", { name: "개월 수" });
+    const countInput = () => screen.getByRole("textbox", { name: "회차" });
+
+    it("처음에는 일시불이고 반복 입력이 접혀 있다", () => {
+      mockServer();
+      renderForm();
+      expect(repeatOption("일시불")).toHaveAttribute("aria-checked", "true");
+      expect(
+        screen.queryByRole("radiogroup", { name: "기간" }),
+      ).not.toBeInTheDocument();
+    });
+
+    it("정기지출: 날짜 라벨이 첫 결제일로 바뀌고, 기본은 계속이며 미리보기를 보인다", async () => {
+      const fetch = mockServer();
+      renderForm();
+      await fillValid();
+
+      await userEvent.click(repeatOption("정기지출"));
+
+      expect(
+        screen.getByRole("button", {
+          name: "날짜 (첫 결제일) 2026년 10월 18일 (일)",
+        }),
+      ).toBeInTheDocument();
+      expect(screen.getByText("매달 18일 · 계속")).toBeInTheDocument();
+
+      await userEvent.click(saveButton());
+      await waitFor(() => dialog("저장 완료"));
+      expect(postBodies(fetch)[0]).toMatchObject({
+        repeat: { type: "recurring", continuous: true },
+      });
+    });
+
+    it("정기지출 개월 수: 미리보기에 기간, 저장하면 months로 보낸다", async () => {
+      const fetch = mockServer();
+      renderForm();
+      await fillValid();
+      await userEvent.click(repeatOption("정기지출"));
+      await userEvent.click(screen.getByRole("radio", { name: "기간 선택" }));
+
+      await userEvent.type(monthsInput(), "6");
+
+      expect(
+        screen.getByText("매달 18일 · 2026년 10월 ~ 2027년 3월"),
+      ).toBeInTheDocument();
+      await userEvent.click(saveButton());
+      await waitFor(() => dialog("저장 완료"));
+      expect(postBodies(fetch)[0]).toMatchObject({
+        repeat: { type: "recurring", months: 6 },
+      });
+    });
+
+    it("개월 수가 비었거나 1이면 [저장] 때 칸 아래 오류와 함께 그 칸으로 간다", async () => {
+      const fetch = mockServer();
+      renderForm();
+      await fillValid();
+      await userEvent.click(repeatOption("정기지출"));
+      await userEvent.click(screen.getByRole("radio", { name: "기간 선택" }));
+
+      await userEvent.click(saveButton());
+      expect(monthsInput()).toHaveAccessibleDescription(
+        "개월 수를 입력해 주세요.",
+      );
+      expect(monthsInput()).toHaveFocus();
+
+      await userEvent.type(monthsInput(), "1");
+      await userEvent.click(saveButton());
+      expect(monthsInput()).toHaveAccessibleDescription(
+        "2부터 입력할 수 있습니다.",
+      );
+      expect(postBodies(fetch)).toEqual([]);
+    });
+
+    it("할부 총액: 금액 라벨이 총액이 되고, 총액이 회차 수보다 작으면 오류", async () => {
+      const fetch = mockServer();
+      renderForm();
+      await userEvent.type(titleInput(), "아이패드");
+      await userEvent.click(screen.getByRole("button", { name: "가전" }));
+      await userEvent.click(repeatOption("할부"));
+      await userEvent.click(screen.getByRole("radio", { name: "총액" }));
+      await userEvent.type(countInput(), "3");
+      const totalInput = screen.getByRole("textbox", { name: "총액" });
+      await userEvent.type(totalInput, "2");
+
+      await userEvent.click(saveButton());
+      expect(totalInput).toHaveAccessibleDescription(
+        "총액은 회차 수 이상이어야 합니다.",
+      );
+      expect(postBodies(fetch)).toEqual([]);
+
+      await userEvent.clear(totalInput);
+      await userEvent.type(totalInput, "100000");
+      expect(
+        screen.getByText("매달 18일 · 2026년 10월 ~ 2026년 12월"),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText("1회차 33,334원 · 2~3회차 33,333원"),
+      ).toBeInTheDocument();
+      await userEvent.click(saveButton());
+      await waitFor(() => dialog("저장 완료"));
+      expect(postBodies(fetch)[0]).toMatchObject({
+        amount: 100000,
+        repeat: { type: "installment", count: 3, basis: "total" },
+      });
+    });
+
+    it("종류를 바꿨다 돌아와도 종류별 값을 유지한다", async () => {
+      mockServer();
+      renderForm();
+      await userEvent.click(repeatOption("할부"));
+      await userEvent.type(countInput(), "12");
+      await userEvent.click(repeatOption("정기지출"));
+      await userEvent.click(repeatOption("할부"));
+
+      expect(countInput()).toHaveValue("12");
+    });
+
+    it("저장 완료 [확인] 뒤에는 반복도 일시불로 되돌린다", async () => {
+      mockServer();
+      renderForm();
+      await fillValid();
+      await userEvent.click(repeatOption("정기지출"));
+      await userEvent.click(saveButton());
+
+      await userEvent.click(
+        within(await waitFor(() => dialog("저장 완료"))).getByRole("button", {
+          name: "확인",
+          hidden: true,
+        }),
+      );
+
+      await waitFor(() =>
+        expect(repeatOption("일시불")).toHaveAttribute("aria-checked", "true"),
+      );
+    });
+
+    it("반복만 바꿔도 작성 중으로 보고 [뒤로]에 확인을 띄운다", async () => {
+      mockServer();
+      renderForm();
+      await userEvent.click(repeatOption("정기지출"));
+
+      await userEvent.click(screen.getByRole("button", { name: "뒤로" }));
+
+      expect(dialog("작성 취소")).toBeInTheDocument();
+      expect(router.replace).not.toHaveBeenCalled();
+    });
+  });
+
   describe("수정 (SC-06 수정)", () => {
     const original = {
       id: "e1",
@@ -676,6 +830,63 @@ describe("ExpenseForm (화면 명세 SC-06 등록)", () => {
       );
 
       await waitFor(() => expect(router.replace).toHaveBeenCalledWith("/"));
+    });
+
+    it("반복 없는 기록은 반복 3단 선택을 잠그고 안내한다", () => {
+      mockServer();
+      renderEdit();
+
+      const group = screen.getByRole("radiogroup", { name: "반복" });
+      expect(group).toHaveAttribute("aria-disabled", "true");
+      expect(
+        within(group).getByRole("radio", { name: "일시불" }),
+      ).toHaveAttribute("aria-checked", "true");
+      expect(
+        screen.getByText("반복 종류와 기간은 바꿀 수 없습니다."),
+      ).toBeInTheDocument();
+    });
+
+    it("반복 기록은 지금 값을 채운 채 잠그고, 날짜 라벨은 그대로 둔다", () => {
+      mockServer();
+      const client = createQueryClient({ onUnauthorized: () => {} });
+      render(
+        <QueryClientProvider client={client}>
+          <ExpenseForm
+            initialDate={original.date}
+            today="2026-10-21"
+            editing={{ ...original, title: "아이패드", date: "2026-11-01" }}
+            series={{
+              type: "INSTALLMENT",
+              seq: 2,
+              totalCount: 3,
+              billingDay: 1,
+              isContinuous: false,
+              installmentTotal: 100000,
+              fromMonth: "2026-10",
+              toMonth: "2026-12",
+            }}
+          />
+        </QueryClientProvider>,
+      );
+
+      expect(screen.getByRole("radiogroup", { name: "반복" })).toHaveAttribute(
+        "aria-disabled",
+        "true",
+      );
+      expect(screen.getByRole("radio", { name: "할부" })).toHaveAttribute(
+        "aria-checked",
+        "true",
+      );
+      expect(screen.getByRole("radio", { name: "회차당 금액" })).toBeDisabled();
+      expect(screen.getByRole("textbox", { name: "회차" })).toHaveValue("3");
+      expect(screen.getByRole("textbox", { name: "회차" })).toBeDisabled();
+      expect(
+        screen.getByText("매달 1일 · 2026년 10월 ~ 2026년 12월"),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: "날짜 2026년 11월 1일 (일)" }),
+      ).toBeInTheDocument();
+      expect(amountInput()).toBeInTheDocument();
     });
 
     it("저장에 실패하면 알림을 띄우고 입력값을 둔다", async () => {

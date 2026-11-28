@@ -95,11 +95,71 @@ describe("createExpenseSchema (데이터 아키텍처 3-2, 8-2)", () => {
       });
       expect(errorsOf({ category: "CAFE" })).toEqual({ category: "REQUIRED" });
     });
+  });
 
-    it("반복 없음만 받는다", () => {
-      expect(errorsOf({ repeat: { type: "recurring", months: 6 } })).toEqual({
-        repeat: "INVALID",
+  describe("반복 (데이터 아키텍처 8-2)", () => {
+    it("없음 · 정기 N개월 · 정기 계속 · 할부를 받는다", () => {
+      for (const repeat of [
+        { type: "none" },
+        { type: "recurring", months: 6 },
+        { type: "recurring", continuous: true },
+        { type: "installment", count: 3, basis: "perCount" },
+        { type: "installment", count: 3, basis: "total" },
+      ])
+        expect(parse({ repeat }).data?.repeat).toEqual(repeat);
+    });
+
+    it("개월 수·회차가 2~99 밖이면 OUT_OF_RANGE", () => {
+      for (const repeat of [
+        { type: "recurring", months: 1 },
+        { type: "recurring", months: 100 },
+      ])
+        expect(errorsOf({ repeat })).toEqual({ repeat: "OUT_OF_RANGE" });
+    });
+
+    it("모양이 틀리면 INVALID", () => {
+      for (const repeat of [
+        { type: "recurring", continuous: false },
+        { type: "recurring" },
+        { type: "installment", count: 3 },
+        { type: "installment", count: 1.5, basis: "total" },
+        { type: "weekly" },
+        undefined,
+      ])
+        expect(errorsOf({ repeat })).toEqual({ repeat: "INVALID" });
+    });
+
+    it("기간이 2099년 12월을 넘으면 OUT_OF_RANGE", () => {
+      expect(
+        parse({ date: "2099-07-31", repeat: { type: "recurring", months: 6 } })
+          .success,
+      ).toBe(true);
+      expect(
+        errorsOf({
+          date: "2099-08-01",
+          repeat: { type: "installment", count: 6, basis: "perCount" },
+        }),
+      ).toEqual({ repeat: "OUT_OF_RANGE" });
+    });
+
+    it("계속 반복은 2099년에 시작해도 받는다 (만들 때 2099년 12월까지만 만든다)", () => {
+      expect(
+        parse({
+          date: "2099-12-01",
+          repeat: { type: "recurring", continuous: true },
+        }).success,
+      ).toBe(true);
+    });
+
+    it("할부 총액이 회차 수보다 작으면 BELOW_COUNT", () => {
+      const repeat = { type: "installment", count: 3, basis: "total" };
+      expect(parse({ amount: 3, repeat }).success).toBe(true);
+      expect(errorsOf({ amount: 2, repeat })).toEqual({
+        amount: "BELOW_COUNT",
       });
+      expect(
+        parse({ amount: 2, repeat: { ...repeat, basis: "perCount" } }).success,
+      ).toBe(true);
     });
   });
 

@@ -1,14 +1,28 @@
 import { useState } from "react";
 
 import { toDigits } from "@/lib/text";
-import { EXPENSE_RULES } from "@/shared/expenseConstants";
+import { EXPENSE_RULES, SERIES_RULES } from "@/shared/expenseConstants";
+import { isRepeatWithinMax } from "@/shared/expenseSchema";
 import { FIELD_ERRORS } from "@/shared/sharedConstants";
 import type {
   CategoryType,
   CreateExpenseRequestType,
   ExpenseDetail,
   ExpenseFormValues,
+  InstallmentBasisType,
+  RecurringPeriodType,
+  RepeatKindType,
+  RepeatType,
 } from "@/types/expenseTypes";
+
+// 반복 입력의 처음 값: 없음, 정기는 계속, 할부는 회차당 금액, 숫자 칸은 빈칸
+const EMPTY_REPEAT = {
+  repeat: "none",
+  recurringPeriod: "continuous",
+  months: "",
+  installmentBasis: "perCount",
+  installmentCount: "",
+} as const;
 
 /** 등록 폼의 처음 값: 받은 날짜 + 빈 칸 */
 export const emptyExpenseValues = (date: string): ExpenseFormValues => ({
@@ -17,21 +31,48 @@ export const emptyExpenseValues = (date: string): ExpenseFormValues => ({
   category: null,
   amount: "",
   content: "",
+  ...EMPTY_REPEAT,
 });
 
-/** 수정 폼의 처음 값: 원래 기록 */
+// 수정 화면의 잠긴 반복 값. 할부는 행마다 금액을 바꾸므로 회차당 금액으로 보여 준다
+const toRepeatValues = (
+  series: ExpenseDetail["series"],
+): Pick<ExpenseFormValues, keyof typeof EMPTY_REPEAT> => {
+  if (!series) return EMPTY_REPEAT;
+  const count = String(series.totalCount ?? "");
+  if (series.type === "INSTALLMENT")
+    return { ...EMPTY_REPEAT, repeat: "installment", installmentCount: count };
+  return series.isContinuous
+    ? { ...EMPTY_REPEAT, repeat: "recurring" }
+    : {
+        ...EMPTY_REPEAT,
+        repeat: "recurring",
+        recurringPeriod: "months",
+        months: count,
+      };
+};
+
+/** 수정 폼의 처음 값: 원래 기록과 반복 정보 */
 export const toExpenseFormValues = (
   expense: ExpenseDetail["expense"],
+  series?: ExpenseDetail["series"],
 ): ExpenseFormValues => ({
   date: expense.date,
   title: expense.title,
   category: expense.category,
   amount: String(expense.amount),
   content: expense.content ?? "",
+  ...toRepeatValues(series),
 });
 
 // 오류를 띄우는 칸. 화면 위에서 아래 순서 (첫 오류 칸으로 포커스할 때 쓴다)
-const ERROR_FIELDS = ["title", "category", "amount"] as const;
+const ERROR_FIELDS = [
+  "title",
+  "category",
+  "amount",
+  "months",
+  "installmentCount",
+] as const;
 
 type ExpenseErrorFieldType = (typeof ERROR_FIELDS)[number];
 
@@ -39,18 +80,76 @@ type ExpenseErrorFieldType = (typeof ERROR_FIELDS)[number];
 type SubmitResultType =
   { error: ExpenseErrorFieldType } | { request: CreateExpenseRequestType };
 
+// 개월 수·회차 칸의 오류: 빈칸 · 2 미만 · 기간이 2099년 12월을 넘음
+const validateRepeatCount = (
+  raw: string,
+  date: string,
+  requiredError: string,
+) => {
+  if (!raw) return requiredError;
+  if (Number(raw) < SERIES_RULES.repeatMin) return FIELD_ERRORS.repeatMin;
+  if (!isRepeatWithinMax(date, Number(raw))) return FIELD_ERRORS.overYearMax;
+  return undefined;
+};
+
+const isMonthsShown = (values: ExpenseFormValues) =>
+  values.repeat === "recurring" && values.recurringPeriod === "months";
+
+// repeatLocked면 반복 입력은 잠겨 있어 검증하지 않는다 (수정 화면)
 const validate = (
   field: ExpenseErrorFieldType,
   values: ExpenseFormValues,
+  repeatLocked: boolean,
 ): string | undefined => {
   switch (field) {
     case "title":
       return values.title.trim() ? undefined : FIELD_ERRORS.titleRequired;
     case "category":
       return values.category ? undefined : FIELD_ERRORS.categoryRequired;
-    case "amount":
-      return values.amount ? undefined : FIELD_ERRORS.amountRequired;
+    case "amount": {
+      if (!values.amount) return FIELD_ERRORS.amountRequired;
+      const count = Number(values.installmentCount);
+      // 할부 총액은 회차 수 이상 (회차가 유효할 때만 비교한다)
+      return !repeatLocked &&
+        values.repeat === "installment" &&
+        values.installmentBasis === "total" &&
+        count >= SERIES_RULES.repeatMin &&
+        Number(values.amount) < count
+        ? FIELD_ERRORS.totalBelowCount
+        : undefined;
+    }
+    case "months":
+      return repeatLocked || !isMonthsShown(values)
+        ? undefined
+        : validateRepeatCount(
+            values.months,
+            values.date,
+            FIELD_ERRORS.monthsRequired,
+          );
+    case "installmentCount":
+      return repeatLocked || values.repeat !== "installment"
+        ? undefined
+        : validateRepeatCount(
+            values.installmentCount,
+            values.date,
+            FIELD_ERRORS.countRequired,
+          );
   }
+};
+
+// 검증을 통과한 폼 값의 반복 → 등록 요청의 repeat
+const toRepeatRequest = (values: ExpenseFormValues): RepeatType => {
+  if (values.repeat === "installment")
+    return {
+      type: "installment",
+      count: Number(values.installmentCount),
+      basis: values.installmentBasis,
+    };
+  if (values.repeat === "recurring")
+    return isMonthsShown(values)
+      ? { type: "recurring", months: Number(values.months) }
+      : { type: "recurring", continuous: true };
+  return { type: "none" };
 };
 
 /**
@@ -58,7 +157,10 @@ const validate = (
  * 입력 중에는 그 칸의 오류를 지우기만 하고, 칸을 벗어날 때와 [저장]을 누를 때 검증한다.
  * initial은 처음 값이다 (등록은 빈 칸, 수정은 원래 값). 입력한 내용이 있는지는 이 값과 비교한다
  */
-export const useExpenseForm = (initial: ExpenseFormValues) => {
+export const useExpenseForm = (
+  initial: ExpenseFormValues,
+  { repeatLocked = false }: { repeatLocked?: boolean } = {},
+) => {
   const [values, setValues] = useState(initial);
   const [errors, setErrors] = useState<
     Partial<Record<ExpenseErrorFieldType, string>>
@@ -72,14 +174,26 @@ export const useExpenseForm = (initial: ExpenseFormValues) => {
     setErrors((prev) => ({ ...prev, [key]: undefined }));
   };
 
+  const clearErrors = (fields: ExpenseErrorFieldType[]) =>
+    setErrors((prev) => ({
+      ...prev,
+      ...Object.fromEntries(fields.map((field) => [field, undefined])),
+    }));
+
   const blur = (field: ExpenseErrorFieldType) => {
-    setErrors((prev) => ({ ...prev, [field]: validate(field, values) }));
+    setErrors((prev) => ({
+      ...prev,
+      [field]: validate(field, values, repeatLocked),
+    }));
   };
 
   /** 모든 칸을 검증해 오류를 띄운다. 오류가 없으면 등록 요청을 만든다 */
   const submit = (): SubmitResultType => {
     const next = Object.fromEntries(
-      ERROR_FIELDS.map((field) => [field, validate(field, values)]),
+      ERROR_FIELDS.map((field) => [
+        field,
+        validate(field, values, repeatLocked),
+      ]),
     );
     setErrors(next);
     const error = ERROR_FIELDS.find((field) => next[field]);
@@ -91,7 +205,7 @@ export const useExpenseForm = (initial: ExpenseFormValues) => {
         category: values.category,
         amount: Number(values.amount),
         content: values.content || null,
-        repeat: { type: "none" },
+        repeat: toRepeatRequest(values),
       },
     };
   };
@@ -109,6 +223,23 @@ export const useExpenseForm = (initial: ExpenseFormValues) => {
     setAmount: (raw: string) =>
       change("amount", toDigits(raw, EXPENSE_RULES.amountDigits)),
     setContent: (content: string) => change("content", content),
+    // 반복 종류·금액 기준을 바꾸면 그와 엮인 칸(금액·개월 수·회차)의 오류도 지운다
+    setRepeat: (repeat: RepeatKindType) => {
+      change("repeat", repeat);
+      clearErrors(["amount", "months", "installmentCount"]);
+    },
+    setRecurringPeriod: (period: RecurringPeriodType) => {
+      change("recurringPeriod", period);
+      clearErrors(["months"]);
+    },
+    setMonths: (raw: string) =>
+      change("months", toDigits(raw, SERIES_RULES.repeatDigits)),
+    setInstallmentBasis: (basis: InstallmentBasisType) => {
+      change("installmentBasis", basis);
+      clearErrors(["amount"]);
+    },
+    setInstallmentCount: (raw: string) =>
+      change("installmentCount", toDigits(raw, SERIES_RULES.repeatDigits)),
     blur,
     submit,
     /** 모든 칸을 처음 값으로 되돌리고 오류를 지운다 (등록 저장 완료 뒤) */

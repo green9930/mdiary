@@ -1,8 +1,13 @@
 import { z } from "zod";
 
-import { isValidDate } from "@/lib/date";
+import { addMonths, isValidDate, monthOf } from "@/lib/date";
 import { countChars, removeControlChars, toSingleLine } from "@/lib/text";
-import { CATEGORY_LIST, EXPENSE_RULES } from "@/shared/expenseConstants";
+import {
+  CATEGORY_LIST,
+  EXPENSE_RULES,
+  SERIES_RULES,
+} from "@/shared/expenseConstants";
+import { DATE_RULES } from "@/shared/sharedConstants";
 import type { CategoryType } from "@/types/expenseTypes";
 
 // 검증 실패 코드는 오류 응답의 fields 값으로 그대로 쓴다 (데이터 아키텍처 8-3)
@@ -45,20 +50,74 @@ const amountSchema = z
   .min(EXPENSE_RULES.amountMin, { error: "OUT_OF_RANGE" })
   .max(EXPENSE_RULES.amountMax, { error: "OUT_OF_RANGE" });
 
-/** 등록 요청 (데이터 아키텍처 8-2). 반복은 F6 전까지 없음만 받는다 */
-export const createExpenseSchema = z.object({
-  date: z
-    .string({ error: "INVALID" })
-    .refine(isValidDate, { error: "INVALID" }),
-  title: titleSchema,
-  category: z.enum(categoryValues, { error: "REQUIRED" }),
-  amount: amountSchema,
-  content: contentSchema,
-  repeat: z.object(
-    { type: z.literal("none", { error: "INVALID" }) },
-    { error: "INVALID" },
-  ),
-});
+// 정기지출 개월 수·할부 회차: 2~99
+const repeatCountSchema = z
+  .number({ error: "OUT_OF_RANGE" })
+  .int({ error: "OUT_OF_RANGE" })
+  .min(SERIES_RULES.repeatMin, { error: "OUT_OF_RANGE" })
+  .max(SERIES_RULES.repeatMax, { error: "OUT_OF_RANGE" });
+
+const recurringType = z.literal("recurring", { error: "INVALID" });
+
+// 반복 (데이터 아키텍처 8-2): 없음 · 정기 N개월 · 정기 계속 · 할부
+const repeatSchema = z.union(
+  [
+    z.strictObject({ type: z.literal("none", { error: "INVALID" }) }),
+    z.strictObject({ type: recurringType, months: repeatCountSchema }),
+    z.strictObject({ type: recurringType, continuous: z.literal(true) }),
+    z.strictObject({
+      type: z.literal("installment", { error: "INVALID" }),
+      count: repeatCountSchema,
+      basis: z.enum(["perCount", "total"], { error: "INVALID" }),
+    }),
+  ],
+  { error: "INVALID" },
+);
+
+/** 반복이 만드는 건수. 없음은 1, 계속은 null (끝이 없다) */
+export const convertRepeatCount = (repeat: z.output<typeof repeatSchema>) => {
+  if (repeat.type === "none") return 1;
+  if (repeat.type === "installment") return repeat.count;
+  return "months" in repeat ? repeat.months : null;
+};
+
+/** 날짜의 달부터 count개 달을 만들 때 마지막 달이 선택 가능 연도(2099년 12월) 안인지 */
+export const isRepeatWithinMax = (date: string, count: number) =>
+  addMonths(monthOf(date), count - 1) <= monthOf(DATE_RULES.maxDate);
+
+/** 등록 요청 (데이터 아키텍처 8-2) */
+export const createExpenseSchema = z
+  .object({
+    date: z
+      .string({ error: "INVALID" })
+      .refine(isValidDate, { error: "INVALID" }),
+    title: titleSchema,
+    category: z.enum(categoryValues, { error: "REQUIRED" }),
+    amount: amountSchema,
+    content: contentSchema,
+    repeat: repeatSchema,
+  })
+  .superRefine(({ date, amount, repeat }, context) => {
+    const count = convertRepeatCount(repeat);
+    // 기간이 2099년 12월을 넘으면 만들지 않는다. 날짜가 틀렸으면 날짜 오류만 낸다
+    if (count !== null && isValidDate(date) && !isRepeatWithinMax(date, count))
+      context.addIssue({
+        code: "custom",
+        path: ["repeat"],
+        message: "OUT_OF_RANGE",
+      });
+    // 할부 총액은 회차 수 이상 (회차당 1원 이상)
+    if (
+      repeat.type === "installment" &&
+      repeat.basis === "total" &&
+      amount < repeat.count
+    )
+      context.addIssue({
+        code: "custom",
+        path: ["amount"],
+        message: "BELOW_COUNT",
+      });
+  });
 
 /** 수정·삭제 범위 (데이터 아키텍처 8-1 `scope`). 반복 기록의 범위(after·count)는 F6에서 받는다 */
 const scopeSchema = z.object(

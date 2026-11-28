@@ -354,7 +354,7 @@ ALTER TABLE "Series"  ADD CONSTRAINT series_billing_day CHECK ("billingDay" BETW
 | `PATCH /api/expenses/:id`     | 바꾼 필드 + `scope`                                                  | `{ updated }` (바뀐 건수)                                                  | SC-06 → SC-09     |
 | `DELETE /api/expenses/:id`    | `scope`                                                              | `{ deleted }`                                                              | SC-08 → SC-09     |
 | `GET /api/expenses/:id/scope` | `scope`, `n?`, `date?` (바꾼 날짜)                                   | `{ remaining, affected: { count, fromMonth, toMonth, continuous } }`       | SC-09 미리보기    |
-| `POST /api/cron/extend`       | 헤더 `Authorization: Bearer CRON_SECRET`                             | `{ series, created }`                                                      | 정기 작업         |
+| `GET /api/cron/extend`        | 헤더 `Authorization: Bearer CRON_SECRET`                             | `{ series, created }`                                                      | 정기 작업         |
 
 - 목록 항목: `{ id, date, title, category, amount, content?, series?: { type, seq, totalCount } }`. 검색에는 `content`를 넣고, 다른 목록에는 넣지 않는다.
 - `scope`: `{ type: "one" | "after" | "count", n? }`. 반복 없는 기록은 `one`만.

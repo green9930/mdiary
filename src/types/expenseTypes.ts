@@ -18,6 +18,18 @@ export type CreateExpenseRequestType = z.input<typeof createExpenseSchema>;
 /** 검증을 거친 등록 값 (제목·내용 정리 후) */
 export type CreateExpenseType = z.output<typeof createExpenseSchema>;
 
+/** 등록 요청의 반복 (데이터 아키텍처 8-2) */
+export type RepeatType = CreateExpenseType["repeat"];
+
+/** 반복 3단 선택 (화면 명세 SC-06) */
+export type RepeatKindType = RepeatType["type"];
+
+/** 정기지출 기간: 계속 / 기간 선택 */
+export type RecurringPeriodType = "continuous" | "months";
+
+/** 할부 금액 기준: 회차당 금액 / 총액 */
+export type InstallmentBasisType = "perCount" | "total";
+
 /** 수정 요청 본문: 바꾼 필드 + scope (데이터 아키텍처 8-1) */
 export type UpdateExpenseRequestType = z.input<typeof updateExpenseSchema>;
 
@@ -118,9 +130,17 @@ export interface ExpenseFormValues {
   date: string;
   title: string;
   category: CategoryType | null;
-  /** 숫자만 담은 문자열. 비어 있을 수 있다 */
+  /** 숫자만 담은 문자열. 비어 있을 수 있다. 할부 총액 기준이면 총액 */
   amount: string;
   content: string;
+  /** 반복. 종류를 바꿔도 종류별 값(기간·개월 수·금액 기준·회차)은 그대로 둔다 */
+  repeat: RepeatKindType;
+  recurringPeriod: RecurringPeriodType;
+  /** 정기지출 개월 수 (숫자 문자열, 비어 있을 수 있다) */
+  months: string;
+  installmentBasis: InstallmentBasisType;
+  /** 할부 회차 (숫자 문자열, 비어 있을 수 있다) */
+  installmentCount: string;
 }
 
 /** 계산기 연산자 (`+ - * /`) */

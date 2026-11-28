@@ -64,6 +64,22 @@ describe("POST /api/expenses (데이터 아키텍처 8-1·8-3)", () => {
     expect(createExpense).not.toHaveBeenCalled();
   });
 
+  it("반복 등록을 그대로 넘기고, 할부 총액이 회차 수보다 작으면 400", async () => {
+    const repeat = { type: "installment", count: 3, basis: "total" };
+    expect((await POST(request({ ...body, repeat }))).status).toBe(201);
+    expect(createExpense).toHaveBeenCalledWith(
+      "user-1",
+      expect.objectContaining({ repeat }),
+    );
+
+    const response = await POST(request({ ...body, amount: 2, repeat }));
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({
+      code: "VALIDATION",
+      fields: { amount: "BELOW_COUNT" },
+    });
+  });
+
   it("본문이 JSON이 아니면 400", async () => {
     const response = await POST(request("not json"));
 

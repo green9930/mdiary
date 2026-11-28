@@ -1,6 +1,15 @@
 import { v7 as uuidv7 } from "uuid";
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
 
+import { convertToDateStr } from "@/lib/date";
 import { prisma } from "@/server/db";
 import {
   createExpense,
@@ -65,6 +74,82 @@ describe("createExpense (데이터 아키텍처 8-1 POST /api/expenses)", () => 
     });
 
     expect(result.id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-7/);
+  });
+});
+
+describe("createExpense 반복 (데이터 아키텍처 5-2)", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  const rowsOf = async (seriesId: string) =>
+    (
+      await prisma.expense.findMany({
+        where: { seriesId },
+        orderBy: { seq: "asc" },
+      })
+    ).map((row) => [row.seq, convertToDateStr(row.date), row.amount]);
+
+  const base = {
+    title: "아이패드",
+    category: "APPLIANCE" as const,
+    content: null,
+  };
+
+  it("할부 총액: 묶음과 회차 행을 한 번에 만들고 첫 행의 id와 날짜를 돌려준다", async () => {
+    const result = await createExpense(userId, {
+      ...base,
+      date: "2026-10-31",
+      amount: 100000,
+      repeat: { type: "installment", count: 3, basis: "total" },
+    });
+
+    const first = await prisma.expense.findUniqueOrThrow({
+      where: { id: result.id },
+      include: { series: true },
+    });
+    expect(result.date).toBe("2026-10-31");
+    expect(first.seq).toBe(1);
+    expect(first.series).toMatchObject({
+      userId,
+      type: "INSTALLMENT",
+      billingDay: 31,
+      isContinuous: false,
+      totalCount: 3,
+      installmentTotal: 100000,
+      generatedUntil: null,
+    });
+    expect(await rowsOf(first.series?.id ?? "")).toEqual([
+      [1, "2026-10-31", 33334],
+      [2, "2026-11-30", 33333],
+      [3, "2026-12-31", 33333],
+    ]);
+  });
+
+  it("정기 계속: 이번 달(서울 기준) + 24개월까지 만들어 둔다", async () => {
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(new Date("2026-11-30T16:00:00Z")); // 서울 12월 1일
+
+    const result = await createExpense(userId, {
+      ...base,
+      title: "월세",
+      date: "2026-10-25",
+      amount: 500000,
+      repeat: { type: "recurring", continuous: true },
+    });
+
+    const first = await prisma.expense.findUniqueOrThrow({
+      where: { id: result.id },
+      include: { series: true },
+    });
+    expect(first.series?.isContinuous).toBe(true);
+    expect(
+      first.series?.generatedUntil &&
+        convertToDateStr(first.series.generatedUntil),
+    ).toBe("2028-12-01");
+    const rows = await rowsOf(first.series?.id ?? "");
+    expect(rows).toHaveLength(27);
+    expect(rows.at(-1)).toEqual([27, "2028-12-25", 500000]);
   });
 });
 
@@ -378,5 +463,42 @@ describe("deleteExpense (데이터 아키텍처 8-1 DELETE, 범위 이 건)", ()
     expect(await deleteExpense(userId, id)).toEqual({
       error: "SCOPE_NOT_ALLOWED",
     });
+  });
+});
+
+describe("조회 직전 연장 (데이터 아키텍처 5-4)", () => {
+  it("하루 목록은 그 달까지 계속 반복을 먼저 연장한다", async () => {
+    const seriesId = uuidv7();
+    await prisma.series.create({
+      data: {
+        id: seriesId,
+        userId,
+        type: "RECURRING",
+        billingDay: 5,
+        isContinuous: true,
+        generatedUntil: new Date("2027-01-01"),
+      },
+    });
+    await prisma.expense.create({
+      data: {
+        id: uuidv7(),
+        userId,
+        seriesId,
+        seq: 1,
+        date: new Date("2027-01-05"),
+        title: "구독",
+        category: "CULTURE",
+        amount: 9900,
+      },
+    });
+
+    const items = await getDayExpenses(userId, "2027-03-05");
+
+    expect(items).toEqual([
+      expect.objectContaining({
+        title: "구독",
+        series: { type: "RECURRING", seq: 3, totalCount: null },
+      }),
+    ]);
   });
 });

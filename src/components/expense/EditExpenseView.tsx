@@ -29,6 +29,7 @@ const EditExpenseView = ({ id, today }: EditExpenseViewProps) => {
         initialDate={query.data.expense.date}
         today={today}
         editing={query.data.expense}
+        series={query.data.series}
       />
     );
 

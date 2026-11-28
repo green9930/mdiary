@@ -16,6 +16,7 @@ import {
   isMinMonth,
   isValidDate,
   isValidMonth,
+  lastDayOf,
   monthGridDates,
   monthOf,
 } from "@/lib/date";
@@ -188,5 +189,15 @@ describe("formatYear · formatMonthNumber (연·월 선택 격자)", () => {
   it("`2026년`, `3월`", () => {
     expect(formatYear(2026)).toBe("2026년");
     expect(formatMonthNumber(3)).toBe("3월");
+  });
+});
+
+describe("lastDayOf", () => {
+  it("그 달의 마지막 날 (윤년 2월 포함)", () => {
+    expect(lastDayOf("2026-10")).toBe(31);
+    expect(lastDayOf("2026-11")).toBe(30);
+    expect(lastDayOf("2027-02")).toBe(28);
+    expect(lastDayOf("2028-02")).toBe(29);
+    expect(lastDayOf("2099-12")).toBe(31);
   });
 });

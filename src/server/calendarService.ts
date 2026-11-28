@@ -1,5 +1,6 @@
 import { addMonths, convertToDateStr, convertToDbDate } from "@/lib/date";
 import { prisma } from "@/server/db";
+import { extendContinuousSeries } from "@/server/seriesService";
 import type { MonthTotals } from "@/types/expenseTypes";
 
 interface DayTotalRow {
@@ -7,11 +8,15 @@ interface DayTotalRow {
   total: bigint;
 }
 
-/** 한 달의 날짜별 합계와 월 합계 (데이터 아키텍처 6장, `GET /api/calendar`). 기록이 있는 날만 준다 */
+/**
+ * 한 달의 날짜별 합계와 월 합계 (데이터 아키텍처 6장, `GET /api/calendar`). 기록이 있는 날만 준다.
+ * 계속 반복은 그 달까지 먼저 연장한다 (5-4 조회 직전)
+ */
 export const getMonthTotals = async (
   userId: string,
   month: string,
 ): Promise<MonthTotals> => {
+  await extendContinuousSeries({ userId, untilMonth: month });
   const from = convertToDbDate(`${month}-01`);
   const to = convertToDbDate(`${addMonths(month, 1)}-01`);
   // SUM(int)은 bigint다. 한 달 합계는 Int 범위를 넘을 수 있다

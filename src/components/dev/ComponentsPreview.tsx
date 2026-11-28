@@ -45,14 +45,14 @@ const VARIANTS: { variant: ButtonVariantType; label: string }[] = [
 const SIZES: ButtonSizeType[] = ["md", "sm"];
 
 const REPEAT_OPTIONS = [
-  { value: "none", label: "없음" },
+  { value: "none", label: "일시불" },
   { value: "monthly", label: "정기지출" },
   { value: "installment", label: "할부" },
 ] as const;
 
 const PERIOD_OPTIONS = [
   { value: "forever", label: "계속" },
-  { value: "months", label: "개월 수" },
+  { value: "months", label: "기간 선택" },
 ] as const;
 
 const SORT_OPTIONS = [

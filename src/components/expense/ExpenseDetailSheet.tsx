@@ -72,7 +72,9 @@ const DetailBody = ({ detail }: DetailBodyProps) => {
           {convertSeriesInfoText(series).map((line) => (
             <p key={line}>{line}</p>
           ))}
-          <p className="text-caption text-text03">{FIELD_HINTS.repeatLocked}</p>
+          <p className="text-caption text-text03">
+            {FIELD_HINTS.seriesActionPending}
+          </p>
         </div>
       )}
     </div>

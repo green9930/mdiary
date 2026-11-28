@@ -38,3 +38,12 @@ export const CALCULATOR_RULES = {
   roundingUnits: [1, 10, 100], // 끝전 처리 단위 (원)
   operatorSymbols: { "+": "+", "-": "−", "*": "×", "/": "÷" },
 } as const;
+
+/** 반복 기록 규칙 (화면 명세 공통 정책값, 데이터 아키텍처 5장) */
+export const SERIES_RULES = {
+  repeatMin: 2, // 최소 반복
+  repeatMax: 99, // 최대 반복
+  repeatDigits: 2, // 개월 수·회차 입력 최대 자릿수
+  extendMonths: 24, // 계속 반복을 미리 만들어 두는 달 수 (이번 달 + 24개월)
+  lastDayNoteFrom: 29, // 이 일 이상이면 없는 달이 생겨 말일 안내를 붙인다
+} as const;
