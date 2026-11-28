@@ -21,11 +21,9 @@ import {
   useScopeSelection,
 } from "@/hooks/useScopeSelection";
 import { formatAmount } from "@/lib/amount";
+import { convertCategoryLabel } from "@/lib/categoriesUtils";
 import { formatFullDate } from "@/lib/date";
-import {
-  convertCategoryLabel,
-  convertSeriesInfoText,
-} from "@/lib/expenseDetailUtils";
+import { convertSeriesInfoText } from "@/lib/expenseDetailUtils";
 import {
   BTN_TEXTS,
   DIALOG_TEXTS,

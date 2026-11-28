@@ -4,6 +4,7 @@ import {
   createExpenseSchema,
   deleteExpenseSchema,
   fieldErrorCodes,
+  periodQuerySchema,
   scopePreviewQuerySchema,
   updateExpenseSchema,
 } from "@/shared/expenseSchema";
@@ -224,5 +225,35 @@ describe("scopePreviewQuerySchema (`GET /api/expenses/:id/scope`)", () => {
     expect(parse({ scope: "count", n: "abc" }).success).toBe(false);
     expect(parse({ scope: "after", date: "2027-02-30" }).success).toBe(false);
     expect(parse({}).success).toBe(false);
+  });
+});
+
+describe("periodQuerySchema (`GET /api/stats`·`GET /api/expenses?from=`)", () => {
+  const errorsOf = (query: Record<string, string>) => {
+    const result = periodQuerySchema.safeParse(query);
+    return result.success ? {} : fieldErrorCodes(result.error);
+  };
+
+  it("시작·끝 달을 읽는다", () => {
+    expect(
+      periodQuerySchema.safeParse({ from: "2025-11", to: "2026-10" }).data,
+    ).toEqual({ from: "2025-11", to: "2026-10" });
+  });
+
+  it("빠졌거나 없는 달이면 그 필드 오류", () => {
+    expect(errorsOf({ to: "2026-10" })).toEqual({ from: "REQUIRED" });
+    expect(errorsOf({ from: "2026-13", to: "2019-12" })).toEqual({
+      from: "INVALID",
+      to: "INVALID",
+    });
+  });
+
+  it("시작 > 끝이거나 60개월을 넘으면 OUT_OF_RANGE", () => {
+    expect(errorsOf({ from: "2026-11", to: "2026-10" })).toEqual({
+      to: "OUT_OF_RANGE",
+    });
+    expect(errorsOf({ from: "2021-10", to: "2026-10" })).toEqual({
+      to: "OUT_OF_RANGE",
+    });
   });
 });

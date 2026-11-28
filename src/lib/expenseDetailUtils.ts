@@ -1,18 +1,10 @@
 import { formatAmount } from "@/lib/amount";
 import { formatMonth } from "@/lib/date";
-import { CATEGORY_LIST } from "@/shared/expenseConstants";
-import { REPEAT_TEXTS } from "@/shared/sharedConstants";
-import type {
-  CategoryType,
-  ExpenseDetailSeriesType,
-} from "@/types/expenseTypes";
-
-/** 카테고리 이름 (`FOOD` → `식비`) */
-export const convertCategoryLabel = (category: CategoryType) =>
-  CATEGORY_LIST.find(({ value }) => value === category)?.label ?? category;
+import { PERIOD_TEXTS, REPEAT_TEXTS } from "@/shared/sharedConstants";
+import type { ExpenseDetailSeriesType } from "@/types/expenseTypes";
 
 const convertFormatPeriod = (series: ExpenseDetailSeriesType) =>
-  REPEAT_TEXTS.range(
+  PERIOD_TEXTS.range(
     formatMonth(series.fromMonth),
     formatMonth(series.toMonth),
   );

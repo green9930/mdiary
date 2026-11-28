@@ -70,3 +70,34 @@ describe("MonthPickerGrid (화면 명세 SC-03 연·월 선택)", () => {
     expect(screen.getByRole("button", { name: "다음 해" })).toBeDisabled();
   });
 });
+
+describe("MonthPickerGrid 기간 선택 (와이어프레임 SC-04 ⑦ ⑫)", () => {
+  it("기간 안의 다른 달은 옅게 채운다", () => {
+    render(
+      <MonthPickerGrid
+        selected="2026-08"
+        currentMonth="2026-11"
+        range={{ from: "2026-08", to: "2026-10" }}
+        onSelect={vi.fn()}
+      />,
+    );
+    const inRange = screen
+      .getAllByRole("button", { name: /^\d+월$/ })
+      .filter((button) => button.dataset.inRange === "true")
+      .map((button) => button.textContent);
+    expect(inRange).toEqual(["9월", "10월"]);
+  });
+
+  it("고를 수 없는 달은 비활성", () => {
+    render(
+      <MonthPickerGrid
+        selected="2026-10"
+        currentMonth="2026-11"
+        isDisabled={(month) => month < "2026-08"}
+        onSelect={vi.fn()}
+      />,
+    );
+    expect(screen.getByRole("button", { name: "7월" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "8월" })).toBeEnabled();
+  });
+});

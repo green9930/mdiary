@@ -24,6 +24,13 @@ export const PATHS = {
 export const URL_PARAMS = {
   /** 열린 상세 시트의 기록 id (SC-08) */
   expense: "expense",
+  /** 조회 기간의 시작·끝 달 YYYY-MM (SC-04) */
+  from: "from",
+  to: "to",
+  /** 카테고리 필터. 카테고리 값의 소문자 (SC-04) */
+  category: "category",
+  /** 목록 정렬 latest | amount (SC-04) */
+  sort: "sort",
 } as const;
 
 /** 화면 제목 (화면 명세). 탭 라벨·헤더 제목·페이지 제목이 같이 쓴다 */
@@ -61,6 +68,11 @@ export const STATE_TEXTS = {
   refreshFailed: "최신 내용을 불러오지 못했습니다.",
   loadMoreFailed: "더 불러오지 못했습니다.",
   noRecords: "기록이 없습니다.",
+  /** 조회 기간에 기록이 없을 때 (SC-04) */
+  noPeriodRecords: "해당 기간 내 기록이 없습니다.",
+  /** 고른 카테고리에 기록이 없을 때 (SC-04) */
+  noCategoryRecords: (category: string) =>
+    `해당 기간 내 ${category} 기록이 없습니다.`,
 } as const;
 
 /** 단위 */
@@ -112,6 +124,41 @@ export const DIALOG_TEXTS = {
   notFoundBody: "이미 삭제된 기록입니다.",
 } as const;
 
+/** 조회 기간 문구 (화면 명세 SC-04·SC-05 기간, 공통 규약 날짜 표시). 월은 `2026년 10월` 형식 문자열로 받는다 */
+export const PERIOD_TEXTS = {
+  /** `2025년 11월 ~ 2026년 10월` */
+  range: (from: string, to: string) => `${from} ~ ${to}`,
+  /** 기간 드롭다운의 빠른 선택 이름. 키는 이번 달을 포함한 개월 수 (CATEGORY_PERIOD_RULES.quickMonths) */
+  quick: {
+    1: "이번 달",
+    3: "최근 3개월",
+    6: "최근 6개월",
+    12: "최근 1년",
+  },
+  start: "시작",
+  end: "끝",
+  /** 기간 선택 [적용]을 막는 이유 */
+  maxRange: "최대 5년까지 조회할 수 있습니다.",
+} as const;
+
+/** 목록 정렬 (화면 명세 SC-04) */
+export const SORT_TEXTS = {
+  latest: "최신순",
+  amount: "큰 금액순",
+} as const;
+
+/** 카테고리별 집계 문구 (화면 명세 SC-04) */
+export const STATS_TEXTS = {
+  /** 기간 요약: `총지출 · 42건` */
+  summary: (count: number) => `총지출 · ${count}${UNITS.count}`,
+  all: "전체",
+  /** 목록 요약: `전체 · 42건 · 1,234,500원` (금액은 쉼표·원을 붙인 문자열) */
+  listSummary: (label: string, count: number, total: string) =>
+    `${label} · ${count}${UNITS.count} · ${total}`,
+  /** 비중이 0.1% 미만 */
+  belowTenth: "<0.1%",
+} as const;
+
 // 반복 문구가 서로 이어 쓰는 말
 const INSTALLMENT = "할부";
 const COUNT_UNIT = "회";
@@ -135,9 +182,7 @@ export const REPEAT_TEXTS = {
   monthUnit: "개월",
   countUnit: COUNT_UNIT,
 
-  // 반복 미리보기 (SC-06 ⑤⑥)
-  /** `2026년 10월 ~ 2027년 3월` */
-  range: (from: string, to: string) => `${from} ~ ${to}`,
+  // 반복 미리보기 (SC-06 ⑤⑥). 기간은 PERIOD_TEXTS.range
   lastDayNote: "없는 달은 말일로 기록됩니다.",
   /** `회차당 33,333원` */
   perCountAmount: (amount: string) => `회차당 ${amount}`,
@@ -164,7 +209,7 @@ export const REPEAT_TEXTS = {
   /** `2026년 10월 25일 1건` */
   scopeOneDay: (date: string, count: number) =>
     `${date} ${count}${UNITS.count}`,
-  /** `2026년 10월 ~ 2027년 3월 (6건)` (기간은 range로 만든 문자열) */
+  /** `2026년 10월 ~ 2027년 3월 (6건)` (기간은 PERIOD_TEXTS.range로 만든 문자열) */
   scopeRangeCount: (range: string, count: number) =>
     `${range} (${count}${UNITS.count})`,
   /** `2026년 10월부터 계속` */
@@ -194,6 +239,8 @@ export const SHEET_TITLES = {
   /** 반복 기록 범위 선택 (SC-09) */
   scopeEdit: "반복 기록 수정",
   scopeDelete: "반복 기록 삭제",
+  /** 조회 기간의 시작·끝 달 선택 (SC-04·SC-05) */
+  periodPicker: "기간 선택",
 } as const;
 
 /** 화면에는 보이지 않고 스크린 리더가 읽는 이름 */
@@ -215,6 +262,14 @@ export const ARIA_LABELS = {
   installmentCount: "회차",
   /** 반복 기록 범위 라디오 묶음 (SC-09) */
   scope: "적용 범위",
+  /** 기간 드롭다운 (SC-04·SC-05) */
+  period: "기간",
+  /** 기간 선택 시트를 여는 버튼 */
+  openPeriodPicker: SHEET_TITLES.periodPicker,
+  sort: "정렬",
+  categoryFilter: "카테고리 필터",
+  /** 카테고리별 비중 막대 묶음 (SC-04) */
+  categoryShare: "카테고리별 비중",
 } as const;
 
 /** 입력·조작 안내 */

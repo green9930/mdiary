@@ -1,8 +1,18 @@
 import { formatAmount } from "@/lib/amount";
-import { addMonths, formatMonth, lastDayOf, monthOf } from "@/lib/date";
+import {
+  addMonths,
+  countMonths,
+  formatMonth,
+  lastDayOf,
+  monthOf,
+} from "@/lib/date";
 import { SERIES_RULES } from "@/shared/expenseConstants";
 import { isRepeatWithinMax } from "@/shared/expenseSchema";
-import { DATE_RULES, REPEAT_TEXTS } from "@/shared/sharedConstants";
+import {
+  DATE_RULES,
+  PERIOD_TEXTS,
+  REPEAT_TEXTS,
+} from "@/shared/sharedConstants";
 import type {
   ExpenseDetailSeriesType,
   ExpenseFormValues,
@@ -24,13 +34,6 @@ export const listMonths = (from: string, to: string) => {
   for (let month = from; month <= to; month = addMonths(month, 1))
     months.push(month);
   return months;
-};
-
-/** from부터 to까지의 개월 수 (둘 다 포함). from이 뒤면 0 */
-export const countMonths = (from: string, to: string) => {
-  const toIndex = (month: string) =>
-    Number(month.slice(0, 4)) * 12 + Number(month.slice(5, 7));
-  return Math.max(toIndex(to) - toIndex(from) + 1, 0);
 };
 
 /** 할부 회차 금액: 총액 기준이면 회차 금액은 버림, 끝전은 1회차에 (데이터 아키텍처 5-2) */
@@ -143,7 +146,7 @@ const validRepeatCount = (raw: string, date: string) => {
 const monthlyOn = (billingDay: number) => REPEAT_TEXTS.monthlyOn(billingDay);
 
 const rangeText = (from: string, to: string) =>
-  REPEAT_TEXTS.range(formatMonth(from), formatMonth(to));
+  PERIOD_TEXTS.range(formatMonth(from), formatMonth(to));
 
 // 할부 금액 줄: 금액이 없거나 총액 < 회차 수면 뺀다
 const installmentAmountText = (values: ExpenseFormValues, count: number) => {

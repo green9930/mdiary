@@ -106,6 +106,22 @@ export interface MonthTotals {
   days: { date: string; total: number }[];
 }
 
+/** 조회 기간: 시작·끝 달 (YYYY-MM, 둘 다 포함) */
+export interface Period {
+  from: string;
+  to: string;
+}
+
+/** 목록 정렬 (화면 명세 SC-04): 최신순 · 큰 금액순 */
+export type ListSortType = "latest" | "amount";
+
+/** 기간의 카테고리별 합계 (`GET /api/stats`). categories는 지출이 있는 카테고리만, 금액 내림차순 */
+export interface CategoryStats {
+  total: number;
+  count: number;
+  categories: { category: CategoryType; total: number; count: number }[];
+}
+
 /** 계정 요약 (`GET /api/me`) */
 export interface AccountSummary {
   email: string;

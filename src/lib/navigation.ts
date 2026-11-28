@@ -1,3 +1,7 @@
+import {
+  type CategoriesQuery,
+  convertCategorySlug,
+} from "@/lib/categoriesUtils";
 import { monthOf } from "@/lib/date";
 import { PATHS, URL_PARAMS } from "@/shared/sharedConstants";
 
@@ -17,6 +21,21 @@ export const calendarPath = (date: string, expense?: string | null) => {
   const params = new URLSearchParams({ month: monthOf(date), date });
   if (expense) params.set(URL_PARAMS.expense, expense);
   return `${PATHS.calendar}?${params}`;
+};
+
+/**
+ * 카테고리별 주소 (`/categories?from=2025-11&to=2026-10&category=food&sort=latest`).
+ * 카테고리는 골랐을 때만 담는다. expense를 주면 그 기록의 상세 시트가 열린 주소다
+ */
+export const categoriesPath = (
+  { from, to, category, sort }: CategoriesQuery,
+  expense?: string | null,
+) => {
+  const params = new URLSearchParams({ from, to });
+  if (category) params.set(URL_PARAMS.category, convertCategorySlug(category));
+  params.set(URL_PARAMS.sort, sort);
+  if (expense) params.set(URL_PARAMS.expense, expense);
+  return `${PATHS.categories}?${params}`;
 };
 
 /** 그 날짜로 여는 등록 화면 주소 (`/expenses/new?date=2026-10-19`) */

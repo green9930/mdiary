@@ -47,3 +47,14 @@ export const SERIES_RULES = {
   extendMonths: 24, // 계속 반복을 미리 만들어 두는 달 수 (이번 달 + 24개월)
   lastDayNoteFrom: 29, // 이 일 이상이면 없는 달이 생겨 말일 안내를 붙인다
 } as const;
+
+/** 조회 기간 규칙 (화면 명세 공통 정책값 · 카테고리별 조회 기간, SC-04 기간 드롭다운) */
+export const CATEGORY_PERIOD_RULES = {
+  maxMonths: 60, // 카테고리별 조회 최대 개월 수 (시작·끝 달 포함)
+  quickMonths: [1, 3, 6, 12], // 기간 드롭다운의 빠른 선택: 이번 달을 포함한 N개월
+} as const;
+
+/** 목록 규칙 (화면 명세 공통 정책값) */
+export const LIST_RULES = {
+  pageSize: 50, // 카테고리별·검색 목록을 한 번에 불러오는 건수
+} as const;

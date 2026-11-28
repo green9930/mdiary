@@ -73,6 +73,13 @@ export const addMonths = (month: string, n: number) => {
   return fromUtc(value).slice(0, 7);
 };
 
+/** from부터 to까지의 개월 수 (둘 다 포함). from이 뒤면 0 */
+export const countMonths = (from: string, to: string) => {
+  const toIndex = (month: string) =>
+    Number(month.slice(0, 4)) * 12 + Number(month.slice(5, 7));
+  return Math.max(toIndex(to) - toIndex(from) + 1, 0);
+};
+
 /** 그 달의 마지막 날 (28~31) */
 export const lastDayOf = (month: string) => {
   const value = toUtc(`${addMonths(month, 1)}-01`);

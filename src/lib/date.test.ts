@@ -5,6 +5,7 @@ import {
   convertToDateStr,
   convertToDbDate,
   convertToKSTStr,
+  countMonths,
   dateOrToday,
   defaultDateOf,
   formatDayHeading,
@@ -216,5 +217,13 @@ describe("monthDiff", () => {
     expect(monthDiff("2026-12", "2026-11")).toBe(-1);
     expect(monthDiff("2026-10", "2026-10")).toBe(0);
     expect(monthDiff("2026-10-25", "2028-01-03")).toBe(15);
+  });
+});
+
+describe("countMonths", () => {
+  it("시작·끝 달을 포함한 개월 수. from이 뒤면 0", () => {
+    expect(countMonths("2026-11", "2027-02")).toBe(4);
+    expect(countMonths("2026-11", "2026-11")).toBe(1);
+    expect(countMonths("2026-12", "2026-11")).toBe(0);
   });
 });

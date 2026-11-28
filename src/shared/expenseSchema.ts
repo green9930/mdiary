@@ -1,6 +1,7 @@
 import { z } from "zod";
 
-import { addMonths, isValidDate, monthOf } from "@/lib/date";
+import { addMonths, isValidDate, isValidMonth, monthOf } from "@/lib/date";
+import { isPeriodWithinMax } from "@/lib/periodUtils";
 import { countChars, removeControlChars, toSingleLine } from "@/lib/text";
 import {
   CATEGORY_LIST,
@@ -184,3 +185,13 @@ export const scopePreviewQuerySchema = z
       ? { scope: parsed.data }
       : { scope: parsed.data, date };
   });
+
+// 조회 기간의 달: 실제 있는 달이고 선택 가능 연도 안
+const monthSchema = z
+  .string({ error: "REQUIRED" })
+  .refine(isValidMonth, { error: "INVALID" });
+
+/** 조회 기간 쿼리 (`from`·`to` YYYY-MM). 시작 ≤ 끝, 최대 60개월 (화면 명세 공통 정책값) */
+export const periodQuerySchema = z
+  .object({ from: monthSchema, to: monthSchema })
+  .refine(isPeriodWithinMax, { path: ["to"], error: "OUT_OF_RANGE" });

@@ -2,8 +2,21 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 
-import Button from "@/components/elements/Button";
+import { cn } from "@/lib/cn";
+import {
+  BUTTON_BASE_CLASS,
+  BUTTON_PADDING_CLASSES,
+  BUTTON_VARIANT_CLASSES,
+} from "@/shared/styleConstants";
 import ArrowDropIcon from "@/assets/icon_arrow_drop_up.svg";
+
+// 여는 버튼: line sm 모양. 누르는 영역은 메뉴 항목 높이와 같은 40
+const TRIGGER_CLASS = cn(
+  BUTTON_BASE_CLASS,
+  "touch-40 h-8 rounded-sm text-caption",
+  BUTTON_PADDING_CLASSES.sm,
+  BUTTON_VARIANT_CLASSES.line,
+);
 
 interface DropdownOption<T extends string> {
   value: T;
@@ -51,9 +64,9 @@ const Dropdown = <T extends string>({
 
   return (
     <div ref={rootRef} className="relative inline-block">
-      <Button
-        variant="line"
-        size="sm"
+      <button
+        type="button"
+        className={TRIGGER_CLASS}
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={open ? listId : undefined}
@@ -62,13 +75,13 @@ const Dropdown = <T extends string>({
       >
         {selected?.label}
         <ArrowDropIcon aria-hidden className="-mr-1 size-4 rotate-180" />
-      </Button>
+      </button>
       {open && (
         <ul
           id={listId}
           role="listbox"
           aria-label={ariaLabel}
-          className={`absolute top-full z-10 mt-1 min-w-37.5 rounded-lg bg-bg py-1.5 shadow-1 transition-opacity duration-(--duration-dropdown) dark:border dark:border-line starting:opacity-0 ${
+          className={`absolute top-full z-10 mt-1 min-w-37.5 overflow-hidden rounded-sm bg-bg shadow-1 transition-opacity duration-(--duration-dropdown) dark:border dark:border-line starting:opacity-0 ${
             align === "end" ? "right-0" : "left-0"
           }`}
         >
@@ -90,7 +103,7 @@ const Dropdown = <T extends string>({
                   onValueChange(option.value);
                   setOpen(false);
                 }}
-                className={`flex h-11 cursor-pointer items-center px-4 text-body whitespace-nowrap ${
+                className={`flex h-10 cursor-pointer items-center px-4 text-body whitespace-nowrap ${
                   isSelected
                     ? "bg-tint font-bold text-on-tint"
                     : "text-text01 active:bg-surface"

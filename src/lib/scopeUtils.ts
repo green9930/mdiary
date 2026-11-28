@@ -1,6 +1,10 @@
 import { formatLongDate, formatMonth, monthDiff } from "@/lib/date";
 import { SERIES_RULES } from "@/shared/expenseConstants";
-import { FIELD_ERRORS, REPEAT_TEXTS } from "@/shared/sharedConstants";
+import {
+  FIELD_ERRORS,
+  PERIOD_TEXTS,
+  REPEAT_TEXTS,
+} from "@/shared/sharedConstants";
 import type { ScopePreview, ScopeType } from "@/types/expenseTypes";
 
 // 반복 기록 범위 선택 (화면 명세 SC-09, 데이터 아키텍처 5-3·5-6)
@@ -61,7 +65,7 @@ export const convertScopePreviewText = ({
       ? REPEAT_TEXTS.scopeFromContinuousOn(from, Number(date.slice(8, 10)))
       : REPEAT_TEXTS.scopeFromContinuous(from);
   return REPEAT_TEXTS.scopeRangeCount(
-    REPEAT_TEXTS.range(from, formatMonth(affected.toMonth)),
+    PERIOD_TEXTS.range(from, formatMonth(affected.toMonth)),
     affected.count,
   );
 };

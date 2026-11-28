@@ -7,7 +7,6 @@ import {
   convertInstallmentAmounts,
   convertRepeatPreview,
   convertSeriesPreview,
-  countMonths,
   listMonths,
 } from "@/lib/seriesUtils";
 import type {
@@ -38,14 +37,6 @@ describe("listMonths", () => {
     ]);
     expect(listMonths("2026-11", "2026-11")).toEqual(["2026-11"]);
     expect(listMonths("2026-12", "2026-11")).toEqual([]);
-  });
-});
-
-describe("countMonths", () => {
-  it("시작·끝 달을 포함한 개월 수. from이 뒤면 0", () => {
-    expect(countMonths("2026-11", "2027-02")).toBe(4);
-    expect(countMonths("2026-11", "2026-11")).toBe(1);
-    expect(countMonths("2026-12", "2026-11")).toBe(0);
   });
 });
 

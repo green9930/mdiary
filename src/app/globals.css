@@ -191,6 +191,20 @@ html:has(dialog[open]) {
   }
 }
 
+/* 누르는 영역을 최소 40×40으로 넓힌다 (드롭다운 버튼). 보이는 크기는 그대로 */
+@utility touch-40 {
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, --spacing(10));
+    height: max(100%, --spacing(10));
+    transform: translate(-50%, -50%);
+  }
+}
+
 /* 하단 탭 바(높이 56 + 안전 여백)에 내용이 가리지 않도록 비우는 여백 */
 @utility pb-tab-bar {
   padding-bottom: calc(--spacing(14) + env(safe-area-inset-bottom));

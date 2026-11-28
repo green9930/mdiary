@@ -50,18 +50,20 @@
 - [x] F6 반복 기록
   - [x] F6-1 반복 등록·연장 (SC-06 반복 입력 `RepeatFields`·미리보기, 달·결제일·할부 금액 `lib/seriesUtils.ts`, `POST /api/expenses`의 `repeat`, 연장 `server/seriesService.ts`의 `extendContinuousSeries`(달력·하루 목록 조회 직전), 정기 작업 `GET /api/cron/extend`, 수정 화면 반복 잠금, 규칙 `SERIES_RULES`)
   - [x] F6-2 범위 수정·삭제 (SC-09 `ScopeFields`·상태 `useScopeSelection`, 수정 `ScopeEditSheet`, 삭제는 상세 시트 안에서 전환, 달 차이 판단·미리보기 문구 `lib/scopeUtils.ts`, `server/scopeService.ts`의 범위 수정(D11)·삭제·미리보기, `GET /api/expenses/:id/scope`·`useScopePreview`, 반복 문구 `REPEAT_TEXTS` 하나로 정리)
-- [ ] F7 ← 다음
+- [ ] F7 카테고리별
+  - [x] F7-1 기간·요약·비중 (SC-04 `CategoriesView`, 기간 드롭다운 `PeriodDropdown`·기간 선택 시트 `PeriodPickerSheet`(SC-05와 같이 씀, 월 격자는 `MonthPickerGrid`의 기간 표시), 빠른 선택·라벨·한도 `lib/periodUtils.ts`, 쿼리 정리·비중 `lib/categoriesUtils.ts`, URL 상태 `useCategoriesQuery`, 비중 그래프 `CategoryShareChart`, `GET /api/stats`·`server/statsService.ts`(조회 직전 연장), 규칙 `CATEGORY_PERIOD_RULES`·`LIST_RULES`, 기간 문구 `PERIOD_TEXTS`)
+  - [ ] F7-2 필터 칩·목록·정렬·무한 스크롤 ← 다음
 - [ ] F8 ~ F12
 
 미뤄 둔 작업:
 
-| 시점              | 작업                                                                                                                                            |
-| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| F7·F8             | 카테고리별·검색(직접 지정 기간) 조회 전에 `extendContinuousSeries({ userId, untilMonth })`로 그 기간의 끝 달까지 연장한다 (데이터 아키텍처 5-4) |
-| F12               | Vercel Cron에 `GET /api/cron/extend`를 하루 1번으로 등록한다                                                                                    |
-| F10               | 오프라인이면 등록 폼 [저장]을 막는다                                                                                                            |
-| F9                | 설정 화면의 임시 [로그아웃](`SignOutButton`)을 SC-10 배치로 옮긴다                                                                              |
-| F10               | 오프라인 띠를 `(tabs)` 레이아웃의 자리 표시 주석 위치에 넣는다                                                                                  |
-| F12               | pnpm 12로 올릴지 정한다 (Vercel·GitHub Actions 지원 확인 후. pnpm 10 지원은 2027년 4월까지)                                                     |
-| 견본 화면 삭제 시 | `/dev/components`를 없앨 때 로그인 없이 여는 처리도 지운다: `PATHS.devComponents`, `proxy.ts`의 통과 조건, `proxy.test.ts`의 해당 테스트        |
-| 사용자            | `.env`의 Neon 주소 두 개를 `sslmode=verify-full`로 바꾸면 `pg`의 SSL 경고가 없어진다                                                            |
+| 시점              | 작업                                                                                                                                                 |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| F7-2·F8           | 카테고리별 목록·검색(직접 지정 기간) 조회 전에 `extendContinuousSeries({ userId, untilMonth })`로 그 기간의 끝 달까지 연장한다 (데이터 아키텍처 5-4) |
+| F12               | Vercel Cron에 `GET /api/cron/extend`를 하루 1번으로 등록한다                                                                                         |
+| F10               | 오프라인이면 등록 폼 [저장]을 막는다                                                                                                                 |
+| F9                | 설정 화면의 임시 [로그아웃](`SignOutButton`)을 SC-10 배치로 옮긴다                                                                                   |
+| F10               | 오프라인 띠를 `(tabs)` 레이아웃의 자리 표시 주석 위치에 넣는다                                                                                       |
+| F12               | pnpm 12로 올릴지 정한다 (Vercel·GitHub Actions 지원 확인 후. pnpm 10 지원은 2027년 4월까지)                                                          |
+| 견본 화면 삭제 시 | `/dev/components`를 없앨 때 로그인 없이 여는 처리도 지운다: `PATHS.devComponents`, `proxy.ts`의 통과 조건, `proxy.test.ts`의 해당 테스트             |
+| 사용자            | `.env`의 Neon 주소 두 개를 `sslmode=verify-full`로 바꾸면 `pg`의 SSL 경고가 없어진다                                                                 |

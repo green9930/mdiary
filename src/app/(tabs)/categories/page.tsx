@@ -1,15 +1,24 @@
+import CategoriesView from "@/components/categories/CategoriesView";
+import { convertToKSTStr } from "@/lib/date";
 import { requireSessionUser } from "@/server/session";
-import { PAGE_TITLES, PATHS } from "@/shared/sharedConstants";
+import { PATHS } from "@/shared/sharedConstants";
 
-// 임시: F7에서 카테고리 화면으로 바꾼다
-const CategoriesPage = async () => {
-  await requireSessionUser(PATHS.categories);
+interface CategoriesPageProps {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}
 
-  return (
-    <main className="p-4">
-      <h1 className="text-title-lg">{PAGE_TITLES.categories}</h1>
-    </main>
+// 카테고리별 (화면 명세 SC-04). 쿼리 from·to·category·sort는 CategoriesView가 읽고 고친다
+const CategoriesPage = async ({ searchParams }: CategoriesPageProps) => {
+  const query = new URLSearchParams(
+    Object.entries(await searchParams).filter(
+      (entry): entry is [string, string] => typeof entry[1] === "string",
+    ),
+  ).toString();
+  await requireSessionUser(
+    query ? `${PATHS.categories}?${query}` : PATHS.categories,
   );
+
+  return <CategoriesView today={convertToKSTStr()} />;
 };
 
 export default CategoriesPage;

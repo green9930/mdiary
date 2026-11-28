@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  convertCategoryLabel,
-  convertSeriesInfoText,
-} from "@/lib/expenseDetailUtils";
+import { convertSeriesInfoText } from "@/lib/expenseDetailUtils";
 import type { ExpenseDetailSeriesType } from "@/types/expenseTypes";
 
 const recurring: ExpenseDetailSeriesType = {
@@ -16,13 +13,6 @@ const recurring: ExpenseDetailSeriesType = {
   fromMonth: "2026-11",
   toMonth: "2027-01",
 };
-
-describe("convertCategoryLabel", () => {
-  it("카테고리 이름", () => {
-    expect(convertCategoryLabel("FOOD")).toBe("식비");
-    expect(convertCategoryLabel("ETC")).toBe("기타");
-  });
-});
 
 describe("convertSeriesInfoText (화면 명세 SC-08 반복 정보)", () => {
   it("계속 반복하는 정기지출: 결제일과 반복", () => {

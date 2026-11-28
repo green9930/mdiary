@@ -46,3 +46,17 @@ export const CATEGORY_ICONS = {
   LIVING: { Icon: PersonIcon, colorClass: "bg-cat-living/15 text-cat-living" },
   ETC: { Icon: CardIcon, colorClass: "bg-cat-etc/15 text-cat-etc" },
 } as const;
+
+/** 비중 막대의 색 (토큰 2-4·5-4): 카테고리 색. Tailwind가 찾을 수 있게 전체 문자열로 적는다 */
+export const CATEGORY_BAR_CLASSES = {
+  FOOD: "bg-cat-food",
+  APPLIANCE: "bg-cat-appliance",
+  TRANSPORT: "bg-cat-transport",
+  MEDICAL: "bg-cat-medical",
+  CLOTHING: "bg-cat-clothing",
+  BEAUTY: "bg-cat-beauty",
+  CULTURE: "bg-cat-culture",
+  EDUCATION: "bg-cat-education",
+  LIVING: "bg-cat-living",
+  ETC: "bg-cat-etc",
+} as const;
